@@ -5,14 +5,26 @@ from itertools import product
 
 
 def calculate_alpha(mu, rho):
+    """
+    calculate alpha parameter of beta
+    distribution in terms of mu and rho
+    """
     return (1-rho) * mu / rho
 
 
 def calculate_beta(mu, rho):
+    """
+    calculate beta parameter of beta
+    distribution in terms of mu and rho
+    """
     return (1-rho) * (1-mu) / rho
 
 
 def beta_binomial_pmf(mu, rho, n):
+    """
+    return pmf of beta-binomial in 
+    with mu and rho parameterization
+    """
     alpha = calculate_alpha(mu, rho)
     beta = calculate_beta(mu, rho)
     return stats.betabinom.pmf(
@@ -25,7 +37,23 @@ def beta_binomial_pmf(mu, rho, n):
 
 def verify(q1, q2, adj, arr):
     """
+    Check literal truth of utterance for an arr.
+    wrt utterance "q1 of the students got q1 of the answers adj"
     NOTE: arr can be 2d
+    
+    Parameters
+    ----------
+    q1, q2, adj: string
+        The bits needed to construct the sentence
+    arr: 1-d or 2-d array of ints
+        An array containing the number of questions
+        that the students got right.
+        Dimensions: (# answers, # students) | (# answers)
+    Returns
+    -------
+    1-d array
+        Array containing for each answer whether it verifies 
+        the utterance.
     """
     
     arr = np.array(arr)
@@ -61,6 +89,31 @@ def verify(q1, q2, adj, arr):
 
 
 def get_and_clean_data():
+    """
+    Get the raw data and cleans it. 
+    Returns various useful objects (see below).
+    
+    Returns
+    -------
+    tuple
+        raw_data: pd df 
+            Dataframe containing the full data 
+        data: pd df 
+            Dataframe containing the data without 
+            incomplete and literally false responses
+        possible_observations: 2-d array
+            Array with the possible unique observations
+            that participants actually saw in the experiment.
+            Contains the number of correct answers
+            of each student in each observation.
+            Dimensions: (observations, students)
+        possible_utterances: 2-d array
+            Array with the possible unique utterances
+            that the participants could produce in the experiment.
+            Each utterance has three components: 
+            (outer quant, inner quant, adjective)
+            Dimensions: (utterances, utterance components)
+    """
     raw_data = pd.read_csv('data_raw.csv')
     
     data = raw_data[[
@@ -138,16 +191,20 @@ def get_and_clean_data():
     return raw_data, data, possible_observations, possible_utterances
 
 
-def calculate_arg_deltas(condition, argumentative_strengths, possible_observations, possible_utterances):
+def calculate_arg_deltas(argumentative_strengths, possible_observations, possible_utterances):
     """
-    difference in argument strength between 
-    the chosen utterance and the most argstrong one
-    possible given the observation
-    
     Parameters
     ----------
-    condition: str
-        either 'positive' or 'negative'
+    argumentative_strengths: array 
+        see return value of calculate_argumentative_strengths
+    possible_observations, possible_utterances: 2-d array
+        See return values of get_and_clean_data function
+    Returns
+    -------
+    array
+        Difference in argument strength between 
+        the chosen utterance and the most argstrong one
+        possible given the observation
     """
     utterance_observation_compatibility = np.stack([
         verify(*a, possible_observations)
@@ -164,9 +221,16 @@ def calculate_arg_deltas(condition, argumentative_strengths, possible_observatio
     
 def calculate_info_deltas(possible_utterances, possible_observations):
     """
-    difference in informativeness between 
-    the chosen utterance and the most informative one
-    possible given the observation
+    Parameters
+    ----------
+    possible_utterances, possible_observations: arrays
+        See return values of get_and_clean_data function
+    Returns
+    -------
+    array
+        Difference in informativeness between 
+        the chosen utterance and the most informative one
+        possible given the observation
     """
     utterance_observation_compatibility = np.stack([
         verify(*a, possible_observations)
@@ -180,6 +244,21 @@ def calculate_info_deltas(possible_utterances, possible_observations):
 
 
 def u_o_array_to_df(array, possible_observations, possible_utterances):
+    """
+    This is a function to help visualize arrays in terms
+    of actual possible_observations and possible_utterances
+    rather than just indices.
+
+    Parameters
+    ----------
+    array: 2d array
+        Dimensions (possible utterances, possible observations)
+    Returns
+    -------
+    df
+        A df with the possible utterances as rows
+        and the possible observations as columns.
+    """
     return pd.DataFrame(
         array,
         index=['|'.join(u) for u in possible_utterances],
@@ -188,6 +267,12 @@ def u_o_array_to_df(array, possible_observations, possible_utterances):
 
 
 def get_costs(utterances, costtype='positive'):
+    """
+    Used for the calculate_logp_data function
+    Reproduces the utterance costs of the cogsci paper if
+    costtype is 'positive'.
+    Otherwise just returns uniform costs.
+    """
     if costtype == 'positive':
         # utterances with a negative quantifier have cost 3, otherwise cost 0
         return np.any(utterances == 'none', axis=1).astype(int)*3
@@ -197,11 +282,28 @@ def get_costs(utterances, costtype='positive'):
 
 
 def softmax(x, axis=1):
+    """
+    Softmax function in numpy
+
+    Parameters
+    ----------
+    x: array
+        An array with any dimensionality
+    axis: int
+        The axis along which to apply the softmax
+    Returns
+    -------
+    array
+        Same shape as x
+    """
     e_x = np.exp(x - np.max(x, axis, keepdims=True))
     return e_x / e_x.sum(axis=axis, keepdims=True)
 
 
 def normalize(arr, axis=1):
+    """
+    Normalize arr along axis
+    """
     return arr / arr.sum(axis, keepdims=True)
 
 
@@ -212,14 +314,21 @@ def calculate_p_utterance_given_gamma(possible_utterances, possible_observations
     To calculate it:
         - Calculate the probability of each observation given the gamma
         - For each utterance, sum the probability of those observations that verify the utterance
-    OLD ----------------------------------------------------------------------------------------
-    The probability of an utterance given a gamma (marginalized across possible observations)
-    To calculate it:
-    - First calculate the p of each observation given the gamma
-    - Then calculate the probability of each utterance AND each observation
-    - Finally, sum across observations
-    p_obs_given_gamma = stats.binom.pmf(nlist, n=12, p=gamma).prod(-1)[None]
-    return normalize(p_obs_given_gamma * utterance_observation_compatibility, (0,1)).sum(1)
+
+    Parameters
+    ----------
+    possible_utterances, possible_observations: arrays
+        See return value of get_and_clean_data
+    utterance_observation_compatibility: Boolean or int 2d array
+        array that says whether each observation is compatible
+        with each utterance.
+    gamma: float
+        Binomial parameter (see model description for explanation)
+    Returns
+    -------
+    2d array
+        Array with the probability of each utterance being true
+        given a gamma.
     """
     p_obs_given_gamma = (
         stats.binom.pmf(
@@ -233,6 +342,10 @@ def calculate_p_utterance_given_gamma(possible_utterances, possible_observations
 
 
 def calculate_prob_quant(quant, bias, n_obs):
+    """
+    Probability of the world producing a state that verifies the quantifier
+    (marginalized across states)
+    """
     if quant == 'all':
         return stats.binom.pmf(n_obs, n=n_obs, p=bias)
     elif quant == 'some':
@@ -244,6 +357,12 @@ def calculate_prob_quant(quant, bias, n_obs):
 
     
 def run_michael_method(utterance, bias):
+    """
+    Use the method to calculate the probability of an utterance
+    being true given a bias (gamma)
+    This is a reimplementation in python of the code in Michael Franke's
+    original R code for the basic model.
+    """
     if utterance[2] == 'wrong':
         bias = 1-bias
     # probability that the quantifier is true for a sample
@@ -260,6 +379,11 @@ def calculate_argumentative_strength(possible_utterances, possible_observations,
     The argumentative strength of an utterance given a value of gamma that one wants to prove
     and a value of gamma that one wants to disprove is equal to:
     log(p(utterance | gamma_prove)) - log(p(utterance | gamma_disprove))
+
+    NOTE: Michael's method considers all *possible* observations 
+    (i.e. every possible number of correct answers from each student)
+    while my method considers just the observations that
+    can be actually made in the experiment.
     """
     
     if michael_method:
@@ -301,6 +425,41 @@ def calculate_argumentative_strength(possible_utterances, possible_observations,
 def calculate_pragmatic_speaker(argumentative_strengths,
                                 p_observation_given_utterance, costs,
                                 alpha, beta, truth_matrix=0):
+    """
+    Calculate the probability of the pragmatic speaker producing each utterance
+    given each observation.
+
+    Parameters
+    ----------
+    argumentative_strengths: array
+        The argumentative strength of each utterance
+        for whatever aim the speaker has
+        (NOTE: this can be positive or negative argstrengths,
+        different speakers are calculated for the two cases)
+    p_observation_given_utterance: array
+        The probability of each observation given an utterance.
+        Basically the literal listener.
+        Dimensions: (possible utterances, possible observations)
+        In Michael's implementation, this array 
+        has all identical rows and the selection of 
+        the incompatible combinations of utt and obs
+        is done by the truth_matrix, which has a very small
+        value (in log space) in order to not break the gradient
+        when the logging of 0 happens in informativity.
+    costs: array
+        The cost of each utterance
+    alpha, beta: float
+        The parameters of the model.
+        See explanation of the model for detail.
+    truth_matrix: array
+        See explanation of p_observation_given_utterance input.
+        Keep it 0 if not using Michael's method.
+    Returns
+    -------
+    array
+        Dimensions (possible utterances, possible observations)
+        The pragmatic speaker.
+    """
     
     informativity = np.log(p_observation_given_utterance)
     utils = (
@@ -320,10 +479,14 @@ def calculate_logp_data(data, alpha, beta,
     Calculate the logp of the data for the first version of the model in the cogsci poster.
     This is meant for initial testing with numpy to compare with original greta implementation.
     
-    Use only the 20 observations that were used in the experiment
-    rather than all the possible observations
-    NOTE: is this a good idea? I guess it depends on what the participants
-    thought were the possible observations.
+    Parameters
+    ----------
+    data, possible_observations, possible_utterances: df, arrays
+        See value returned by get_and_clean_data
+    alpha, beta: floats
+        See description of model
+    like_cogsci_paper: bool
+        Reproduces Michael's implementation.
     """
     
     utterance_observation_compatibility = np.stack([
@@ -357,13 +520,11 @@ def calculate_logp_data(data, alpha, beta,
         gamma_disprove=0.85
     )
     
-    """
-    The probability of an observation given an utterance
-    is simply 1 divided by the number of observations compatible
-    with the utterance. 
-    (we are assuming here a uniform prior over observations)
-    """
-    # import pdb; pdb.set_trace()
+    # The probability of an observation given an utterance
+    # is simply 1 divided by the number of observations compatible
+    # with the utterance. 
+    # (we are assuming here a uniform prior over observations)
+    
     costs = get_costs(possible_utterances)
     
     p_utterance_given_observation_high = calculate_pragmatic_speaker(
