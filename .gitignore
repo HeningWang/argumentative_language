@@ -1,7 +1,8 @@
 # my exclusions
 vinnie/
 data_raw.csv
-models_traces/*.pkl
+models_traces/*/*.pkl
+models_traces/*/*.nc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

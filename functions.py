@@ -2,6 +2,36 @@ import pandas as pd
 from scipy import stats
 import numpy as np
 from itertools import product
+import os
+import errno
+import pickle
+import xarray as xr
+
+
+def save_model_and_trace(name, model, trace):
+    
+    try:
+        os.makedirs(f'models_traces/{name}')
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+    
+    with open(f'models_traces/{name}/model.pkl', 'wb') as openfile:
+        pickle.dump(model, openfile)
+    trace.to_netcdf(f'models_traces/{name}/trace.nc')
+                    
+
+def load_model_and_trace(name):
+    
+    returndict = dict()
+    
+    with xr.open_dataset(f'models_traces/{name}/trace.nc') as ds:
+        returndict['trace'] = ds
+        
+    with open(f'models_traces/{name}/model.pkl', 'rb') as openfile:
+        returndict['model'] = pickle.load(openfile)
+    
+    return returndict
 
 
 def calculate_alpha(mu, rho):
@@ -361,8 +391,8 @@ def calculate_prob_quant(quant, bias, n_obs):
     elif quant == 'none':
         return stats.binom.pmf(0, n=n_obs, p=bias)
 
-    
-def run_michael_method(utterance, bias):
+
+def run_michael_method(utterance, bias, n_students=5, n_questions=12):
     """
     Use the method to calculate the probability of an utterance
     being true given a bias (gamma)
@@ -372,12 +402,13 @@ def run_michael_method(utterance, bias):
     if utterance[2] == 'wrong':
         bias = 1-bias
     # probability that the quantifier is true for a sample
-    inner_prob = calculate_prob_quant(utterance[1], bias, 12)
-    return calculate_prob_quant(utterance[0], inner_prob, 5)
+    inner_prob = calculate_prob_quant(utterance[1], bias, n_questions)
+    return calculate_prob_quant(utterance[0], inner_prob, n_students)
 
 
 def calculate_argumentative_strength(possible_utterances, possible_observations, 
-                                     gamma_prove, gamma_disprove, michael_method=True):
+                                     gamma_prove, gamma_disprove, michael_method=True,
+                                     michael_kwargs=dict()):
     """
     Calculate the argumentative strength of each possible utterance given each possible state
     and a gamma to prove and a gamma to disprove.
@@ -395,12 +426,12 @@ def calculate_argumentative_strength(possible_utterances, possible_observations,
     if michael_method:
         
         p_prove = [
-            run_michael_method(u, gamma_prove)
+            run_michael_method(u, gamma_prove, **michael_kwargs)
             for u in possible_utterances
         ]
 
         p_disprove = [
-            run_michael_method(u, gamma_disprove)
+            run_michael_method(u, gamma_disprove, **michael_kwargs)
             for u in possible_utterances
         ]
 
