@@ -422,7 +422,7 @@ def calculate_argumentative_strength(possible_utterances, possible_observations,
     NOTE: Michael's method considers all *possible* observations 
     (i.e. every possible number of correct answers from each student)
     while my method considers just the observations that
-    can be actually made in the experiment.
+    can be actually made in the experiment (up to a normalization constant)
     """
     
     if michael_method:
