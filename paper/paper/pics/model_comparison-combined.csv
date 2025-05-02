@@ -1,0 +1,11 @@
+model,analysis,loo,se
+non-parametric,hierarchical,-5229.744401,80.469325
+maximin,hierarchical,-5339.622637,79.661985
+likelihood ratio (semantic),hierarchical,-5581.435641,81.641450
+likelihood ratio (pragmatic),hierarchical,-5596.165760,81.480474
+vanilla RSA,hierarchical,-7883.190488,54.577591
+non-parametric,population,-5751.492268,80.431136
+maximin,population,-5784.454397,80.429194
+likelihood ratio (semantic),population,-6057.245789,79.926400
+likelihood ratio (pragmatic),population,-6073.191303,79.724550
+vanilla RSA,population,-7908.407944,54.361088
