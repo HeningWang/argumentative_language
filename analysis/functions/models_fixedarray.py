@@ -22,7 +22,7 @@ def calculate_logp_data(data, alpha, beta,
                         possible_observations, possible_utterances, 
                         like_cogsci_paper=False):
     """
-    Calculate the logp of the data for the simplest version of the model.
+    Calculate the logp of the data in numpy for the simplest version of the model.
     
     Parameters
     ----------

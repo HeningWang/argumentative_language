@@ -9,6 +9,8 @@ import pymc3 as pm
 import theano as T
 import theano.tensor as tt
 import arviz as az
+import pandas as pd
+from scipy import stats
 
 
 def save_trace(name, trace, path_to_folder):
@@ -246,6 +248,17 @@ def theano_normalize(tensor, axis):
     see documentation of normalize in functions
     """
     return tensor / tt.sum(tensor, axis=axis, keepdims=True)
+
+def theano_softmax(tensor, axis):
+    """
+    For explanations of input/outputs,
+    see documentation of softmax in functions
+    """
+    # NOTE: axis=0 only works for 2d arrays
+    if axis==1:
+        return tt.nnet.softmax(tensor)
+    else:
+        return tt.nnet.softmax(tensor.T).T
 
 
 def u_o_array_to_df(array, possible_observations, possible_utterances):
@@ -526,3 +539,54 @@ def parameter_recovery_MAP(model, nsamples, data):
     pm.set_data({'observed': data.index_utterance}, model=model)
     return prior_pd, MAP_values
 
+
+def from_posterior(param, samples, lb=False, ub=False):
+    """
+    Function to go from trace from previous fit
+    to distribution to use as prior.
+    Use gaussian kde for approximation.
+    
+    Parameters
+    ----------
+    param: string
+        Name of parameter
+    samples: array
+        Array with the posterior values
+    lb, ub: Bool
+        Whether the parameter has an upper/lower bound.
+        If true, lower bound is set to 0 and upper bound to 1.
+    """
+    
+    smin, smax = np.min(samples), np.max(samples)
+    width = smax - smin
+    x = np.linspace(
+        smin, 
+        smax, 
+        100
+    )
+    y = stats.gaussian_kde(samples)(x)
+
+    min_x = x[0] - 3 * width
+    if lb:
+        # since the param is lower-bounded at 0, add this
+        min_x = max(0.00001, min_x)
+        
+    max_x = x[-1] + 3 * width
+    if ub:
+        max_x = min(max_x, 0.99999)
+        
+    # what was never sampled should have a small probability but not 0,
+    # so we'll extend the domain and use linear approximation of density on it
+    x = np.concatenate([
+        [min_x], 
+        x,
+        [max_x]
+    ])
+    
+    y = np.concatenate([
+        [0], 
+        y, 
+        [0]
+    ])
+    
+    return pm.Interpolated(param, x, y)

@@ -328,6 +328,10 @@ def calculate_maximin_argstrength_slow_fullstatespace(possible_utterances,
 def calculate_nonparametric_argstrength_fullstatespace(
         possible_utterances, possible_observations, condition, savefolder=None):
     
+    assert condition in {"high", "low"}
+    n_answers  = int(possible_observations.max())
+    n_students = possible_observations.shape[1]
+    
     def multinomial_coeff(state):
         """Number of permutations of an unordered state."""
         denom = 1
@@ -348,10 +352,6 @@ def calculate_nonparametric_argstrength_fullstatespace(
         )
         if (cached := load_argstrengths(savename)) is not None:
             return cached
-
-    assert condition in {"high", "low"}
-    n_answers  = int(possible_observations.max())
-    n_students = possible_observations.shape[1]
 
     # accumulators
     numer = np.zeros(len(possible_utterances), dtype=float)
