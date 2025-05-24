@@ -79,8 +79,8 @@ In line with the usual assumption of Bayesian decision-makers, the speaker's pol
   P_{S} (u \mid s) & \propto \expo\left( \alpha U( u , s ) \right)\,.
 \end{align}
 The utility function $U(u,s)$ captures how good it is for the speaker to choose $u$ when the true state, according to the speaker, is $s$.
-We here follow the Rational Speech Act (RSA) modeling framework \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,Degen2023:The-Rational-Sp} which adopts the usual Gricean assumptions that the speaker wants speak truly, maximize the amount of information conveyed about the state $s$, and to minimize their own speaking effort \citep{Grice1975:Logic-and-Conve}.
-To implement these assumptions, utilities are defined as a sum of the information theoretic surprisal of $s$ conditional on $u$ being true and the (negative) cost of $u$, which is a stand-in for production effort or ease of accessibility:
+We here follow the Rational Speech Act (RSA) modeling framework \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,Degen2023:The-Rational-Sp} which adopts the usual Gricean assumptions that the speaker wants to speak truly, maximize the amount of information conveyed about the state $s$, and to minimize their own speaking effort \citep{Grice1975:Logic-and-Conve}.
+To implement these assumptions, utilities are defined as a sum of the information-theoretic surprisal of $s$ conditional on $u$ being true and the (negative) cost of $u$, which is a stand-in for production effort or ease of accessibility:
 \begin{align}
   \label{eq:util-vanilla}
   U(u , s) &= \log P(s \mid \interpret{u}) - \text{cost}(u)\,,
@@ -108,7 +108,7 @@ With this, if the semantics for utterances is binary, the utility function from 
 
 The speaker's policy defined above in Equation~\eqref{eq:S1}, when used with the standard utility function in Equation~\eqref{eq:util-vanilla} has been productively used to explain choices of utterances for different linguistic constructions of phenomena, e.g., for referential expressions \citep{FrankGoodman2012:Predicting-Prag}, generics \citep{Tessler2019:The-Language-of}, conditionals \citep{GrusdtLassiter2021:Probabilistic-m}, quantifiers and implicature \citep{GoodmanStuhlmuller2013:Knowledge-and-I,Tielvan-TielFranke2021:Probabilistic-p}, gradable adjectives \citep{LassiterGoodman2015:Adjectival-vagu}, or probability expression \citep{HerbstrittFranke2019:Complex-probabi}.
 \mf{insert some more references (without MF as co-author!)}
-Yet, some phenomena seem to require a more elaborate utility functions.
+Yet, some phenomena seem to require more elaborate utility functions.
 For example, in the realm of social meaning, extensions of the vanilla RSA model sketched above have been explored which incorporate additional utility components related to politeness \citep{YoonTessler2020:Polite-Speech-E}.
 Here, we take a similar approach to modelling the utility trade-off between describing the world informatively and making an argument in favor of a position or hypothesis $H_{0}$, as opposed to the competing position or hypothesis $H_{1}$.
 The general form of the extended speaker utility function we consider in this paper will be:
@@ -134,14 +134,6 @@ In the following we will explore different models of the speaker's utterance cho
   \item The \textbf{model-free model} uses a situation-specific notion of argumentative strength in terms of the posterior expectation of true answers; this approach is ``model-free'' in the sense that it does not commit to a strong theoretic position on what argument strength is supposed to be.
 \end{enumerate}
 
-\begin{draftytext}
-  \begin{itemize}
-    \item will explore a bunch of notions
-    \item the starting point is log likelihood ratio
-    \item used by a lot of previous work
-    \item but no real quantitative model fits so far
-  \end{itemize}
-\end{draftytext}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiment}
@@ -209,15 +201,10 @@ Each participant consistently saw one size of the four results matrices, and the
 Trials were randomly assigned to a high or low framing condition, so that each participant saw 10 trials in the high and 10 trials in the low framing condition.
 
 \paragraph{Results.}
-Following preregistered protocol, we excluded any response that is literally false as a description of the results shown in the corresponding trial.
-This resulted in \mf{how many trials were excluded?}
-We also excluded all the data from a participant if the participant selected the same response in all trials or if the participant gave more than 4 false responses.
-This resulted in \mf{how many people were excluded?}
-After cleaning, we had data from $N=\mf{fill me}$ participants.
-
-\mf{TODO: implement exclusion criteria in R; get the numbers for this section; replot with proper data exclusion}
-
-
+Following preregistered protocol, we excluded all the data from a participant if the participant selected the same response in all trials or if the participant gave more than four responses which are literally false as a description of the results shown in the corresponding trial.
+This reduced the original number of $N=201$ participants to $N=186$.
+We also excluded any remaining responses that are literally false.
+This resulted in another $113$ individual responses being removed from the data set.
 
 
 

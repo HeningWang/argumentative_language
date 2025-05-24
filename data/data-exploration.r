@@ -18,67 +18,71 @@ scale_fill_discrete <- function(...) {
   scale_fill_manual(..., values = project_colors)
 }
 
-d_pilot <- read_csv("data_pilot/data_raw.csv") |> 
+d_pilot <- read_csv("data_pilot/cleaned_data.csv") |> 
   mutate(source = "pilot")
-d_exp1 <- read_csv("data_experiment1/data.csv") |> 
-  mutate(source = "exp1") |> 
-  mutate(arraySizeCondition = "wideShort")
-d_exp2 <- read_csv("data_experiment2/data.csv") |> 
-  mutate(source = "exp2")
+d_exp1and2 <- read_csv("data_experiment2/cleaned_data_1and2.csv") 
 
 # number of participants in the pilot study
 d_pilot |> nrow() / 20
 
-d_exps <- bind_rows(d_exp1, d_exp2) |> 
-  mutate(source = factor(source, levels = c("exp1", "exp2"))) |> 
+d_exps <- d_exp1and2 |> 
   mutate(arrayCondition = case_when(
-    arraySizeCondition == "wideShort" ~ " 5 x 12",
-    arraySizeCondition == "narrowShort" ~ " 5 x 6",
-    arraySizeCondition == "wideLong" ~ "11 x 12",
-    arraySizeCondition == "narrowLong" ~ "11 x  6"
+    array_size_condition == "wideShort" ~ " 5 x 12",
+    array_size_condition == "narrowShort" ~ " 5 x 6",
+    array_size_condition == "wideLong" ~ "11 x 12",
+    array_size_condition == "narrowLong" ~ "11 x  6"
   )) |> 
   mutate(condition = ifelse(condition, "high", "low") |> factor(levels = c("high", "low")))
 
-# number of participants in each experiment
-d_exps |> count(source) |> mutate(n = n / 20)
-d_exps |> count(gender) |> mutate(n = n / 20)
-d_exps |> summarize(mean_age= mean(age, na.rm = TRUE),
-                    sd_age = sd(age, na.rm = TRUE),
-                    min_age = min(age, na.rm = TRUE),
-                    max_age = max(age, na.rm = TRUE) )
-d_exps |> summarize(
-  mean_duration = mean(experiment_duration/60000),
-  median_duration = median(experiment_duration/60000)
-  )
 
+# total number of participants after cleaning
+n_participants <- d_exps |> pull(id) |> unique() |> length()
+# total number of additionally excluded responses (due to semantic falsity) after cleaning
+n_participants * 20 - nrow(d_exps)
 
 # number of participants assigned to each size condition
 d_exps |> count(arrayCondition) |>  mutate(n = n / 20)
 
+# prettify the response strings
+
+responses_prettified <- d_exps |> pull(response) |> 
+  # 1) drop [, ], and '
+  str_remove_all("\\[|\\]|'") %>%     
+  # 2) collapse commas into " | "
+  str_replace_all(",\\s*", " | ") %>% 
+  # 3) trim any stray whitespace
+  str_trim()
+
+d_exps$response <- responses_prettified
+
+
 ## sum stats & basic plot for aggregate data ----
 
 sum_stats <- d_exps |> 
-  group_by(condition, arrayCondition) |> count(responses) |> 
+  group_by(condition, arrayCondition) |> count(response) |> 
   mutate(proportion = n / sum(n))
 
 sum_stats |> 
-  ggplot(aes(x = responses , y = proportion, group = condition, fill = condition)) +
+  ggplot(aes(x = response , y = proportion, group = condition, fill = condition)) +
   geom_bar(stat = "identity", position = "dodge") + 
   facet_grid(arrayCondition ~ ., scale = "free") +
   theme_csp() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("pics/barplot_responses_perConditions.pdf", width = 8, height = 4.5, scale = 1.5)
 
+############# TODO revision up to HERE ##############
+
 
 ## sum stats & basic plot for selected situations data ----
 
 sum_stats_full <- d_exps |> 
-  group_by(condition, arrayCondition, studentsArray) |> count(responses) |> 
+  group_by(condition, arrayCondition, row_number) |> count(response) |> 
   mutate(proportion = n / sum(n)) 
 
 sum_stats_full |> 
-  filter(studentsArray == "12|12|9|3|3") |> 
-  ggplot(aes(x = responses , y = proportion, group = condition, fill = condition)) +
+  
+  filter(row_number == "[12, 12, 9, 3, 3]") |> 
+  ggplot(aes(x = response , y = proportion, group = condition, fill = condition)) +
   geom_bar(stat = "identity", position = "dodge") + 
   theme_csp() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -89,13 +93,13 @@ ggsave("pics/barplot_responses_example12|12|9|3|3.pdf", width = 8, height = 4.5,
 
 
 # fit_noCondition <- brms::brm(
-#   formula = responses ~ arrayAndSize,
+#   formula = response ~ arrayAndSize,
 #   data = d_exps |> mutate(arrayAndSize = paste(arrayCondition, studentsArray)),
 #   family = categorical()
 # )
 # 
 # fit_full <- brms::brm(
-#   formula = responses ~ arrayAndSize * condition,
+#   formula = response ~ arrayAndSize * condition,
 #   data = d_exps |> mutate(arrayAndSize = paste(arrayCondition, studentsArray)),
 #   family = categorical()
 # )
