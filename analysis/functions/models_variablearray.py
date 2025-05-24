@@ -21,7 +21,8 @@ from functions.argstrengths import (
 ###### Base RSA
 
 def factory_model_base(data, list_possible_observations, 
-                       possible_utterances, include_observed=True):
+                       possible_utterances, include_observed=True,
+                       include_S1=False):
     """
     
     The only change compared to the model with fixed array sizes is that now there's different sets of possible
@@ -128,6 +129,12 @@ def factory_model_base(data, list_possible_observations,
                 ],
                 production_probs_masked
             )
+
+            if include_S1:
+                pm.Deterministic(
+                    f'S1_{i}',
+                    p_utterance_given_observation
+                )
         
         pm.Categorical(
             'utterances',
@@ -260,7 +267,8 @@ def factory_model_base_hierarchical(data, list_possible_observations,
 ########## lr argstrength
 
 def factory_model_lr_argstrength(data, list_possible_observations, 
-                                 possible_utterances, include_observed=True):
+                                 possible_utterances, include_observed=True,
+                                 include_S1=False):
                                
     mask_none = np.any(possible_utterances=='none', axis=1).astype(int)
     
@@ -373,6 +381,12 @@ def factory_model_lr_argstrength(data, list_possible_observations,
                 ],
                 production_probs_masked
             )
+
+            if include_S1:
+                pm.Deterministic(
+                    f'S1_{i}',
+                    p_utterance_given_observation
+                )
 
         utterances = pm.Categorical(
             'utterances',
@@ -550,7 +564,8 @@ def factory_model_lr_argstrength_hierarchical(data, list_possible_observations,
 ############## maximin argstrength
 
 def factory_model_maximin_argstrength(data, list_possible_observations, 
-                                      possible_utterances, include_observed=True):
+                                      possible_utterances, include_observed=True,
+                                      include_S1=False):
                                    
     mask_none = np.any(possible_utterances=='none', axis=1).astype(int)
     
@@ -662,7 +677,13 @@ def factory_model_maximin_argstrength(data, list_possible_observations,
                 production_probs_masked
             )
 
-        utterances = pm.Categorical(
+            if include_S1:
+                pm.Deterministic(
+                    f'S1_{i}',
+                    p_utterance_given_observation
+                )
+
+        pm.Categorical(
             'utterances',
             p_production.T,
             observed=data_utterance if include_observed else None,
@@ -837,7 +858,8 @@ def factory_model_maximin_argstrength_hierarchical(data, list_possible_observati
 ######### pragmatic argstrength
 
 def factory_model_prag_argstrength(data, list_possible_observations, 
-                                   possible_utterances, include_observed=True):
+                                   possible_utterances, include_observed=True,
+                                   include_S1=False):
 
     mask_none = np.any(possible_utterances=='none', axis=1).astype(int)
 
@@ -953,6 +975,12 @@ def factory_model_prag_argstrength(data, list_possible_observations,
                 ],
                 production_probs_masked
             )
+
+            if include_S1:
+                pm.Deterministic(
+                    f'S1_{i}',
+                    p_utterance_given_observation
+                )
 
         pm.Categorical(
             'utterances',
@@ -1135,7 +1163,8 @@ def factory_model_prag_argstrength_hierarchical(data, list_possible_observations
 
 
 def factory_model_nonparametric_argstrength(data, list_possible_observations, 
-                                            possible_utterances, include_observed=True):
+                                            possible_utterances, include_observed=True,
+                                            include_S1=False):
                                
     mask_none = np.any(possible_utterances=='none', axis=1).astype(int)
     
@@ -1246,6 +1275,12 @@ def factory_model_nonparametric_argstrength(data, list_possible_observations,
                 ],
                 production_probs_masked
             )
+
+            if include_S1:
+                pm.Deterministic(
+                    f'S1_{i}',
+                    p_utterance_given_observation
+                )
 
         utterances = pm.Categorical(
             'utterances',

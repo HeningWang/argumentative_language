@@ -155,7 +155,7 @@ def factory_model_base(data, possible_observations,
             data.index_observation
         ]
 
-        utterances = pm.Categorical(
+        pm.Categorical(
             'utterances',
             p_production.T,
             observed=data_utterance if include_observed else None,
