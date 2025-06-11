@@ -91,18 +91,17 @@ ggsave("pics/barplot_responses_example-12-12-9-3-3.pdf", width = 8, height = 4.5
 
 ## regression models ----
 
+fit_noCondition <- brms::brm(
+  formula = response ~ arrayAndSize,
+  data = d_exps |> mutate(arrayAndSize = paste(arrayCondition, as_factor(index_observation))),
+  family = categorical()
+)
 
-# fit_noCondition <- brms::brm(
-#   formula = response ~ arrayAndSize,
-#   data = d_exps |> mutate(arrayAndSize = paste(arrayCondition, studentsArray)),
-#   family = categorical()
-# )
-# 
-# fit_full <- brms::brm(
-#   formula = response ~ arrayAndSize * condition,
-#   data = d_exps |> mutate(arrayAndSize = paste(arrayCondition, studentsArray)),
-#   family = categorical()
-# )
+fit_full <- brms::brm(
+  formula = response ~ arrayAndSize * condition,
+  data = d_exps |> mutate(arrayAndSize = paste(arrayCondition, as_factor(index_observation))),
+  family = categorical()
+)
 
 
 
