@@ -142,34 +142,28 @@ function defineSampleTrial(arraySizeCondition){
 	// Has to be compatible with 'Some of the students got all of the questions right'
 	// and 'Some of the students got all of the questions wrong'
 	var sampleTrial;
-	if (arraySizeCondition === 'wideShort'){
+	if (arraySizeCondition === 'high'){
 		sampleTrial = {
 			"condition": 1,
-			"names": [ "Marie", "Nico", "Mia", "John", "Alex" ],
-			"studentsArray": [ 12, 12, 9, 0, 0 ],
+			"names": [ "Marie", "Nico", "Mia", "John", "Alex"],
+			"studentsArray": [12, 12, 9, 0, 0],
 			"nQuestions": 12 
 		};
-	} else if (arraySizeCondition === 'wideLong'){
+	} else if (arraySizeCondition === 'info'){
 		sampleTrial = {
 			"condition": 1,
-			"names": ["Marie", "Nico", "Mia", "John", "Alex", "Lesly", "Julian", "Chris", "Marie", "Lisanne", "John"],
-			"studentsArray": [12, 12, 12, 12, 3, 3, 3, 0, 0, 0, 0],
+			"names": ["Marie", "Nico", "Mia", "John", "Alex"],
+			"studentsArray": [12, 12, 9, 0, 0],
 			"nQuestions": 12 
 		};
-	} else if (arraySizeCondition === 'narrowShort'){
+	} else if (arraySizeCondition === 'low'){
 		sampleTrial = {
 			"condition": 1,
 			"names": [ "Marie", "Nico", "Mia", "John", "Alex" ],
 			"studentsArray": [ 6, 6, 1, 0, 0 ],
 			"nQuestions": 6 
 		};
-	} else if (arraySizeCondition === 'narrowLong'){
-		sampleTrial = {
-			"condition": 1,
-			"names": ["Marie", "Nico", "Mia", "John", "Alex", "Lesly", "Julian", "Chris", "Marie", "Lisanne", "John"],
-			"studentsArray": [6, 6, 6, 6, 1, 1, 1, 0, 0, 0, 0],
-			"nQuestions": 6 
-		};
+	} 
 	}
 	console.log(sampleTrial);
 	return sampleTrial
@@ -186,7 +180,7 @@ function constructTrials(arraySizeCondition){
 	var nQuestions;
 	var studentsArrays;
 
-	if (arraySizeCondition === 'wideShort'){
+	if (arraySizeCondition === 'high'){
 		nQuestions = 12;
 		// Each participant sees all arrays once!
 		// (there's 20 trials and 20 possible arrays)
@@ -212,7 +206,7 @@ function constructTrials(arraySizeCondition){
 			[ 3,  3,  0,  0,  0],
 			[ 0,  0,  0,  0,  0]
 		]);
-	} else if (arraySizeCondition === 'wideLong'){
+	} else if (arraySizeCondition === 'info'){
 			nQuestions = 12;
 			studentsArrays = _.shuffle([
 				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -237,7 +231,7 @@ function constructTrials(arraySizeCondition){
 				[12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
 			]);
 
-	} else if (arraySizeCondition === 'narrowShort'){
+	} else if (arraySizeCondition === 'low'){
 		nQuestions = 6;
 		studentsArrays = _.shuffle([
 			[0, 0, 0, 0, 0],
@@ -261,30 +255,7 @@ function constructTrials(arraySizeCondition){
 			[6, 6, 6, 5, 5],
 			[6, 6, 6, 6, 6]
 		]);
-	} else if (arraySizeCondition === 'narrowLong'){
-		nQuestions = 6;
-		studentsArrays = _.shuffle([
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-			[1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-			[5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0],
-			[5, 5, 5, 5, 1, 1, 1, 0, 0, 0, 0],
-			[5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1],
-			[5, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0],
-			[5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1],
-			[5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-			[6, 6, 6, 6, 0, 0, 0, 0, 0, 0, 0],
-			[6, 6, 6, 6, 1, 1, 1, 0, 0, 0, 0],
-			[6, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1],
-			[6, 6, 6, 6, 5, 5, 5, 0, 0, 0, 0],
-			[6, 6, 6, 6, 5, 5, 5, 1, 1, 1, 1],
-			[6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 5],
-			[6, 6, 6, 6, 6, 6, 6, 0, 0, 0, 0],
-			[6, 6, 6, 6, 6, 6, 6, 1, 1, 1, 1],
-			[6, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5],
-			[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
-		]);
+	} 
 	}
 
 	// Create an array with 10 zeros and 10 ones and shuffle it.

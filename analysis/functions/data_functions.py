@@ -42,14 +42,14 @@ def get_and_clean_data_exp1(pathdata='data_raw.csv'):
             'responses',       # previous: response
             'studentsArray',   # previous: row_number
             # 'trial_name',      # doesn't exist for this version
-            'prolific_pid'     # previous: prolific_id
+            'submission_id'     # previous: prolific_id
         ]]
 
         # change to the names I've used so far
         data.rename(columns={
             'responses': 'response',
             'studentsArray': 'row_number',
-            'prolific_pid': 'prolific_id'
+            'submission_id': 'prolific_id'
         }, inplace=True)
 
         data.loc[:,'response'] = data.response.str.lower()
@@ -258,7 +258,7 @@ def get_and_clean_data_exp2(pathdata='data_raw.csv', pathdata_firstexp=None, sel
         'condition', 
         'responses',       # previous: response
         'studentsArray',   # previous: row_number
-        'prolific_pid',     # previous: prolific_id
+        'submission_id',     # previous: prolific_id
         'arraySizeCondition'
     ]].reset_index(drop=True)
 
@@ -267,7 +267,7 @@ def get_and_clean_data_exp2(pathdata='data_raw.csv', pathdata_firstexp=None, sel
     data.rename(columns={
         'responses': 'response',
         'studentsArray': 'row_number',
-        'prolific_pid': 'prolific_id',
+        'submission_id': 'prolific_id',
         'arraySizeCondition': 'array_size_condition'
     }, inplace=True)
 
