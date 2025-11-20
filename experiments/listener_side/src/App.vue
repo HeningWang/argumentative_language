@@ -111,20 +111,34 @@
 	
 	// After all the instructions,
 	// the actual trials!
-	<template v-for="(trial, i) in trials">
-		<SelectionScreen
-			:question="questions[trial.condition]"
-			text="%s of the students got %s of the answers %s"
-			:options="choices"
+	<!-- Actual experimental trials -->
+	<template v-for="(trial, i) of trials">
+
+		<ForcedChoiceScreen
 			:key='i'
-			:progress='i / trials.length'
+			:qud="questions[0]"
+			:question="`${trial.Q1} of the students got ${trial.Q2} of the answers ${trial.A}`"
+			:options="trial.options"
+			:progress="i / trials.length"
 		>
-			// Add table to the stimulus slot in the slide 
+
+			<!-- Table + data recorder -->
 			<template #stimulus>
-				<AnswersTable :trialData='trial' />
-				<Record :data="trial" />
+					<AnswersTable :trialData="trial" />
+					<Record
+						:data="trial"
+					/>
+					<!-- 🚀 DEBUG PRINT -->
+					<pre style="background:#eee; padding:5px; font-size:12px;">
+						trial {{ i }}:
+						studentsArray = {{ trial.studentsArray }}
+						names: {{ trial.names }}
+						condition: {{ trial.condition }}
+					</pre>
 			</template>
-		</SelectionScreen>
+
+		</ForcedChoiceScreen>
+
 	</template>
 
 	<PostTestScreen />
@@ -136,158 +150,103 @@
 import _ from 'lodash';
 import AnswersTable from '@/Answers.vue';
 import SelectionScreen from '@/SelectionScreen.vue';
+import itemsRaw from '../items/final_listener_items.csv';
 
+// --- helpers ---
+// If observation in CSV is already an array, you can skip this and just use itemsRaw directly.
+function normalizeItems(rawItems) {
+  return rawItems.map((row, idx) => {
+    let obs = row.observation;
 
-function defineSampleTrial(arraySizeCondition){
-	// Has to be compatible with 'Some of the students got all of the questions right'
-	// and 'Some of the students got all of the questions wrong'
-	var sampleTrial;
-	if (arraySizeCondition === 'high'){
-		sampleTrial = {
-			"condition": 1,
-			"names": [ "Marie", "Nico", "Mia", "John", "Alex"],
-			"studentsArray": [12, 12, 9, 0, 0],
-			"nQuestions": 12 
-		};
-	} else if (arraySizeCondition === 'info'){
-		sampleTrial = {
-			"condition": 1,
-			"names": ["Marie", "Nico", "Mia", "John", "Alex"],
-			"studentsArray": [12, 12, 9, 0, 0],
-			"nQuestions": 12 
-		};
-	} else if (arraySizeCondition === 'low'){
-		sampleTrial = {
-			"condition": 1,
-			"names": [ "Marie", "Nico", "Mia", "John", "Alex" ],
-			"studentsArray": [ 6, 6, 1, 0, 0 ],
-			"nQuestions": 6 
-		};
-	} 
-	}
-	console.log(sampleTrial);
-	return sampleTrial
+    // If observation is a string (e.g., "12,12,0,0,0"), parse it into an array of numbers.
+    if (typeof obs === "string") {
+      obs = obs
+        .replace(/[\[\]\(\)]/g, "")
+        .split(/[,\s]+/)
+        .filter((x) => x !== "")
+        .map((x) => Number(x));
+    }
+
+    return {
+      id: row.id != null ? row.id : idx,
+      Q1: row.Q1,
+      Q2: row.Q2,
+      A: row.A,
+      condition: row.condition,
+      observation: obs,
+    };
+  });
 }
 
-function constructTrials(arraySizeCondition){
-	// Return a list of objects
-	// Each object represents a trial and contains
-	// information about:
-		// condition (high or low, represented as 1 and 0 respectively)
-		// the names to show (5 names)
-		// the answer array, represented as an array of ints, e.g. [12,12,6,6,0]
-	
-	var nQuestions;
-	var studentsArrays;
+const items = normalizeItems(itemsRaw);
 
-	if (arraySizeCondition === 'high'){
-		nQuestions = 12;
-		// Each participant sees all arrays once!
-		// (there's 20 trials and 20 possible arrays)
-		studentsArrays = _.shuffle([
-			[12, 12, 12, 12, 12],
-			[12, 12, 12,  3,  3],
-			[12, 12, 12,  9,  9],
-			[12, 12, 12,  0,  0],
-			[12, 12,  9,  9,  9],
-			[12, 12,  9,  3,  3],
-			[12, 12,  9,  0,  0],
-			[12, 12,  3,  3,  3],
-			[12, 12,  3,  0,  0],
-			[12, 12,  0,  0,  0],
-			[ 9,  9,  9,  9,  9],
-			[ 9,  9,  9,  3,  3],
-			[ 9,  9,  9,  0,  0],
-			[ 9,  9,  3,  3,  3],
-			[ 9,  9,  3,  0,  0],
-			[ 9,  9,  0,  0,  0],
-			[ 3,  3,  3,  3,  3],
-			[ 3,  3,  3,  0,  0],
-			[ 3,  3,  0,  0,  0],
-			[ 0,  0,  0,  0,  0]
-		]);
-	} else if (arraySizeCondition === 'info'){
-			nQuestions = 12;
-			studentsArrays = _.shuffle([
-				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-				[3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0],
-				[3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0],
-				[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-				[9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0],
-				[9, 9, 9, 9, 3, 3, 3, 0, 0, 0, 0],
-				[9, 9, 9, 9, 3, 3, 3, 3, 3, 3, 3],
-				[9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0],
-				[9, 9, 9, 9, 9, 9, 9, 3, 3, 3, 3],
-				[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9],
-				[12, 12, 12, 12, 0, 0, 0, 0, 0, 0, 0],
-				[12, 12, 12, 12, 3, 3, 3, 0, 0, 0, 0],
-				[12, 12, 12, 12, 3, 3, 3, 3, 3, 3, 3],
-				[12, 12, 12, 12, 9, 9, 9, 0, 0, 0, 0],
-				[12, 12, 12, 12, 9, 9, 9, 3, 3, 3, 3],
-				[12, 12, 12, 12, 9, 9, 9, 9, 9, 9, 9],
-				[12, 12, 12, 12, 12, 12, 12, 0, 0, 0, 0],
-				[12, 12, 12, 12, 12, 12, 12, 3, 3, 3, 3],
-				[12, 12, 12, 12, 12, 12, 12, 9, 9, 9, 9],
-				[12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
-			]);
+function defineSampleTrial(item) {
+  // item is one row from itemsTable: { Q1, Q2, A, observation, condition, ... }
 
-	} else if (arraySizeCondition === 'low'){
-		nQuestions = 6;
-		studentsArrays = _.shuffle([
-			[0, 0, 0, 0, 0],
-			[1, 1, 0, 0, 0],
-			[1, 1, 1, 0, 0],
-			[1, 1, 1, 1, 1],
-			[5, 5, 0, 0, 0],
-			[5, 5, 1, 0, 0],
-			[5, 5, 1, 1, 1],
-			[5, 5, 5, 0, 0],
-			[5, 5, 5, 1, 1],
-			[5, 5, 5, 5, 5],
-			[6, 6, 0, 0, 0],
-			[6, 6, 1, 0, 0],
-			[6, 6, 1, 1, 1],
-			[6, 6, 5, 0, 0],
-			[6, 6, 5, 1, 1],
-			[6, 6, 5, 5, 5],
-			[6, 6, 6, 0, 0],
-			[6, 6, 6, 1, 1],
-			[6, 6, 6, 5, 5],
-			[6, 6, 6, 6, 6]
-		]);
-	} 
-	}
+  const namesPool = [
+    "John", "Lisa", "Amy", "Daniel", "Alex", "Tina", "Mia", "Julia", "Tim", "Johann",
+    "Lesly", "Julian", "Chris", "Marie", "Lisanne", "Thomas", "Pablo", "Rebecca",
+    "Theresa", "Susanne", "Jan", "Nico"
+  ];
 
-	// Create an array with 10 zeros and 10 ones and shuffle it.
-	// These represent whether the participant is in the high or low
-	// condition in each trial. 
-	// Total of 20 trials.
-	const conditions = _.shuffle(Array(10).fill(1).concat(Array(10).fill(0)));
-	var names = [
-		"John", "Lisa", "Amy", "Daniel", "Alex", "Tina", "Mia", "Julia", "Tim", "Johann", 
-		"Lesly", "Julian", "Chris", "Marie", "Lisanne", "Thomas", "Pablo", "Rebecca", 
-		"Theresa", "Susanne", "Jan", "Nico"
-	];
+  const nStudents = item.observation.length;
 
-	
-	// Construct the array with the trial information
-	var trials = [];
-	for (var i=0; i < conditions.length; i++){
-		var trial = {
-			// Get a condition from shuffled list of conditions
-			condition: conditions[i],
-			// Sample 5 student names at random
-			names: _.sampleSize(names, studentsArrays.length),
-			// Get an answers array from shuffled list
-			studentsArray: studentsArrays[i],
-			nQuestions: nQuestions,
-			// Save the arraySizeCondition
-			arraySizeCondition: arraySizeCondition
-		};
-		trials.push(trial);
-	}
+  // Build a sample trial object matching the shape used in constructTrials
+  const trial = {
+    condition: item.condition,
+    names: _.sampleSize(namesPool, nStudents),
+    studentsArray: item.observation,
+    nQuestions: 12,        // or infer from observation if you prefer
+    Q1: item.Q1,
+    Q2: item.Q2,
+    A: item.A
+  };
 
-	return _.shuffle(trials)
+  return trial;
+}
+
+function constructTrials(itemsTable) {
+  // Pool of possible student names
+	var namesPool = [
+    "John", "Lisa", "Amy", "Daniel", "Alex", "Tina", "Mia", "Julia", "Tim", "Johann",
+    "Lesly", "Julian", "Chris", "Marie", "Lisanne", "Thomas", "Pablo", "Rebecca",
+    "Theresa", "Susanne", "Jan", "Nico"
+  ];
+  	const choiceOptions = ["Student", "Teacher", "Principal", "I don't know"];
+
+  // Turn each row in the items table into a trial object
+  	var trials = itemsTable.map(function(item) {
+    var obs = item.observation;
+    var nStudents = obs.length;
+
+    // If you always have 12 questions, fix nQuestions = 12.
+    // Otherwise you can infer it from the max count:
+    // var nQuestions = Math.max.apply(null, obs);
+    var nQuestions = 12;
+
+    return {
+      // Ground-truth speaker type for this item
+      condition: item.condition,          // "high", "low", or "info"
+
+      // Names: sample as many names as there are students in the observation
+      names: _.sampleSize(namesPool, nStudents),
+
+      // The counts per student (e.g., [12, 12, 0, 0, 0])
+      studentsArray: obs,
+
+      // Total number of questions in the exam
+      nQuestions: nQuestions,
+
+      // Keep linguistic info for sentence construction
+      Q1: item.Q1,   // first quantifier
+      Q2: item.Q2,   // second quantifier
+      A:  item.A,     // "right" / "wrong"
+	  options: _.shuffle(choiceOptions)
+    };
+  });
+
+  // Randomize trial order before returning
+  return _.shuffle(trials);
 }
 
 
@@ -300,48 +259,41 @@ const arraySizeCondition = 'narrowLong'
 
 // Called 'questions' cause that is the name of the appropriate
 // prop in the CompletionScreen component
+// Question shown above the report
 const questions = [
-	"Describe these results of Riverside so as to make it appear as if there is a <b>low</b> success rate without lying.",
-	"Describe these results of Green Valley so as to make it appear as if there is a <b>high</b> success rate without lying."
+  "Who is most likely to have said this report?"
 ];
-	
-const choices = [
-	['Some', 'All', 'None', 'Most'],
-	['some', 'all', 'none', 'most'],
-	['right', 'wrong']
-];
+
+// Possible response options (will be shuffled once per participant)
+const choiceOptions = ["Student", "Teacher", "Principal", "I don't know"];
 
 
 export default {
-	name: 'App',
-	data() {
-		return {
-			// Shuffle presentation order of trials
-			// This is in data and so it is only ran once
-			trials: constructTrials(arraySizeCondition),
-			// Shuffle order of choices in select box
-			// (Only done once per participant)
-			choices: _.map(choices, _.shuffle),
-			// The two questions
-			questions: questions,
-			sampleTrial: defineSampleTrial(arraySizeCondition),
-			arraySizeCondition: arraySizeCondition
-		};
-	},
-	components: {
-		AnswersTable,
-		SelectionScreen
-	},
-	methods: {
-		constructTrials,
-		defineSampleTrial
-	},
-	computed: {
-		// Expose lodash to template code
-		_() {
-			return _;
-		}
-	}
+  name: "App",
+  components: {
+    AnswersTable,
+    SelectionScreen,
+  },
+  data() {
+    const trials = constructTrials(items);
+
+    return {
+      trials,
+      choices: [_.shuffle(choiceOptions)],
+      questions,
+      sampleTrial: defineSampleTrial(items[0]),
+      items,
+    };
+  },
+  methods: {
+    constructTrials,
+    defineSampleTrial,
+  },
+  computed: {
+    _() {
+      return _;
+    },
+  },
 };
 
 </script>
