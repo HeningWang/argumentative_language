@@ -136,3 +136,5 @@ node_modules
 **/*.synctex.gz
 **/.auctex-auto
 **/.Rhistory
+.Rproj.user
+analysis/listener_side/listener_side.Rproj

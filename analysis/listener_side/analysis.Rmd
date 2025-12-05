@@ -1,0 +1,30 @@
+---
+title: "analysis"
+output: html_document
+---
+
+## Import modules
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+## Load data
+```{r}
+data <- read.csv("../../data/data_listenerside/data.csv")
+```
+
+
+## Basic data
+
+### Participants
+
+This study included a total of r n_participants participants recruited from online platforms.
+Participants had a mean age of r round(mean(participants_summary$age, na.rm = TRUE),1) years
+(SD = r round(sd(participants_summary$age, na.rm = TRUE),1), range:
+r min(participants_summary$age, na.rm = TRUE)–
+r max(participants_summary$age, na.rm = TRUE)).
+```{r}
+
+```

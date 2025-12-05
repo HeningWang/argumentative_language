@@ -30,8 +30,6 @@
 			<br /><br />
 			<b>Nature of the study.</b> You are invited to participate in a study which involves looking at sets of (fictitious) exam results. You will read descriptions about these results and decide who wrote them. Once you finish, we will have also some brief questions concerning your age, gender, and language background. Your session should last for up to 10 minutes. You will be given full instructions shortly.
 			<br /><br />
-			<b>Compensation.</b> You will be paid £1.5 for your participation in this study.
-			<br /><br />
 			<b>Risks and benefits.</b> There are no known risks to participation in this study. Other than the payment mentioned, there are no tangible benefits to you, however you will be contributing to our knowledge about language.  
 			<br /><br />
 			<b>Confidentiality and use of data.</b> All the information we collect during the course of the research will be processed in accordance with Data Protection Law. In order to safeguard your privacy, we will never share personal information (like your name) with anyone outside the research team. Your data will be referred to by a unique participant number. Please note that we will temporarily collect your participant ID to prevent repeated participation, however we will never share this information with anyone outside the research team. We will store any personal data (i.e., participant ID) securely using the University of Tübingen’s storage systems. The anonymised data collected during this study will be used for research purposes and may be shared with other researchers or with the general public (e.g., we may make it available through the world wide web, or use it in TV or radio broadcasts).
@@ -53,7 +51,7 @@
 		<Slide>
 			Many events in life can be described in one way or another. Think of describing the same glass as either half full or half empty. In this experiment, we are interested in how <i>you</i> would interpret the intended meaning behind an utterance.
 			<br/><br/>
-			You will see pictures showing the true results of an exam, along with short reports describing those results. Your task is to decide <b>who</b> made each report, given the true outcomes and the different goals of the possible speakers.
+			You will see pictures showing the results of an exam, along with short reports describing those results. Your task is to decide <b>who</b> made each report, given the true outcomes and the different goals of the possible speakers.
 			<br/><br/>
 			The next screen will give you more concrete instructions for the upcoming task.
 			<button @click="$magpie.nextSlide()">Next</button>
@@ -62,17 +60,17 @@
 		<Slide>
 		<strong>Background:</strong> Recently, Green Valley High School has held several exams. In some exams, students had a high probability of success; in others, the chances of success were lower.
 		<br/><br/>
-		There are three people who may report about these exams, each with slightly different goals:
+		There are three people who may may want to tell you about the results of these exams, each with slightly different goals:
 		<br/><br/>
-		<b>The student</b> wants the exam to sound difficult&mdash;that is, as if students had a low chance of success&mdash;because it would make her own performance seem better in comparison.
+		<b>The student</b> wants the exam to appear <b>difficult</b>&mdash;that is, as if students had a low chance of success&mdash;because it would make her own performance seem better in comparison.
 		<br/><br/>
-		<b>The teacher</b> wants the exam to sound easy&mdash;that is, as if students had a high chance of success&mdash;because it would reflect positively on the quality of teaching and the students’ overall preparedness.
+		<b>The teacher</b> wants the exam to appear <b>easy</b>&mdash;that is, as if students had a high chance of success&mdash;because it would reflect positively on the quality of teaching and the students’ overall preparedness.
 		<br/><br/>
-		<b>The principal</b> provides an objective report that aims to describe the exam as it was, without making it sound particularly hard or easy.
+		<b>The principal</b> provides an objective report that aims to describe the exam <b>objectively</b>, without making it sound particularly hard or easy.
 		<br/><br/>
 		In the following practice trails, you will see examples of exam results. The tables are showing the exam results of students. 
 			A "<i style="color:#13AC38">&#10004;</i>" indicates that a task was answered correctly, 
-			and a "<i style="color:#B12810">&#10008;</i>" that it was answered incorrectly.You will first try to make your own report as if you were one of the three speakers, and then you will see example reports made by each of the three speakers.
+			and a "<i style="color:#B12810">&#10008;</i>" that it was answered incorrectly. You will first try to make your own report as if you were one of the three speakers, and then you will see example reports made by each of the three speakers.
 		<button @click="$magpie.nextScreen()">Next</button>
 		</Slide>
 	</Screen>
@@ -93,7 +91,7 @@
 	</template>
 	<Screen>
 		<Slide>
-			Great! You've completed the training phase as a spekaer. We will move on to the main part of the experiment next, where you will take the role of a listener.
+			Great! You've completed the training phase as a speaker. We will move on to the main part of the experiment next, where you will take the role of a listener.
 			<br/><br/>
 			Remember: the tables are showing the exam results of students. 
 			A "<i style="color:#13AC38">&#10004;</i>" indicates that a task was answered correctly, 
