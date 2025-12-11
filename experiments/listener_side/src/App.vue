@@ -358,7 +358,7 @@ export default {
     // 2. Between-subject assignment: this participant sees either odd or even list
     //    (you can later replace this with a condition from magpie/url if you like)
     //const listAssignment = _.sample(["odd", "even"]);
-	const listAssignment = "odd"
+	const listAssignment = "even"
     const selectedItems = listAssignment === "odd" ? listOdd : listEven;
 
     // 3. Build trials only from the selected half
