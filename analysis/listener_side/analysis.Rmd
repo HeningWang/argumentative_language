@@ -8,11 +8,16 @@ output: html_document
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(aida)
+library(broom)
+library(MASS)
+library(brms)
+library(cmdstanr)
 ```
 
 ## Load data
 ```{r}
-data <- read.csv("../../data/data_listenerside/data.csv")
+data <- read.csv("../../data/data_listenerside/data_pilot1.csv")
 ```
 
 
@@ -140,6 +145,134 @@ ggplot(boot_descriptive,
     y = "Proportion of responses",
     fill = "Response type"
   ) +
-  theme_minimal(base_size = 14)
+  theme_aida()
 ```
+## Inferential data analysis
+
+First we try with GLM based analysis. We could for each conditions fit and non-fit.
+
+```{r}
+# 1. Fit vs non-fit per trial
+data <- data %>%
+  mutate(
+    fit = if_else(condition == response_condition, 1L, 0L),
+    # set reference level (change if you prefer another baseline)
+    condition = relevel(condition, ref = "info")
+  )
+
+# 2. Descriptive proportions of 'fit' by condition
+fit_summary <- data %>%
+  group_by(condition) %>%
+  summarise(
+    n      = n(),
+    n_fit  = sum(fit),
+    prop_fit = n_fit / n,
+    .groups = "drop"
+  )
+
+fit_summary
+```
+
+```{r}
+# Logistic regression: fit ~ condition
+glm_fit <- glm(fit ~ condition,
+               data   = data,
+               family = binomial)
+
+summary(glm_fit)
+
+# Odds ratios with 95% CIs
+glm_fit_or <- tidy(glm_fit,
+                   conf.int   = TRUE,
+                   exponentiate = TRUE)
+
+glm_fit_or
+```
+Next we try with binomial test:
+```{r}
+chance <- 1/3
+
+fit_tests <- fit_summary %>%
+  rowwise() %>%
+  mutate(
+    bt = list(binom.test(n_fit, n, p = chance)),
+    p_value  = bt$p.value,
+    ci_low   = bt$conf.int[1],
+    ci_high  = bt$conf.int[2]
+  ) %>%
+  ungroup() %>%
+  select(condition, n, n_fit, prop_fit, p_value, ci_low, ci_high)
+
+fit_tests
+```
+
+Finally we will try a ordinal regression analysis:
+```{r}
+
+
+# Make sure factors are set up correctly
+data <- data %>%
+  mutate(
+    # ordered outcome for brms
+    response_ord = factor(
+      response_condition,
+      levels = c("low", "info", "high"),
+      ordered = TRUE
+    ),
+    # set baseline of condition
+    condition = relevel(condition, ref = "info")
+  )
+
+table(data$response_ord, data$condition)
+```
+
+```{r}
+
+# Priors: fairly weakly informative
+priors <- c(
+  set_prior("normal(0, 2)", class = "b"),         # effects of condition
+  set_prior("normal(0, 5)", class = "Intercept")  # thresholds (cut-points)
+)
+
+ord_brms <- brm(
+  formula = response_ord ~ condition,
+  family  = cumulative("logit"),
+  data    = data,
+  prior   = priors,
+  chains  = 4,
+  iter    = 4000,
+  warmup  = 2000,
+  cores   = 4,
+  seed    = 1234,
+  backend = "cmdstanr"
+)
+
+summary(ord_brms)
+```
+```{r}
+fixef(ord_brms)  # raw posterior summaries on log-odds scale
+
+# Exponentiate to get odds ratios
+fixef_ord_or <- exp(fixef(ord_brms)[, c("Estimate", "Q2.5", "Q97.5")])
+fixef_ord_or
+```
+A Bayesian cumulative ordinal regression revealed that the low condition reliably shifted responses toward lower categories (OR = 0.41, 95% CrI [0.20, 0.83]).
+The high condition showed a positive but uncertain effect (OR = 1.77, 95% CrI [0.85, 3.80]).
+These results indicate strong evidence that the low-information trials pull participants toward selecting “low,” while the high-information trials show only weak evidence for shifting choices toward “high.”
+
+```{r}
+new_dat <- data.frame(
+  condition = factor(c("info", "high", "low"),
+                     levels = levels(data$condition))
+)
+
+pred_probs <- fitted(
+  ord_brms,
+  newdata = new_dat,
+  summary = TRUE  # average across posterior draws
+)
+
+pred_probs
+```
+
 
