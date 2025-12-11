@@ -20,11 +20,126 @@ data <- read.csv("../../data/data_listenerside/data.csv")
 
 ### Participants
 
-This study included a total of r n_participants participants recruited from online platforms.
-Participants had a mean age of r round(mean(participants_summary$age, na.rm = TRUE),1) years
-(SD = r round(sd(participants_summary$age, na.rm = TRUE),1), range:
-r min(participants_summary$age, na.rm = TRUE)–
-r max(participants_summary$age, na.rm = TRUE)).
+```{r}
+num_participants <- data %>% distinct(submission_id)
+```
+
+## Descriptive data analysis
 ```{r}
 
+experiment_condition <- c("high", "info", "low")
+
+data <- data %>%
+  mutate(condition = factor(condition, levels = experiment_condition)) %>%
+  filter(!is.na(response)) %>%
+  filter(condition %in% experiment_condition)
+
+
+response_code <- c(
+  "Student"   = "low",
+  "Teacher"   = "high",
+  "Principal" = "info"
+)
+
+data <- data %>%
+  mutate(
+    response_condition = response_code[response],
+    response_condition = factor(response_condition,
+                                levels = experiment_condition)
+  )
+
+descriptive_summary <- data %>%
+  group_by(condition, response_condition) %>%
+  summarise(
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  group_by(condition) %>%
+  mutate(
+    proportion = n / sum(n)
+  ) %>%
+  ungroup()
+
+descriptive_summary
 ```
+```{r}
+descriptive_wide <- descriptive_summary %>%
+  select(condition, response_condition, proportion) %>%
+  pivot_wider(
+    names_from  = response_condition,
+    values_from = proportion,
+    values_fill = 0
+  )
+
+descriptive_wide
+```
+
+```{r}
+# all responses mapped?
+sum(is.na(data$response_condition))
+
+# proportions sum to 1?
+descriptive_summary %>%
+  group_by(condition) %>%
+  summarise(sum_prop = sum(proportion))
+```
+```{r}
+# df must have a column `response_condition` (factor or character)
+bootstrap_props_one_condition <- function(df, B = 2000, level = 0.95) {
+  # Ensure factor with stable levels
+  res_levels <- levels(df$response_condition)
+  if (is.null(res_levels)) {
+    res_levels <- sort(unique(df$response_condition))
+    df <- df %>% mutate(response_condition = factor(response_condition,
+                                                    levels = res_levels))
+  }
+  
+  boot_mat <- replicate(B, {
+    idx <- sample(seq_len(nrow(df)), replace = TRUE)
+    tab <- table(df$response_condition[idx])
+    # ensure all levels present
+    tab_full <- tab[res_levels]
+    tab_full[is.na(tab_full)] <- 0
+    as.numeric(tab_full) / length(idx)
+  })
+  
+  alpha <- (1 - level) / 2
+  ci_low  <- apply(boot_mat, 1, quantile, probs = alpha)
+  ci_high <- apply(boot_mat, 1, quantile, probs = 1 - alpha)
+  prop_emp <- as.numeric(table(df$response_condition)[res_levels]) / nrow(df)
+  
+  tibble(
+    response_condition = factor(res_levels, levels = res_levels),
+    proportion         = prop_emp,
+    ci_low             = ci_low,
+    ci_high            = ci_high
+  )
+}
+
+boot_descriptive <- data %>%
+  group_by(condition) %>%
+  group_modify(~ bootstrap_props_one_condition(.x)) %>%
+  ungroup()
+
+boot_descriptive
+
+ggplot(boot_descriptive,
+       aes(x = condition,
+           y = proportion,
+           fill = response_condition)) +
+  geom_col(position = position_dodge(width = 0.9)) +
+  geom_errorbar(
+    aes(ymin = ci_low, ymax = ci_high),
+    position = position_dodge(width = 0.9),
+    width = 0.2
+  ) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1),
+                     limits = c(0, 1)) +
+  labs(
+    x = "Experimental condition",
+    y = "Proportion of responses",
+    fill = "Response type"
+  ) +
+  theme_minimal(base_size = 14)
+```
+

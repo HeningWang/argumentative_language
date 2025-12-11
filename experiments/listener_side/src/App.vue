@@ -20,7 +20,7 @@
 		</Slide>
 			
 		<Slide>
-			<b>Study title</b>: Describing exam results
+			<b>Study title</b>: Who reports what? Investigating the interpretation of utterances with different communicative goals
 			<br /><br />
 			<b>Principal Investigator</b>: Michael Franke
 			<br /><br />
@@ -28,13 +28,13 @@
 			<br /><br />
 			<b>What is this document?</b>  This document explains what kind of study we’re doing, what your rights are, and what will be done with your data. You should print this page for your records.
 			<br /><br />
-			<b>Nature of the study.</b> You are invited to participate in a study which involves looking at sets of (fictitious) exam results. You will read descriptions about these results and decide who wrote them. Once you finish, we will have also some brief questions concerning your age, gender, and language background. Your session should last for up to 10 minutes. You will be given full instructions shortly.
+			<b>Nature of the study.</b> You are invited to participate in a study which involves looking at sets of (fictitious) exam results. You will read descriptions of these results and decide who wrote them. Once you finish, we will also ask you some brief questions concerning your age, gender, and language background. Your session should last for up to 15 minutes. You will be given full instructions shortly.
 			<br /><br />
-			<b>Risks and benefits.</b> There are no known risks to participation in this study. Other than the payment mentioned, there are no tangible benefits to you, however you will be contributing to our knowledge about language.  
+			<b>Risks and benefits.</b> There are no known risks to participation in this study. Other than the payment, there are no tangible benefits to you; however, you will be contributing to our knowledge about language.  
 			<br /><br />
-			<b>Confidentiality and use of data.</b> All the information we collect during the course of the research will be processed in accordance with Data Protection Law. In order to safeguard your privacy, we will never share personal information (like your name) with anyone outside the research team. Your data will be referred to by a unique participant number. Please note that we will temporarily collect your participant ID to prevent repeated participation, however we will never share this information with anyone outside the research team. We will store any personal data (i.e., participant ID) securely using the University of Tübingen’s storage systems. The anonymised data collected during this study will be used for research purposes and may be shared with other researchers or with the general public (e.g., we may make it available through the world wide web, or use it in TV or radio broadcasts).
+			<b>Confidentiality and use of data.</b> All the information we collect during the course of the research will be processed in accordance with Data Protection Law. In order to safeguard your privacy, we will never share personal information (like your name) with anyone outside the research team. Your data will be referred to by a unique participant number. Please note that we will temporarily collect your participant ID to prevent repeated participation; however, we will never share this information with anyone outside the research team. We will store any personal data (i.e., participant ID) securely using the University of Tübingen’s storage systems. The anonymised data collected during this study will be used for research purposes and may be shared with other researchers or with the general public (e.g., we may make it available through the world wide web, or use it in TV or radio broadcasts).
 			<br /><br />
-			<b>Voluntary participation and right to withdraw.</b> Your participation is voluntary, and you may withdraw from the study at any time and for any reason. If you withdraw from the study after data gathering, we will delete your Prolific ID from the data and there is no penalty or loss of benefits to which you are otherwise entitled. To withdraw from the study after data gathering please contact the research team by providing your prolific participant ID.  
+			<b>Voluntary participation and right to withdraw.</b> Your participation is voluntary, and you may withdraw from the study at any time and for any reason. If you withdraw from the study after data gathering, we will delete your Prolific ID from the data, and there will be no penalty or loss of benefits to which you are otherwise entitled. To withdraw from the study after data gathering, please contact the research team by providing your Prolific participant ID.  
 			<br /><br />
 			If you have any questions about what you’ve just read, please feel free to ask, or contact us later. You can contact us by email at hening.wang@uni-tuebingen.de.
 			<br /><br />
@@ -60,15 +60,15 @@
 		<Slide>
 		<strong>Background:</strong> Recently, Green Valley High School has held several exams. In some exams, students had a high probability of success; in others, the chances of success were lower.
 		<br/><br/>
-		There are three people who may may want to tell you about the results of these exams, each with slightly different goals:
+		There are three people who may want to tell you about the results of these exams, each with slightly different goals:
 		<br/><br/>
 		<b>The student</b> wants the exam to appear <b>difficult</b>&mdash;that is, as if students had a low chance of success&mdash;because it would make her own performance seem better in comparison.
 		<br/><br/>
 		<b>The teacher</b> wants the exam to appear <b>easy</b>&mdash;that is, as if students had a high chance of success&mdash;because it would reflect positively on the quality of teaching and the students’ overall preparedness.
 		<br/><br/>
-		<b>The principal</b> provides an objective report that aims to describe the exam <b>objectively</b>, without making it sound particularly hard or easy.
+		<b>The principal</b> provides a report that aims to describe the exam <b>objectively</b>, without making it sound particularly hard or easy.
 		<br/><br/>
-		In the following practice trails, you will see examples of exam results. The tables are showing the exam results of students. 
+		In the following practice trials, you will see examples of exam results. The tables show the exam results of students. 
 			A "<i style="color:#13AC38">&#10004;</i>" indicates that a task was answered correctly, 
 			and a "<i style="color:#B12810">&#10008;</i>" that it was answered incorrectly. You will first try to make your own report as if you were one of the three speakers, and then you will see example reports made by each of the three speakers.
 		<button @click="$magpie.nextScreen()">Next</button>
@@ -93,11 +93,11 @@
 		<Slide>
 			Great! You've completed the training phase as a speaker. We will move on to the main part of the experiment next, where you will take the role of a listener.
 			<br/><br/>
-			Remember: the tables are showing the exam results of students. 
+			Remember: the tables show the exam results of students. 
 			A "<i style="color:#13AC38">&#10004;</i>" indicates that a task was answered correctly, 
 			and a "<i style="color:#B12810">&#10008;</i>" that it was answered incorrectly.
 			<br/><br/>
-			From the table, note that each person reports with a different goal:
+			From these tables, note that each person has a different goal when reporting:
 			<br/><br/>
 				The <b>student</b> wants the exam to sound <b>difficult</b>.
 			<br/><br/>
@@ -193,6 +193,25 @@ function normalizeItems(rawItems) {
 }
 
 const items = normalizeItems(itemsRaw);
+
+// Deterministic split: odd vs even by CSV row order
+// 1st row (index 0 => 1-based 1) -> odd list
+// 2nd row (index 1 => 1-based 2) -> even list
+function splitItemsIntoTwoListsConstant(itemsArray) {
+  const listOdd = [];
+  const listEven = [];
+
+  itemsArray.forEach((item, idx) => {
+    const oneBased = idx + 1; // row number as in CSV (starting at 1)
+    if (oneBased % 2 === 1) {
+      listOdd.push(item);   // 1, 3, 5, ...
+    } else {
+      listEven.push(item);  // 2, 4, 6, ...
+    }
+  });
+
+  return { listOdd, listEven };
+}
 
 function defineSampleSpeakerTrial(arraySizeConditions) {
   // arraySizeConditions is an array like ['high', 'info', 'low']
@@ -333,7 +352,18 @@ export default {
     SelectionScreen,
   },
   data() {
-    const trials = constructTrials(items);
+	// 1. Create two fixed lists based on CSV row parity
+    const { listOdd, listEven } = splitItemsIntoTwoListsConstant(items);
+
+    // 2. Between-subject assignment: this participant sees either odd or even list
+    //    (you can later replace this with a condition from magpie/url if you like)
+    //const listAssignment = _.sample(["odd", "even"]);
+	const listAssignment = "odd"
+    const selectedItems = listAssignment === "odd" ? listOdd : listEven;
+
+    // 3. Build trials only from the selected half
+    const trials = constructTrials(selectedItems, listAssignment);
+
 	const sampleTrials = defineSampleSpeakerTrial(sampleTrial_conditions);
     return {
       trials,
