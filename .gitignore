@@ -139,3 +139,4 @@ node_modules
 .Rproj.user
 analysis/listener_side/listener_side.Rproj
 analysis/listener_side/.RData
+analysis/listener_side/.RData
