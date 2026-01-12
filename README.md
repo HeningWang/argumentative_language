@@ -12,7 +12,7 @@ This repository contains the code, data, and analysis for a research project inv
   
   Also includes `data-exploration.r` for data wrangling and plotting.
 
-- **analysis/**  
+- **analysis/**
   Jupyter notebooks and supporting code for modeling and analyzing the experimental data:
   - `analysis_pilot_exp1.ipynb`: Analysis for pilot and Experiment 1.
   - `analysis_exp2.ipynb`: Analysis for Experiment 2.
