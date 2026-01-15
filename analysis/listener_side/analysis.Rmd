@@ -25,6 +25,7 @@ library(broom)
 library(MASS)
 library(brms)
 library(cmdstanr)
+library(stringr)
 library(cspplot) # https://github.com/CogSciPrag/cspplot
 ```
 
@@ -59,6 +60,32 @@ scale_fill_discrete <- function(...) {
 ## Load data
 ```{r}
 data <- read.csv("../../data/data_listenerside/data_pilot1.csv")
+list_info <- read.csv("../../experiments/listener_side/items/final_listener_items.csv")
+```
+
+```{r}
+# Add list info to the data, allowing by-item level analysis
+list_info %>% mutate(
+    item_id = row_number(),
+    list = if_else(item_id %% 2 == 1, 1L, 2L),
+    # Make the first letter of Q1 uppercase
+    Q1 = str_replace(Q1, "^([a-zA-Z])", str_to_upper),
+
+    # Ensure A ends with a period
+    A = if_else(str_detect(A, "\\.$"), A, paste0(A, "."))
+  ) -> list_info
+
+data <- data %>%
+  left_join(
+    list_info %>%
+      dplyr::select(Q1, Q2, A, condition, item_id, list),
+    by = c(
+      "Q1",
+      "Q2",
+      "A",
+      "condition"
+    )
+  )
 ```
 
 
@@ -196,9 +223,41 @@ ggplot(boot_descriptive,
     y = "Proportion of responses",
     fill = "Response type"
   ) +
-  theme_aida()
+  theme_csp()
 ```
+By-item analysis.
+```{r}
+# Plot descriptive proportions with CIs
+data %>% filter(condition == "info") %>%
+  group_by(item_id, response_condition) %>%
+  summarise(
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  group_by(item_id) %>%
+  mutate(
+    proportion = n / sum(n)
+  ) %>%
+  ungroup() %>%
+  ggplot(aes(x = factor(item_id),
+             y = proportion,
+             fill = response_condition)) +
+  geom_col(position = position_dodge(width = 0.9)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1),
+                     limits = c(0, 1)) +
+  labs(
+    x = "Item ID",
+    y = "Proportion of responses",
+    fill = "Response type",
+    title = "Descriptive by-item analysis for condition 'info'"
+  ) +
+  theme_csp()
 
+#17  most  some  wrong      [12, 9, 9, 9, 9]      info          NaN         NaN   -1.042818
+#18  most   all  wrong     [12, 12, 0, 0, 0]      info          NaN         NaN   -1.116629
+#19  some   all  wrong    [12, 12, 12, 0, 0]      info          NaN         NaN   -1.026854
+#20  some   all  right     [12, 12, 0, 0, 0]      info          NaN         NaN   -1.027021
+```
 ## Inferential data analysis
 
 First we try with GLM based analysis. We could for each conditions enocode fit and non-fit.
@@ -278,7 +337,7 @@ data <- data %>%
 table(data$response_ord, data$condition)
 ```
 
-```{r, results = 'hide'}
+```{r}
 # Priors: fairly weakly informative
 priors <- c(
   set_prior("normal(0, 2)", class = "b"),         # effects of condition
