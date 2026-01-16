@@ -219,18 +219,15 @@ Yet, some phenomena seem to require more elaborate utility functions.
 For example, in the realm of social meaning, extensions of the vanilla RSA model sketched above have been explored which incorporate additional utility components related to politeness \citep{YoonTessler2020:Polite-Speech-E}.
 Here, we take a similar approach to modelling the utility trade-off between describing the world informatively and making an argument in favor of a position or hypothesis $H_{0}$, as opposed to the competing position or hypothesis $H_{1}$.
 The general form of the extended speaker utility function we consider in this paper will be:
-\begin{align}
+\begin{align*}
   \label{eq:utilArgstrength}
-  U(u , s , H_{0} , H_{1})
-  = &
-    \underbrace{{\mycolh{\beta}} \ \log P_{L_0} (s \mid \interpret{u})}_{\text{truth \& informativity}}
- \\
-    & + \
+  & U(u , s , H_{0} , H_{1}) = \\
+  & \underbrace{{\mycolh{\beta}} \ \log P_{L_0} (s \mid \interpret{u})}_{\text{truth \& informativity}}
+ \  + \
       \underbrace{(\mycolh{1-\beta}) \ \text{argstr}(u, H_{0} , H_{1})}_{\text{argumentative strength}}
- \\
-    & - \
-    \underbrace{\text{cost}(u)}_{\text{economy}}\,.
-\end{align}
+ \ - \
+    \underbrace{\text{cost}(u)}_{\text{economy}}
+\end{align*}
 Following the previous literature, the parameter $\beta$ models the degree to which a speaker values optimizing informativity of an utterance or making a strong argument for position $H_{0}$ (relative to $H_{1}$).
 For the special case of $\beta = 1$, this formulation reduces to the previous utility function which did not have argumentative strength as an additional speaker objective for utterance selection.
 
