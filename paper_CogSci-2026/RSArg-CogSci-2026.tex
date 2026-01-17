@@ -96,16 +96,84 @@
 
 \begin{document}
 
+
 \maketitle
+
+
+\noindent
+\hspace*{0.33\linewidth}%
+\parbox{0.66\linewidth}{%
+  \itshape
+  \footnotesize
+  ``Today in Timiryazevsky Park [two] world leaders participated in a 100 meter foot race.
+      Our Soviet Premier, Nikita Khrushchev, finished a very respectable second place.
+      The poor American President, John F.~Kennedy finished a miserable next-to-last.'' \\
+      \hfill --- \textcolor{gray}{ascribed to Russian newspaper \textit{Pravda}}
+}
+
+\bigskip
+
+
+  % \begin{footnotesize}
+  %   \begin{quote}
+  %     \noindent
+  %     % \textbf{A Foot Race In Moscow Between World Leaders.}
+  %     Today in Timiryazevsky Park [two] world leaders participated in a 100 meter foot race.
+  %     Our Soviet Premier, Nikita Khrushchev, finished a very respectable second place.
+  %     The poor American President, John F.~Kennedy finished a miserable next-to-last. \\
+  %     \hfill (\textcolor{gray}{[ascribed to newspaper \textit{Pravda}\footnote{Taken from: \url{https://www.linkedin.com/pulse/foot-race-between-john-f-kennedy-nikita-khrushchev-tom-salamone}}]})
+  %   \end{quote}
+  % \end{footnotesize}
+
+
 
 \begin{abstract}
   Concrete.
 
 \textbf{Keywords:}
-add your choice of indexing terms or keywords;
-kindly use a semicolon;
-between each term
+pragmatic language use;
+argumentative framing;
+argument strength;
+probabilistic modeling;
 \end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+
+\begin{itemize}
+  \item intro:
+  \begin{itemize}
+    \item pragmatics mostly on cooperative dialogue
+    \item much less on argumentative language use; and what exists is often informal \citep{AnscombreDucrot1983:Largumentation-}
+    \item problem: what's the goal of argumentative language use (what's the payoff function?)
+  \end{itemize}
+  \item probabilistic pragmatics / RSA:
+  \begin{itemize}
+    \item vanilla version
+    \item extensions with multiple utility components
+    \item sketch idea of adding some notion of argumentative strength to utils
+    \item mention log-odds ratio as an obvious candidate but postpone full model and definition of $argStr(u)$ until after the experimental part
+  \end{itemize}
+  \item Exp 1 \& 2 (in one swoop):
+  \begin{itemize}
+    \item describe experimental design
+    \item mention (e.g., in footnote and expand in appendix) what was preregistered when
+    \item report on results w/ visuals and some descriptive stats showing the “argumentativity matters”
+  \end{itemize}
+  \item Models:
+  \begin{itemize}
+    \item describe different RSArg models, expand on argStr(u)
+    \item maybe: motivate models with reference to some aspect of the observed data
+  \end{itemize}
+  \item Model fits \& comparison:
+  \begin{itemize}
+    \item describe Bayesian models (hierarchical models, priors etc.)
+    \item discuss results of model fits and comparison
+  \end{itemize}
+  \item Discussion
+\end{itemize}
+
 
 \section{Probabilistic pragmatics \& and argumentative discourse}
 \label{sec:prob-pragm}
@@ -151,16 +219,15 @@ Yet, some phenomena seem to require more elaborate utility functions.
 For example, in the realm of social meaning, extensions of the vanilla RSA model sketched above have been explored which incorporate additional utility components related to politeness \citep{YoonTessler2020:Polite-Speech-E}.
 Here, we take a similar approach to modelling the utility trade-off between describing the world informatively and making an argument in favor of a position or hypothesis $H_{0}$, as opposed to the competing position or hypothesis $H_{1}$.
 The general form of the extended speaker utility function we consider in this paper will be:
-\begin{align}
+\begin{align*}
   \label{eq:utilArgstrength}
-  U(u , s , H_{0} , H_{1})
-  &=
-    \underbrace{{\mycolh{\beta}} \ \log P_{L_0} (s \mid \interpret{u})}_{\text{truth \& informativity}}
-    \ + \
-    \underbrace{(\mycolh{1-\beta}) \ \text{argstr}(u, H_{0} , H_{1})}_{\text{argumentative strength}}
-    \ - \
-    \underbrace{\text{cost}(u)}_{\text{economy}}\,.
-\end{align}
+  & U(u , s , H_{0} , H_{1}) = \\
+  & \underbrace{{\mycolh{\beta}} \ \log P_{L_0} (s \mid \interpret{u})}_{\text{truth \& informativity}}
+ \  + \
+      \underbrace{(\mycolh{1-\beta}) \ \text{argstr}(u, H_{0} , H_{1})}_{\text{argumentative strength}}
+ \ - \
+    \underbrace{\text{cost}(u)}_{\text{economy}}
+\end{align*}
 Following the previous literature, the parameter $\beta$ models the degree to which a speaker values optimizing informativity of an utterance or making a strong argument for position $H_{0}$ (relative to $H_{1}$).
 For the special case of $\beta = 1$, this formulation reduces to the previous utility function which did not have argumentative strength as an additional speaker objective for utterance selection.
 
@@ -195,24 +262,24 @@ Participants could essentially choose one of 32 sentences, but they did so by se
   \begin{equation*}
   \left.
     \begin{matrix}
-      \mathrm{None}\\
-      \mathrm{Some}\\
-      \mathrm{Most}\\
-      \mathrm{All}
+      \textrm{None}\\
+      \textrm{Some}\\
+      \textrm{Most}\\
+      \textrm{All}
     \end{matrix}
   \right\}
   \text{ of the students got }
   \begin{Bmatrix}
-    \mathrm{none}\\
-    \mathrm{some}\\
-    \mathrm{most}\\
-    \mathrm{all}
+    \textrm{none}\\
+    \textrm{some}\\
+    \textrm{most}\\
+    \textrm{all}
   \end{Bmatrix}
   \text{ of the questions }
   \left\{
     \begin{matrix}
-      \mathrm{right}\\
-      \mathrm{wrong}
+      \textrm{right}\\
+      \textrm{wrong}
     \end{matrix}
   \right \}
   \,.
@@ -391,7 +458,7 @@ Consider the second option.
 - In this case, most|most|right might be argumentatively stronger than some|all|right.
 - This approach is also going to change the argstrength of the other utterances. Question is how.
 - Let's say that each student is still described by a Binomial parameter, but these parameters are distributed as a Beta distribution, so the resulting model is hierarchical, i.e. a Beta-Binomial distribution.
-- To calculate argstrength in this case, we need to calculate $p(\text{utterance being true} \mid \text{argued-for state} ) = \sum_{s \in \mathrm{observations}} I(s \in \mathrm{utterance}) p(s \mid \text{argued-for state})$.
+- To calculate argstrength in this case, we need to calculate $p(\text{utterance being true} \mid \text{argued-for state} ) = \sum_{s \in \textrm{observations}} I(s \in \textrm{utterance}) p(s \mid \text{argued-for state})$.
 - The observations for simplicity can be just the 20 observations of the model.
 - The argued-for state in this case can either be a specific combination of parameters of the Beta-Binomial or some range of the parameters. Suppose the former for simplicity.
 - $p(s \mid \text{argued-for state})$: This is, similarly to the previous model, the probability of an observation given the argued-for-state.
