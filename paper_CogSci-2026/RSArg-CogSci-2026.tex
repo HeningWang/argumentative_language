@@ -59,7 +59,7 @@
 
 \newcommand{\hw}[1]{\textcolor{glaucous-bright}{[HW: #1]}}
 \newcommand{\mf}[1]{\textcolor{shimmer-main}{[MF: #1]}}
-\newcommand{\FC}[1]{\textcolor{opal-bright}{[FC: #1]}}
+\newcommand{\fc}[1]{\textcolor{opal-bright}{[FC: #1]}}
 \DefineNamedColor{named}{mycol2}{cmyk}{0.8,0,0.8,0.2}
 \newcommand{\mycolh}[1]{{\textcolor{mycol2}{#1}}}
 \newcommand{\mymark}[1]{{\color{mycol}{#1}}}
@@ -212,7 +212,6 @@ With this, if the semantics for utterances is binary, the utility function from 
              \underbrace{\text{cost}(u)}_{\text{economy}} \,.
 \end{align*}
 
-
 The speaker's policy defined above in Equation~\eqref{eq:S1}, when used with the standard utility function in Equation~\eqref{eq:util-vanilla} has been productively used to explain choices of utterances for different linguistic constructions of phenomena, e.g., for referential expressions \citep{FrankGoodman2012:Predicting-Prag}, generics \citep{Tessler2019:The-Language-of}, conditionals \citep{GrusdtLassiter2021:Probabilistic-m}, quantifiers and implicature \citep{GoodmanStuhlmuller2013:Knowledge-and-I,Tielvan-TielFranke2021:Probabilistic-p}, gradable adjectives \citep{LassiterGoodman2015:Adjectival-vagu}, or probability expression \citep{HerbstrittFranke2019:Complex-probabi}.
 \mf{insert some more references (without MF as co-author!)}
 Yet, some phenomena seem to require more elaborate utility functions.
@@ -257,45 +256,20 @@ The design used here is essentially the same as that of Experiment~1 reported in
 While the work reported by \citet{Vinicius-Macuch-SilvaWinter2024:Strategic-use-o} also elicited and analyzed free production data, we here focus on a more constrained free-choice task in order to harness the complexity of the data for subsequent modeling.
 Participants could essentially choose one of 32 sentences, but they did so by selecting, using a drop-selection menu, (i) an outer quantifier, (ii) an inner quantifier, and (iii) an adjective, to complete the sentence frame in (\ref{bsp:sentences-Exp}).
 
-\begin{exe}
-  \ex \label{bsp:sentences-Exp}
-  \begin{equation*}
-  \left.
-    \begin{matrix}
-      \textrm{None}\\
-      \textrm{Some}\\
-      \textrm{Most}\\
-      \textrm{All}
-    \end{matrix}
-  \right\}
-  \text{ of the students got }
-  \begin{Bmatrix}
-    \textrm{none}\\
-    \textrm{some}\\
-    \textrm{most}\\
-    \textrm{all}
-  \end{Bmatrix}
-  \text{ of the questions }
-  \left\{
-    \begin{matrix}
-      \textrm{right}\\
-      \textrm{wrong}
-    \end{matrix}
-  \right \}
-  \,.
-\end{equation*}
-
+\begin{exe}\ex \label{bsp:sentences-Exp}
+OQ of the students got IQ of the questions ADJ
 \end{exe}
+with OQ and IQ $\in \{$ None, Some, Most, All $\}$, and ADJ $\in \{$ right, wrong $\}$.
 
 \paragraph{Participants.}
 A total of $N=201$ participants were recruited via Prolific (self-identified gender: 88 female, 111 male, 1 other and 1 non-disclosed; mean age (of those who revealed it) 30.3 (standard deviation 8.07), min 18 and max 60).
 Participants had to be at least 18 years old in order to participate.
 They were paid £1.5.
 Based on a mean completion time of just below 10 minutes (median just below 9 minutes), this amounted to an average hourly payment of £1.5.
-\mf{check: no other Prolific internal selection criteria; English etc.?}
+\mf{check: no other Prolific internal selection criteria; English etc.?}\fc{We only excluded participants with more than 4 false responses}
 
 \paragraph{Materials.}
-The results of high-school exams were presented visually in form of matrices, as shown in Figure~\ref{fig:overview} (top left).
+The results of high-school exams were presented visually in form of matrices, as shown in Figure~\ref{fig:overview} (top left).\fc{Figure is missing}
 The rows of matrices corresponded to students (indicated by names), the columns indicated questions.
 A checkmark on green background in a cell represented that the student got the question right.
 A cross on a red background represented a false answer.
@@ -345,6 +319,18 @@ The latter result, indicating a difference between \textit{high} and \textit{low
 
 We consider different model variants, each using a different notion of argumentative strength.
 
+The calculation of argumentative strength for all models requires the specification of two hypotheses, one that is being argued for ($H_0$) and one that is being argued against ($H_1$). 
+We model each hypothesis as saying that all students in the class have a certain, equal probability $\gamma$ of getting each answer correct; therefore, we make the simplifying assumption that there is no variation in skill across students and no variation in probability of getting different answers correct. 
+\fc{I actually spent a long time in the early phases of the project exploring variations of this - not sure it makes sense to pick up this thread though.}
+Under this assumption, the probability of observing 	the results for a class is proportional to the product of the Binomial probability of each student's results:
+  %
+  \begin{equation}
+    P(s \mid \gamma) \propto \prod_{k \in s}{ 12 \choose k } \gamma^k (1-\gamma)^{12-k}
+  \end{equation}
+  %
+ where $S$ is the set of exam arrays participants can observe in the experiment, each exam is encoded as a list of numbers of correct answers, and $P(s \mid \gamma)$ is normalized across $S$.
+In the high framing condition, $\gamma=0.85$ for $H_0$ and $\gamma=0.15$ for $H_1$, and the reverse for the low framing condition.
+
 \subsection{Log likelihood ratio argstrength RSA}
 \label{sec:argstrengthRSA}
 
@@ -353,122 +339,24 @@ This notion requires fixing two competing hypotheses $H_{0}$ and $H_{1}$ and for
 Concretely, we consider the degree to which the utterance $u$ is more likely to be true (literally) under hypothesis $H_{0}$ than under a competing (alternative) hypothesis $H_{1}$:
 %
 \begin{equation}
-    \text{argstr}(u, H_{0}, H_{1}) = \log \frac{
+    \text{argstr}(u, H_{0}, H_{1}) = 
+    \log \frac{
     P( \interpret{u} \mid H_0 )
     }{
     P( \interpret{u} \mid H_1 )
     }
 \end{equation}
 %
-\noindent where $P( \interpret{u} \mid H )$ is the probability that utterance $u$ is true given hypothesis $H$.
-
-\bigskip
-
-\begin{draftytext}
-  To apply this definition to the case of our experiment, we have to specify what the competing hypotheses are, and how they condition the probability of $u$ being literally true.
-  There are certainly degrees of freedom in this operationalization.
-  The preregistered approach we report on here is as follows.
-  Participants are instructed to argue that the students in a certain classroom have either a high probability of getting the questions right (\textit{high condition}) or a low probability of getting the questions right (\textit{low condition}).
-  We make the simplifying assumption that the participants assume that all students in a class have the same probability $\gamma$ of answering each question correctly.
-  Under this assumption, each observed exam result consists of $n_{s}$ samples (one per student) from a Binomial distribution with success parameter $\gamma$ and $n_{q}$ (i.e., the number of questions).
-  Result for a participant therefore only conveys how many questions the participants answered correctly.
-  On the other hand, students are identified individually with names in each trial.
-  $H_0$ is then the hypothesis that the binomial probability parameter $p$ equals $\gamma$.
-  Therefore:
-  %
-  \begin{align}
-    P(\interpret{u} \mid \gamma)
-    &= \sum_{s \in S}
-      \left(
-      s \in \interpret{u}
-      K_s
-      \right)
-    \\
-    K_s
-    &\propto \prod_{k \in s}{ 12 \choose k } \gamma^k (1-\gamma)^{12-k}
-  \end{align}
-  %
-  where $S$ is the set of exam arrays participants can observe in the experiment, each exam is encoded as a list of numbers of correct answers, and the binomial probabilities are normalized across the arrays in the experiment.
-
-  Compared to the vanilla RSA model, this model has two additional parameters: $\beta$ and $\gamma$.
-  These parameters are hard to infer jointly, but we have some prior knowledge that $\gamma$ is high in the high condition and low in the low condition.
-  Therefore, we set $\gamma=0.85$ in the high condition and $\gamma=0.15$ in the low condition.
-
-  We fit two versions of this model:
-  \begin{enumerate}
-    \item A version with completely pooled $\alpha$ and $\beta$.
-    \item A version with by-participant $\alpha$, $\beta$.
-  \end{enumerate}
-\end{draftytext}
-
-\begin{draftytext}
-
-  A very basic way of checking how the model differs from predictions is to check for which cases the most produced signals for an observation are *not* on the Pareto frontier of informativity/argstrength as calculated, and which signals are produced instead. This gives conceptually the most obvious ways in which the basic model does not capture the data (there's also the cost of the signal but as it turns out it doesn't matter in this case).
-
-It turns out that this sometimes happen for the lr argstrength. These are:
-
-\begin{itemize}
-  \item Observation 4 ([12, 12, 9, 0, 0]), high condition:
-  \begin{itemize}
-    \item Optimal signal: 'some|all|right' (5 times)
-    \item Most common signal: 'most|most|right'
-  \end{itemize}
-  \item Observation 10 ([12, 12, 3, 0, 0]), low condition:
-  \begin{itemize}
-    \item Optimal signal: 'some|all|wrong' (7 times)
-    \item Most common signal: 'most|most|wrong' (15 times)
-  \end{itemize}
-  \item Observation 15 ([12, 12, 9, 3, 3]), high condition:
-  \begin{itemize}
-    \item Optimal signal: 'some|all|right' (14 times)
-    \item Most common signal: 'most|most|right' (20 times)
-  \end{itemize}
-  \item Observation 16 ([12, 12, 9, 9, 9]), high condition:
-  \begin{itemize}
-    \item Optimal signal: 'some|all|right' (8 times)
-    \item Most common signal: 'most|most|right' (11 times)
-  \end{itemize}
-  \item Observation 19 ([9, 9, 3, 0, 0]), low condition:
-  \begin{itemize}
-    \item Optimal signal: 'some|all|wrong' (7 times)
-    \item Most common signal: 'most|most|wrong' (11 times)
-  \end{itemize}
-\end{itemize}
-(Note: there are other ways in which the predictions differ from observations, e.g. often signals on the Pareto frontier are not produced as often as one would expect.)
-
-They all involve 'most|most| ' being used when 'some|all| ' is predicted to be a better signal by the model!
-
-The initial thinking was that this could be because 'most' is in fact considered by the participant argumentatively stronger than the base model predicts. This way, 'some' becomes much weaker than 'most' and 'some students got all answers wrong' could argumentatively weaker than 'most students got most of the answers wrong'. Models 3, 4, 6, 7, and 11 all go this route, and they involve some change to the calculation of the argumentative strength of utterances involving 'most', which makes them argumentatively stronger:
-\begin{itemize}
-  \item Calculate with pragmatic argumentative strength using S1.
-  \item Give a stronger literal meaning (based on Solt's account of 'most')
-  \item Use a 'manually' pragmatically enriched sense of 'most' (based on my paper with Jakub).
-\end{itemize}
-However, none of these variations were better than the literal default argstrength for utterances involving 'most'. This means either that these breaks from the model prediction are not so important for the overall likelihood of the dataset, or that these explanations do not make the right kind of predictions overall.
-
-What are other possible explanations? I can see two.
-
-1. For high enough values of $\gamma$, most|most|right becomes argumentatively stronger than some|all|right.
-
-Option 1 is what comes out of model 12, where (although with a prior that pushed in that direction) $\gamma$ is estimated to be very close to 1 (indeed, so close that most|most| is more argumentatively strong than some|all).
-
-2. The basic model assumes a single binomial parameter for all students. Therefore, 'some|all|right' is quite argumentatively strong. However, if different students have different binomial $p$ parameters (e.g. structured hierarchically), knowing that one student performed very well does not tell you as much as knowing that many students performed reasonably well, as the former might be a fluke.
-
-Consider the second option.
-- In this case, most|most|right might be argumentatively stronger than some|all|right.
-- This approach is also going to change the argstrength of the other utterances. Question is how.
-- Let's say that each student is still described by a Binomial parameter, but these parameters are distributed as a Beta distribution, so the resulting model is hierarchical, i.e. a Beta-Binomial distribution.
-- To calculate argstrength in this case, we need to calculate $p(\text{utterance being true} \mid \text{argued-for state} ) = \sum_{s \in \textrm{observations}} I(s \in \textrm{utterance}) p(s \mid \text{argued-for state})$.
-- The observations for simplicity can be just the 20 observations of the model.
-- The argued-for state in this case can either be a specific combination of parameters of the Beta-Binomial or some range of the parameters. Suppose the former for simplicity.
-- $p(s \mid \text{argued-for state})$: This is, similarly to the previous model, the probability of an observation given the argued-for-state.
-\end{draftytext}
+\noindent where $P( \interpret{u} \mid H )$ is the probability that utterance $u$ is true given hypothesis $H$. For and $H$ asserting that each student answers each question correctly with probability $\gamma_H$:
+\begin{equation}
+    P(\interpret{u} \mid H)
+    = \sum_{s \in S} P(\interpret{u} \mid s ) P(s \mid \gamma_H)
+    = \sum_{s \in S} \interpret{u}^s P(s \mid \gamma_H)
+\end{equation}
 
 \subsection{Pragmatic argstrength RSA}
 
-\begin{draftytext}
-  The second model is the same as the log likelihood ratio argstrength RSA model described above, expect for the utility function which uses a different measure of argumentative strength: \mf{explain notation $w$ (world states)}
-\end{draftytext}
+The second model is the same as the log likelihood ratio argstrength RSA model described above, expect for the utility function which uses a different measure of argumentative strength: \mf{explain notation $w$ (world states)}
 
 \begin{align*}
 \textrm{argstr}(u)
@@ -483,116 +371,15 @@ P_{S} (u \mid H_1)
 \sum_{w \in W} P_{S} (u \mid w) P(w \mid H_1)
 }
 \end{align*}
-
 \noindent where $P_{S}$ is defined above in Equation~\eqref{eq:S1}.
 
-\begin{draftytext}
-  We fit two versions of this model:
-  \begin{enumerate}
-    \item A version with completely pooled $\alpha$ and $\beta$.
-    \item A version with by-participant $\alpha$, $\beta$. This version assumes that each participant uses the same (estimated) value of $\alpha$ for the calculation of the argumentative strength and of the utility.
-  \end{enumerate}
-\end{draftytext}
+This pragmatic speaker is different from the real pragmatic speaker, because they do not include argumentative strength in their calculation, corresponding to the idea that the real speaker is considering a listener who doesn't take into account the speaker's argumentative goal. Conceptually, a pragmatic speaker that uses this type of argumentative strength exploits the listener's assumption of cooperativeness.
 
-\begin{draftytext}
-
-DOUBLE CHECK THIS
-
-  This is the same as the basic model, but instead of calculating the argumentative strength with the truth value, we calculate it with the pragmatic production probabilities.
-- To see the conceptual connection, note that the original argstrength can be rewritten in terms of the probability of making an observation and the probability of a signal being true given the observation:
-
-\begin{align}
-\text{argstrength}(u)
-&= \log \frac{
-p(u \mid \gamma = 0.85)
-}{
-p(u \mid \gamma = 0.15)
-} \\
-&= \log \frac{
-\sum_{i=1}^{20} p(u, o_i \mid \gamma = 0.85)
-}{
-\sum_{i=1}^{20} p(u, o_i \mid \gamma = 0.15)
-} \\
-&= \log \frac{
-\sum_{i=1}^{20} p( u \mid o_i) p(o_i, \gamma = 0.85)
-}{
-\sum_{i=1}^{20} p( u \mid o_i) p(o_i, \gamma = 0.15)
-} \\
-&= \log \frac{
-\sum_{o \in u} p(o, \gamma = 0.85)
-}{
-\sum_{o \in u} p(o, \gamma = 0.15)
-} \\
-\end{align}
-
-But now instead of considering the probability that an utterance is true, consider the probability of the literal speaker producing an utterance given an observation.
-
-\begin{align}
-\text{argstrength}(u)
-&= \log \frac{
-p(u \mid \gamma = 0.85)
-}{
-p(u \mid \gamma = 0.15)
-} \\
-&= \log \frac{
-\sum_{i=1}^{20} p(u, o_i \mid \gamma = 0.85)
-}{
-\sum_{i=1}^{20} p(u, o_i \mid \gamma = 0.15)
-} \\
-&= \log \frac{
-\sum_{i=1}^{20} p( u \mid o_i) p(o_i, \gamma = 0.85)
-}{
-\sum_{i=1}^{20} p( u \mid o_i) p(o_i, \gamma = 0.15)
-} \\
-&= \log \frac{
-\sum_{i=1}^{20} p(o_i, \gamma = 0.85)
-\begin{cases}
-\frac{1}{| u |} & \text{if } o \in u \\
-0               & \text{else}
-\end{cases}
-}{
-\sum_{i=1}^{20} p(o_i, \gamma = 0.15)
-\begin{cases}
-\frac{1}{| u |} & \text{if } o \in u \\
-0               & \text{else}
-\end{cases}
-} \\
-&= \log \frac{
-\sum_{o \in u} p(o, \gamma = 0.85) \frac{1}{| u |}
-}{
-\sum_{o \in u} p(o, \gamma = 0.15) \frac{1}{| u |}
-} \\
-&= \log \frac{
-\frac{1}{| u |} \sum_{o \in u} p(o, \gamma = 0.85)
-}{
-\frac{1}{| u |} \sum_{o \in u} p(o, \gamma = 0.15)
-} \\
-&= \log \frac{
-\sum_{o \in u} p(o, \gamma = 0.85)
-}{
-\sum_{o \in u} p(o, \gamma = 0.15)
-} \\
-\end{align}
-
-It's the same!
-
-- So the argumentative strength above was basically the Bayes factor calculated by the listener using the literal speaker as a model.
-- Instead of the literal speaker, a pragmatic speaker can be used.
-    - This pragmatic speaker is different from the real pragmatic speaker, because they do not include argument strength in their calculation, corresponding to the idea that the real speaker is imagining a listener who doesn't take into account the speaker's argumentative aims.
-    - Nonetheless, I always assume a literal listener with a uniform prior over states (Is this reasonable?)
-    - Conceptually, a pragmatic speaker that uses this type of argumentative strength relies on (\ exploits) the listener's assumption of cooperativeness.
-- In this case, there are three differences:
-    - 'some' implicates 'not most'
-    - 'some' implicates 'not all'
-    - 'most' implicates 'not all'
-- The other signals do not generate implicatures.
-\end{draftytext}
+Pragmatic speakers intuitively differ for signals that have a stronger alternatives. In the experiment, these are `some' (alternative: `most') and `most' (alternative `all').
 
 \subsection{Maximin argstrength RSA}
 
-\begin{draftytext}
-  The third model we fit is meant to capture the intuition that, rather than minimizing full argumentative strength as defined above, participants might try to find the utterance $u$ such that the argumentatively weakest among the states compatible with $u$ is maximal. More formally, for each utterance $u$ participants might consider the following argumentative strength:
-
+The third model we fit is meant to capture the intuition that, rather than calculating argumentative strength by marginalizing across \emph{all} the states compatible with the utterance, participants only consider the argumentatively weakest one. More formally, for each utterance $u$ participants might consider the following argumentative strength:
   \begin{align}
     \text{maximin-argstr}(u)
     &=
@@ -604,111 +391,26 @@ It's the same!
     p( s \mid \interpret{u}, \gamma )
     &\propto\prod_{k \in s}{ 12 \choose k } \gamma^k (1-\gamma)^{12-k}
   \end{align}
-
   \noindent where $\gamma = 0.85$ encodes $H_0$ and $\gamma = 0.15$ encodes $H_1$. Other than the calculation of the argumentative strength, the model is identical to the model presented in Section \ref{sec:argstrengthRSA}.
+  
+Maximin- and lr-argstrength differ not only in terms of the absolute argstrength of signals, in some cases also in their ranks. For instance, in the high condition 'most|none|wrong' is better than 'all|most|right' for lr, but the other way around for maximin.
+  
+Weak signals for minimax argstrength can be bad arguments across the board. The most striking is 'some|some|right', which is always quite a bad signal argumentatively (in absolute terms). However, given a specific situation a bad signal can still be the best option. For instance, `most|most|right' in the high condition is actually a slightly bad signal (with sigma=0.85), but often the best available. %as can be seen by the argdeltas in 'by\_observation\_maximin\_argdelta'.
 
-  We fit two versions of this model:
-  \begin{enumerate}
-    \item A version with completely pooled $\alpha$ and $\beta$.
-    \item A version with by-participant $\alpha$, $\beta$.
-  \end{enumerate}
-\end{draftytext}
-
-\begin{draftytext}
-  \textbf{Collapse of badness}
-
-  Maximin argstrength predicts that a lot of the 'bad' signals (given the condition) are equally bad. For instance, 'some|some|wrong' in the high condition is argumentatively as bad as 'all|all|wrong' with minimax-argstrength. On the other hand, with BF-argstrength 'all|all|wrong' is a bad signal to send, but 'some|some|wrong' is neutral (neither good nor bad). This might seem like a weird prediction of maximin at first, but interestingly it makes sense of a part of the data that was puzzling before, which can be seen by comparing figures '13.png' of 'by\_observation\_maximin\_argdelta' and 'by\_observation\_argdelta'. When participants are forced to describe a 'bad' situation in the high condition, they don't just produce the 'winner' according to BF-argstrength ('some|some|wrong'), but rather produce a larger variety of signals than for other observations (e.g. 'none|all|right'). On the other hand, maximin argstrength cannot explain why 'some|some|wrong' is produced more often.
-
-  It feels like the truth is somewhere in the middle, e.g. we consider a few observations for the signal but not all. Maybe a few of the ones close to the 'threshold', or some of the most 'prototypical' for the signal. I feel like the best story depends on where the approximation 'lies':
-
-  \begin{itemize}
-    \item If the speaker is perfectly rational but reasons about an imperfect listener, then the question will be 'What are the few states that the listener is likely to consider upon hearing that signal?'.
-    \item On the other hand, if the speaker themselves is approximately rational, the question is 'What states is the speaker most likely to consider when picking a signal?'
-  \end{itemize}
-
-  \textbf{Badness of weak signals}
-
-  Weak signals for minimax argstrength can be bad arguments across the board. The most striking is 'some|some|right', which is always quite a bad signal argumentatively (in absolute terms). I don't have strong intuitions either way about this.
-
-  However, given a specific situation a bad signal can still be the best option. For instance, 'most|most|right' in the high condition is actually a slightly bad signal (with sigma=0.85), but often the best available, as can be seen by the argdeltas in 'by\_observation\_maximin\_argdelta'.
-
-  \textbf{Different orderings}
-
-  In some cases, BF and maximin predict different orderings of goodness. For instance, in the high condition 'most|none|wrong' is better than 'all|most|right' for BF, but the other way around for maximin (I haven't looked yet at how gamma influences this though). Again, I don't have clear intuitions about this.
-
-  \textbf{Better predictions of maximin argstrength for individual observations}
-
-  \begin{itemize}
-    \item '1.png' and '3.png', low condition: The most produced signal ('most|all|wrong') is the best for maximin but not for BF (although still close to best).
-    \item  '2.png', low condition and '13.png' high condition: As I mentioned above, maximin makes sense of why so many different signals were produced.
-    \item '4.png' and '15.png', high condition:  The most produced signal ('most|most|right') is best for maximin but not for BF.  Neither argstrength explains why 'some|none|right' was not produced more, but the cost for 'none' might.
-    \item '8.png', high condition: The most produced signal ('all|most|right') is best for maximin but not for BF.
-    \item '9.png' and '14.png', low condition: The most produced signal ('all|most|wrong') is best for maximin but not for BF.
-    \item '10.png' and '19.png', low condition: The most produced signal ('most|most|wrong') is best for maximin but not for BF.
-  \end{itemize}
-
-  \textbf{Worse predictions of maximin argstrength for individual observations}
-
-  - '5.png', high condition: 'most|all|right' is the most produced signal, and it is the best under BF but not maximin (which instead predicts 'all|most|right' to be argumentatively better).
-  - '14.png', high condition: a signal that is predicted to be good by maximin ('none|all|wrong') is not produced much. This can be explained by the cost for 'none' though.
-
-  \textbf{Some stuff that neither model explains}
-
-  - '17.png': low condition: Neither model can really make sense of why 'most|all|wrong' is by far the most produced signal. BF thinks it should be 'most|none|right' and maximin that it should be 'all|most|wrong'.
-  - '16.png', high condition: Really strange, because it seems like there's no way of cashing out argumentative strength where 'most|most|right' is better than 'all|most|right' in the high condition.
-
-  \textbf{Adjectival maximin}
-
-  Instead of calculating the maximin for a specific value of $\gamma$, we could also calculate it assuming that the agent is arguing \emph{for} "The value of $\gamma$ is greater than this threshold" and \emph{against} "The value of $\gamma$ is lower than this threshold". Formally, we can write it as follows:
-
-  $$
+Instead of calculating the maximin for a specific value of $\gamma$, we could also calculate it assuming that the agent is arguing \emph{for} the value of $\gamma$ being greater than a particular threshold and \emph{against} the value of $\gamma$ being lower than that threshold. This could be formalized as:
+$$
   \text{maximin-argstrength}(u) =
   \min_{s \in S} \log \frac{
     p( s \mid [[u]]=1, \phi \geq \theta )
   }{
     p( s \mid [[u]]=1, \phi < \theta )
   }
-  $$
+$$
 
-  Let's think about how to calculate the components:
-
-  \begin{align}
-    p( s \mid [[u]]=1, \phi \geq \theta ) =
-    \frac{
-    p(\phi \geq \theta \mid [[u]]=1, s) p( s \mid [[u]]=1 )
-    }{
-    p(\phi \geq \theta)
-    }
-  \end{align}
-\end{draftytext}
-
-\subsection{Model-free argstrength}
-
-\begin{draftytext}
-  In this version of the model, we define the measure of argumentative strength so that the arguing agent tries to maximize (in the high condition) or minimize (in the low condition) the expected total number of correct answers across all students given the utterance:\footnote{Here, $s$ is interpreted as a list of numbers, one for each student in the class, encoding the number of correct answers by the student.}
-
-  \begin{align}
-    \text{modelfree-argstr}(u)
-    =&
-       |\interpret{u}|^{-1} \sum_{s \in \interpret{u}} \sum_{i \in s} i
-    & \text{High condition} \\
-    \text{modelfree-argstr}(u)
-    = - &
-          |\interpret{u}|^{-1} \sum_{s \in \interpret{u}} \sum_{i \in s} i
-    & \text{Low condition}
-  \end{align}
-  \noindent In words, the argumentative strength encodes the expected total number of right answers, which is to be (soft)maximised in the high condition and (soft)minimized in the low condition.
-
-  This model has three free parameters to fit for each participant: $\alpha$, $\beta$, and the cost for `none'. Similarly to the previous models, we fit two versions of this model:
-  \begin{enumerate}
-    \item A completely pooled version
-    \item A version with by-participant $\alpha$ and $\beta$ (and completely pooled `none' cost)
-  \end{enumerate}
-\end{draftytext}
 
 \begin{draftytext}
 
-  There is an intuition:  what makes 'most|most|right' a better argument than 'some|all|right' is that the former excludes some particularly bad cases (namely, the case where one participant answered correctly and all the other ones got all of them wrong).
+There is an intuition:  what makes 'most|most|right' a better argument than 'some|all|right' is that the former excludes some particularly bad cases (namely, the case where one participant answered correctly and all the other ones got all of them wrong).
 
 An intuitive explanation for this intuition is that the speaker is thinking 'conservatively' about the listener. The imagined listener does not consider all possible observations, but rather guesses the situation (among the ones compatible with the utterance) that lends the least support to the argued-for state (e.g. $\gamma$ parameter or betabinomial parameters).
 
@@ -736,7 +438,23 @@ Conceptually: it's the minimum state-wise Bayes factor (the evidence for the wor
 In slogan form: an argumentation chain is only as strong as its weakest link.
 \end{draftytext}
 
+\subsection{Model-free argstrength}
+
+The agent might also try to maximize (in the high condition) or minimize (in the low condition) the expected total number of correct answers across all students given the utterance (recall that $s$ is a list of the number of correct answers for each student):
+\begin{equation}
+    \text{totalcorrect}(u)
+    =& |\interpret{u}|^{-1} \sum_{s \in \interpret{u}} \sum_{i \in s} i 
+ \end{equation}
+\noindent In words, the argumentative strength encodes the expected total number of right answers, which is to be (soft)maximised in the high condition and (soft)minimized in the low condition.
+
 \section{Results}
+
+For each of the measures of argumentative strength above, we implement and fit two models:
+  \begin{enumerate}
+    \item A population model with completely pooled $\alpha$ and $\beta$.
+    \item A hierarchical model with by-participant $\alpha$, $\beta$ (For the pragmatic argstrength model, we pool the value of $\alpha$ for the calculation of the argumentative strength and of the utility).
+  \end{enumerate}
+\noindent The parameter encoding the cost for `none' is always pooled.
 
 Figure~\ref{fig:results-model-comparison} shows the results of loo-based model comparison.
 By expected log-likelihood under leave-one-out cross-validation, the best model is the hierarchical non-parametric model.
@@ -754,14 +472,7 @@ However, the second best model, the hierarchical maximin model, is not significa
   \label{fig:results-model-comparison}
 \end{figure*}
 
-\begin{draftytext}
-  \begin{itemize}
-    \item There are a couple of implementation decisions for this model (and all the following ones):
-    \item Whether to consider all \emph{possible} observations (every way that 5 students can answer 12 questions) or just the 20 observations that were presented in the model. I call the former the 'Michael method' in the code and the latter is the one I am implementing for simplicity, because it allows me to simply manipulate arrays and keep everything vectorized.
-    \item Whether to give a small fuzzy truth value to utterances that are literally false or treat them as just having truth value 0. The former is the method I use here (though see the calculation below in the model with Solt's 'most'), the latter is the one used in the original Greta implementation.
-  \end{itemize}
-
-  For several of the models, I calculated the posterior predictive p-values for all the models (see Bayesian p-value section above). In all cases they were quite close to 0.5, indicating good compatibility of the data with the fitted posterior. However, note that posterior predictive p-values are generally not uniformly distributed in [0,1] and hierarchical models pose a challenge (see e.g. \href{https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.165.118&rep=rep1&type=pdf}{this paper (clickable)}).
+For several of the models, I calculated the posterior predictive p-values for all the models (see Bayesian p-value section above). In all cases they were quite close to 0.5, indicating good compatibility of the data with the fitted posterior. However, note that posterior predictive p-values are generally not uniformly distributed in [0,1] and hierarchical models pose a challenge (see e.g. \href{https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.165.118&rep=rep1&type=pdf}{this paper (clickable)}).
 
 It is also instructive to have a look at the \emph{pointwise} posterior predictive p-values.
 - Roughly, they quantify the compatibility of the model with each individual datapoint.
@@ -774,8 +485,78 @@ It is also instructive to have a look at the \emph{pointwise} posterior predicti
 - This will happen if the model across the trace gives a high probability to the specific datapoint that was observed.
 - So it's not so worrying.
 - Pointwise predictive values close to 1 however indicate low compatibility of the model and the data.
-\end{draftytext}
 
+\paragraph{lr-argstrength} Looking at the datapoints that the different models fail to predict reveals some illuminating patterns. For the lr-argstrength model, we look at the signals that were produced most often by participants for a certain observation but which are not on the Pareto frontier of informativity/lr-argstrength, which means that no value of $\beta$ could account of them. These are:
+\begin{itemize}
+  \item Observation 4 ([12, 12, 9, 0, 0]), high condition:
+  \begin{itemize}
+    \item Optimal signal: 'some|all|right' (5 times)
+    \item Most common signal: 'most|most|right'
+  \end{itemize}
+  \item Observation 10 ([12, 12, 3, 0, 0]), low condition:
+  \begin{itemize}
+    \item Optimal signal: 'some|all|wrong' (7 times)
+    \item Most common signal: 'most|most|wrong' (15 times)
+  \end{itemize}
+  \item Observation 15 ([12, 12, 9, 3, 3]), high condition:
+  \begin{itemize}
+    \item Optimal signal: 'some|all|right' (14 times)
+    \item Most common signal: 'most|most|right' (20 times)
+  \end{itemize}
+  \item Observation 16 ([12, 12, 9, 9, 9]), high condition:
+  \begin{itemize}
+    \item Optimal signal: 'some|all|right' (8 times)
+    \item Most common signal: 'most|most|right' (11 times)
+  \end{itemize}
+  \item Observation 19 ([9, 9, 3, 0, 0]), low condition:
+  \begin{itemize}
+    \item Optimal signal: 'some|all|wrong' (7 times)
+    \item Most common signal: 'most|most|wrong' (11 times)
+  \end{itemize}
+\end{itemize}
+(Note: there are other ways in which the predictions differ from observations, e.g. often signals on the Pareto frontier are not produced as often as one would expect.) They all involve 'most|most| ' being used when 'some|all| ' is predicted to be a better signal by the model!
+
+\paragraph{maximin argstrength}  Maximin argstrength makes better predictions than lr-argstrength in several instances:
+\begin{itemize}
+    \item '1.png' and '3.png', low condition: The most produced signal ('most|all|wrong') is the best for maximin but not for BF (although still close to best).
+    \item  '2.png', low condition and '13.png' high condition: As I mentioned above, maximin makes sense of why so many different signals were produced.
+    \item '4.png' and '15.png', high condition:  The most produced signal ('most|most|right') is best for maximin but not for BF.  Neither argstrength explains why 'some|none|right' was not produced more, but the cost for 'none' might.
+    \item '8.png', high condition: The most produced signal ('all|most|right') is best for maximin but not for BF.
+    \item '9.png' and '14.png', low condition: The most produced signal ('all|most|wrong') is best for maximin but not for BF.
+    \item '10.png' and '19.png', low condition: The most produced signal ('most|most|wrong') is best for maximin but not for BF.
+  \end{itemize}
+
+Maximin argstrength also predicts that a lot of the `bad' signals (given the condition) are equally bad, e.g., 'some|some|wrong' and 'all|all|wrong' (in the high condition). On the other hand, with lr-argstrength 'all|all|wrong' is a bad signal and but 'some|some|wrong' is neutral (neither good nor bad). This might seem like a weird prediction of maximin at first, but interestingly it makes sense of a part of the data that was puzzling before.
+ % which can be seen by comparing figures '13.png' of 'by\_observation\_maximin\_argdelta' and 'by\_observation\_argdelta'. Not just  ('some|some|wrong') but also (e.g. 'none|all|right')
+ When participants are forced to describe a 'bad' situation in the high condition, they don't just produce the 'winner' according to BF-argstrength, but rather produce a larger variety of signals than for other observations. 
+ 
+On the other hand, maximin argstrength underpredicts the frequency of 'some|some|wrong'. The truth might lie in the middle. Participants might consider some but not all of the observations for the signal. This behaviour can be rationalized: If the speaker is perfectly rational but reasons about an imperfect listener, they might only focus on the few states that the listener is likely to consider given a signal.
+
+In some cases, maximin-argstrength makes worse predictions than lr-argstrength.  '5.png', high condition: 'most|all|right' is the most produced signal, and it is the best under lr but not maximin (which instead predicts 'all|most|right' to be argumentatively better). '14.png', high condition: a signal that is predicted to be good by maximin ('none|all|wrong') is not produced much. This can be explained by the cost for 'none'.
+
+\section{Discussion}
+
+  \begin{itemize}
+    \item There are a couple of implementation decisions for this model (and all the following ones):
+    \item Whether to consider all \emph{possible} observations (every way that 5 students can answer 12 questions) or just the 20 observations that were presented in the model. I call the former the 'Michael method' in the code and the latter is the one I am implementing for simplicity, because it allows me to simply manipulate arrays and keep everything vectorized.
+    \item Whether to give a small fuzzy truth value to utterances that are literally false or treat them as just having truth value 0. The former is the method I use here (though see the calculation below in the model with Solt's 'most'), the latter is the one used in the original Greta implementation.
+  \end{itemize}
+
+An interesting empirical observation is that participants prefer `most|most' over `some|all'. A first explanation could be that `most' has a stronger interpretation than assumed in the lr-argstrength model. Then, `some' becomes weaker than `most' and `some students got all answers wrong' could be argumentatively weaker than `most students got most of the answers wrong'. We played with several variations of this idea that increases the argumentative strength of utterances involving 'most':
+\begin{itemize}
+  \item Calculate with pragmatic argumentative strength using S1.
+  \item Give a stronger literal meaning (based on Solt's account of 'most')
+  \item Use a 'manually' pragmatically enriched sense of 'most' (based on my paper with Jakub).
+\end{itemize}
+None of these variations were better than the lr-argstrength.
+
+Another option is that high enough values of $\gamma$ make `most|most|right' argumentatively stronger than `some|all|right'. We tested a model where (although with a prior that pushed in that direction) $\gamma$ is estimated to be very close to 1 (indeed, so close that most|most| is argumentatively stronger than some|all).
+
+A third option lifts the assumption in the originl model of a single binomial parameter for all students. If different students have different binomial $p$ parameters (e.g. structured hierarchically), knowing that one student performed very well does not tell you as much as knowing that many students performed reasonably well, as the former might be a fluke, making `some|all' weaker. If each student is still described by a Binomial parameter, but these parameters are distributed as a Beta distribution, the resulting model of exam result probabilities follows a Beta-Binomial distribution. We leave a more detailed analysis of this option to future work.
+
+Some observations remain puzzling. 
+  - '17.png': low condition: Neither model can really make sense of why 'most|all|wrong' is by far the most produced signal. lr-argstrength predicts it should be 'most|none|right' and maximin that it should be 'all|most|wrong'.
+  - '16.png', high condition: Really strange, because it seems like there's no way of cashing out argumentative strength where 'most|most|right' is better than 'all|most|right' in the high condition.
 
 \printbibliography
 
