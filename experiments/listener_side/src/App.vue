@@ -66,7 +66,7 @@
 		<br/><br/>
 		<b>The teacher</b> wants the exam to appear <b>easy</b>&mdash;that is, as if students had a high chance of success&mdash;because it would reflect positively on the quality of teaching and the students’ overall preparedness.
 		<br/><br/>
-		<b>The principal</b> provides a report that aims to describe the exam <b>objectively</b>, without making it sound particularly hard or easy.
+		<b>The principal</b> provides a report that aims to describe the exam <b>objectively</b>; that is <b>without making it sound particularly hard or easy.</b>
 		<br/><br/>
 		In the following practice trials, you will see examples of exam results. The tables show the exam results of students. 
 			A "<i style="color:#13AC38">&#10004;</i>" indicates that a task was answered correctly, 
@@ -170,12 +170,12 @@ function normalizeItems(rawItems) {
         .filter((x) => x !== "")
         .map((x) => Number(x));
     }
-	const Q1 =
+	const Q1_encoded =
       typeof row.Q1 === "string" && row.Q1.length > 0
         ? row.Q1.charAt(0).toUpperCase() + row.Q1.slice(1)
         : row.Q1;
 
-	const A =
+	const A_encoded =
       typeof row.A === "string" && row.A.length > 0
         ? row.A.endsWith(".")
           ? row.A
@@ -183,11 +183,15 @@ function normalizeItems(rawItems) {
         : row.A;
     return {
       id: row.id != null ? row.id : idx,
-      Q1: Q1,
+      Q1: Q1_encoded,
       Q2: row.Q2,
-      A: A,
+      A: A_encoded,
+      Q1_raw: row.Q1,
+      A_raw: row.A,
       condition: row.condition,
       observation: obs,
+      list: row.list || null,
+      itemID: row.itemID || null,
     };
   });
 }
@@ -303,6 +307,12 @@ function constructTrials(itemsTable) {
       // Names: sample as many names as there are students in the observation
       names: _.sampleSize(namesPool, nStudents),
 
+      // itemID
+      itemID: item.itemID,
+
+      //list
+      list: item.list,
+
       // The counts per student (e.g., [12, 12, 0, 0, 0])
       studentsArray: obs,
 
@@ -313,6 +323,8 @@ function constructTrials(itemsTable) {
       Q1: item.Q1,   // first quantifier
       Q2: item.Q2,   // second quantifier
       A:  item.A,     // "right" / "wrong"
+      Q1_raw: item.Q1_raw,
+      A_raw: item.A_raw,
 	  options: choiceOptions
     };
   });
@@ -333,7 +345,7 @@ const choiceOptions = ["Student", "Teacher", "Principal"];
 
 const speaker_questions = {
 	"sample.low": "Imagine you were a <b>student</b>, describe these results of this exam so as to make it appear as if there is a <b>low</b> success rate without lying.",
-	"sample.info": "Imagine you were a <b>principal</b>, describe these results of this exam as <b>accurately</b> as possible without making it sound particularly easy or difficult.",
+	"sample.info": "Imagine you were a <b>principal</b>, describe these results of this exam as <b>objective</b> as possible <b>without making it sound particularly easy or difficult.</b> ",
 	"sample.high": "Imagine you were a <b>teacher</b>, describe these results of this exam so as to make it appear as if there is a <b>high</b> success rate without lying."
 };
 	
