@@ -20,7 +20,7 @@
 		</Slide>
 			
 		<Slide>
-			<b>Study title</b>: Who reports what? Investigating the interpretation of utterances with different communicative goals
+			<b>Study title</b>: Who says what? Investigating the interpretation of utterances with different communicative goals
 			<br /><br />
 			<b>Principal Investigator</b>: Michael Franke
 			<br /><br />
@@ -51,7 +51,7 @@
 		<Slide>
 			Many events in life can be described in one way or another. Think of describing the same glass as either half full or half empty. In this experiment, we are interested in how <i>you</i> would interpret the intended meaning behind an utterance.
 			<br/><br/>
-			You will see pictures showing the results of an exam, along with short reports describing those results. Your task is to decide <b>who</b> made each report, given the true outcomes and the different goals of the possible speakers.
+			You will see pictures showing the results of an exam, along with short messages describing those results. Your task is to decide <b>who</b> produced each message, given the true outcomes and the different goals of the possible speakers.
 			<br/><br/>
 			The next screen will give you more concrete instructions for the upcoming task.
 			<button @click="$magpie.nextSlide()">Next</button>
@@ -62,11 +62,11 @@
 		<br/><br/>
 		There are three people who may want to tell you about the results of these exams, each with slightly different goals:
 		<br/><br/>
-		<b>The student</b> wants the exam to appear <b>difficult</b>&mdash;that is, as if students had a low chance of success&mdash;because it would make her own performance seem better in comparison.
+		<b>The student</b> wants the exam to appear <b>hard</b>&mdash;that is, as if students had a <b>low</b> chance of success&mdash;because it <b>would make her own performance seem better in comparison.</b>
 		<br/><br/>
-		<b>The teacher</b> wants the exam to appear <b>easy</b>&mdash;that is, as if students had a high chance of success&mdash;because it would reflect positively on the quality of teaching and the students’ overall preparedness.
+		<b>The teacher</b> wants the exam to appear <b>easy</b>&mdash;that is, as if students had a <b>high</b> chance of success&mdash;because it <b>would reflect positively on the quality of teaching and the students’ overall preparedness.</b>
 		<br/><br/>
-		<b>The principal</b> provides a report that aims to describe the exam <b>objectively</b>; that is <b>without making it sound particularly hard or easy.</b>
+		<b>The examiner</b> provides a message that aims to describe the exam <b>objectively</b>; that is <b>without making it sound particularly hard or easy.</b>
 		<br/><br/>
 		In the following practice trials, you will see examples of exam results. The tables show the exam results of students. 
 			A "<i style="color:#13AC38">&#10004;</i>" indicates that a task was answered correctly, 
@@ -99,11 +99,11 @@
 			<br/><br/>
 			From these tables, note that each person has a different goal when reporting:
 			<br/><br/>
-				The <b>student</b> wants the exam to sound <b>difficult</b>.
+				The <b>student</b> wants the exam to sound <b>hard</b>.
 			<br/><br/>
 				The <b>teacher</b> wants the exam to sound <b>easy</b>.
 			<br/><br/>
-				The <b>principal</b> provides an <b>objective</b> report.
+				The <b>examiner</b> provides an <b>objective</b> report that sound <b>neither hard nor easy</b>.
 			<br/><br/>
 			Your task is to decide <b>who</b> said the report.
 			<br/><br/>
@@ -288,7 +288,7 @@ function constructTrials(itemsTable) {
     "Lesly", "Julian", "Chris", "Marie", "Lisanne", "Thomas", "Pablo", "Rebecca",
     "Theresa", "Susanne", "Jan", "Nico"
   ];
-  	const choiceOptions = ["Student", "Principal", "Teacher"];
+  	const choiceOptions = ["Student", "Examiner", "Teacher"];
 
   // Turn each row in the items table into a trial object
   	var trials = itemsTable.map(function(item) {
@@ -341,11 +341,11 @@ const questions = [
 ];
 
 // Possible response options (will be shuffled once per participant)
-const choiceOptions = ["Student", "Teacher", "Principal"];
+const choiceOptions = ["Student", "Teacher", "Examiner"];
 
 const speaker_questions = {
 	"sample.low": "Imagine you were a <b>student</b>, describe these results of this exam so as to make it appear as if there is a <b>low</b> success rate without lying.",
-	"sample.info": "Imagine you were a <b>principal</b>, describe these results of this exam as <b>objective</b> as possible <b>without making it sound particularly easy or difficult.</b> ",
+	"sample.info": "Imagine you were a <b>examiner</b>, describe these results of this exam as <b>objective</b> as possible <b>without making it sound particularly easy or difficult.</b> ",
 	"sample.high": "Imagine you were a <b>teacher</b>, describe these results of this exam so as to make it appear as if there is a <b>high</b> success rate without lying."
 };
 	
