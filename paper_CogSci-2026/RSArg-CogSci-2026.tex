@@ -10,6 +10,7 @@
   style=apa,
   natbib=true,
   annotation=false,
+  sortcites=false,
 ]{biblatex}
 \addbibresource{../paper/RSArg.bib} %%% Specify the path to a BibLaTeX file
 \setlength{\bibhang}{.125in}
@@ -140,42 +141,42 @@ probabilistic modeling;
 \section{Introduction}
 \label{sec:introduction}
 
+Overwhelming evidence from decades of research demonstrates that human language use is often strongly oriented towards providing a high degree of useful information for addressees \mf{REFs}.
+This picture aligns well with the classic Gricean framework \citep{Grice1975:Logic-and-Conve}, which posits a cooperative principle alongside Maxims of Quality (truth), Quantity (informativity), and Relevance---where the latter is typically interpreted as relevance to the listener.
 
-\begin{itemize}
-  \item intro:
-  \begin{itemize}
-    \item pragmatics mostly on cooperative dialogue
-    \item much less on argumentative language use; and what exists is often informal \citep{AnscombreDucrot1983:Largumentation-}
-    \item problem: what's the goal of argumentative language use (what's the payoff function?)
-  \end{itemize}
-  \item probabilistic pragmatics / RSA:
-  \begin{itemize}
-    \item vanilla version
-    \item extensions with multiple utility components
-    \item sketch idea of adding some notion of argumentative strength to utils
-    \item mention log-odds ratio as an obvious candidate but postpone full model and definition of $argStr(u)$ until after the experimental part
-  \end{itemize}
-  \item Exp 1 \& 2 (in one swoop):
-  \begin{itemize}
-    \item describe experimental design
-    \item mention (e.g., in footnote and expand in appendix) what was preregistered when
-    \item report on results w/ visuals and some descriptive stats showing the “argumentativity matters”
-  \end{itemize}
-  \item Models:
-  \begin{itemize}
-    \item describe different RSArg models, expand on argStr(u)
-    \item maybe: motivate models with reference to some aspect of the observed data
-  \end{itemize}
-  \item Model fits \& comparison:
-  \begin{itemize}
-    \item describe Bayesian models (hierarchical models, priors etc.)
-    \item discuss results of model fits and comparison
-  \end{itemize}
-  \item Discussion
-\end{itemize}
+Formal models of pragmatic language use consequently often rely on some kind of formal, relative, or quantitative notion of informativity, versions of which are supplied by formal logic (e.g., asymmetric logical entailment) or information theory.
+Based on such formalized quantitative notions of informativity, we can describe speakers' pragmatic choice of expressions as a form of utility maximization, defined---at least in part---by the drive to optimize relevant information exchange \citep{Parikh1991:Communication-a,BlutnerBOTJoS2000}.
+
+However, human talk does not always revolve around the straightforward exchange of relevant information alone.
+We also express an interpretative stance towards the facts we describe, communicating sentiment and opinion alongside descriptions of the world.
+Indeed, some work suggests that human talk is much more about persuasion, argumentation, manipulation, and opinion-negotiation than about pure, objective---indeed, robot-like---information-sharing \citep{AnscombreDucrot1983:Largumentation-,MercierSperber2011:Why-do-humans-r,Enfield2024:Language-vs.Rea}.
+For example, as a case of selective truth-telling, or \emph{paltering} \citep{RogersZeckhauser2017:Artful-palterin}, the same outcome of an exam could be truthfully described in a way that makes the students appear successful or less successful overall:
+
+\begin{exe}
+  \item
+  \begin{xlist}
+    \item Most of the students got most questions right.
+    \item Some of the students got all questions wrong.
+  \end{xlist}
+\end{exe}
+
+Yet, there is much less formal work on this kind of language use.
+What seems to be blatantly lacking are good formal descriptions of what makes one utterance more suitable than another for a speaker with an intent to argumentatively frame their contribution.
+In this work, we therefore ask which kind of utility function might underlie a speaker's choice to prefer one utterance over another in a persuasive or argumentative context: how can we capture formally what makes one argument better than another?
+We address this question through the notion of \emph{argumentative strength}.
+
+Some prior work \citep[e.g.,][]{Merin1997:If-all-our-argu,Rooijvan-Rooij2004:Cooperative-ver,CumminsFranke2021:Rational-interp} suggests a formalization of argumentative strength in terms of \textit{log-likelihood ratios}, based on early work from the philosophy of science on observational evidence \citep{Good1950:Probability-and}; see the formalization below.
+However, so far there has been no stringent empirical testing of this notion, nor a systematic comparison against closely related competitor notions in terms of their predictive accuracy for experimental data.
+Providing such a comparison is the main contribution of this work.
+
+We focus on a setting of selective truth-telling, or paltering \cite{Roberts}.
+We study cases similar to the real-life examples examined by \citet{CumminsFranke2021:Rational-interp}, but consider a constrained experimental setting that allows statistical model comparison of bespoke probabilistic models which differ only in the quantitative notion of argumentative strength they assume underlies the speakers' choice of expression.
+In the following, we formulate these models in the tradition of the RSA framework \cite{RSA}.
+Next, we describe the experimental set-up, and report on the statistical model comparisons, as well as our results.
+Our main findings are that \mf{fill me \dots}.
 
 
-\section{Probabilistic pragmatics \& and argumentative discourse}
+\section{Probabilistic models of argumentative language}
 \label{sec:prob-pragm}
 
 Probabilistic models of pragmatic reasoning usually define a speaker and listener policy.
@@ -250,6 +251,7 @@ In the following we will explore different models of the speaker's utterance cho
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiment}
+\label{sec:experiment-1}
 
 To test whether and how speakers choose expressions to frame a complex situation with argumentative information culling, we used an experimental design which presents a perspicuous but complex state of affairs (the results of a high-school exam) and allows participants to choose flexibly from a larger, but still constrained set of alternative expressions.
 The design used here is essentially the same as that of Experiment~1 reported in \citep{Vinicius-Macuch-SilvaWinter2024:Strategic-use-o}, except that we here used a larger set of visual scenes (different array sizes, see below).
@@ -315,7 +317,7 @@ The latter result, indicating a difference between \textit{high} and \textit{low
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Models}
-\label{sec:experiment}
+\label{sec:models}
 
 We consider different model variants, each using a different notion of argumentative strength.
 
@@ -441,13 +443,14 @@ In slogan form: an argumentation chain is only as strong as its weakest link.
 \subsection{Model-free argstrength}
 
 The agent might also try to maximize (in the high condition) or minimize (in the low condition) the expected total number of correct answers across all students given the utterance (recall that $s$ is a list of the number of correct answers for each student):
-\begin{equation}
+\begin{align*}
     \text{totalcorrect}(u)
     =& |\interpret{u}|^{-1} \sum_{s \in \interpret{u}} \sum_{i \in s} i 
- \end{equation}
+ \end{align*}
 \noindent In words, the argumentative strength encodes the expected total number of right answers, which is to be (soft)maximised in the high condition and (soft)minimized in the low condition.
 
 \section{Results}
+\label{sec:results}
 
 For each of the measures of argumentative strength above, we implement and fit two models:
   \begin{enumerate}
@@ -535,6 +538,7 @@ On the other hand, maximin argstrength underpredicts the frequency of 'some|some
 In some cases, maximin-argstrength makes worse predictions than lr-argstrength.  '5.png', high condition: 'most|all|right' is the most produced signal, and it is the best under lr but not maximin (which instead predicts 'all|most|right' to be argumentatively better). '14.png', high condition: a signal that is predicted to be good by maximin ('none|all|wrong') is not produced much. This can be explained by the cost for 'none'.
 
 \section{Discussion}
+\label{sec:discussion}
 
   \begin{itemize}
     \item There are a couple of implementation decisions for this model (and all the following ones):
