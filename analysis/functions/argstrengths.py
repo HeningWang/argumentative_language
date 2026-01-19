@@ -168,9 +168,10 @@ def theano_calculate_pragmatic_argstrength(possible_utterances, possible_observa
             )
             .prod(-1)[None]
         )
-        # normalize across utterances
+        # normalize to get probs of observations
         return p_obs_given_gamma / p_obs_given_gamma.sum()
     
+    # shape (utterance, observation)
     p_observation_given_utterance = normalize(np.stack([
         verify(
             *a, 
