@@ -51,7 +51,7 @@
 		<Slide>
 			Many events in life can be described in one way or another. Think of describing the same glass as either half full or half empty. In this experiment, we are interested in how <i>you</i> would interpret the intended meaning behind an utterance.
 			<br/><br/>
-			You will see pictures showing the results of an exam, along with short messages describing those results. Your task is to decide <b>who</b> produced each message, given the true outcomes and the different goals of the possible speakers.
+			You will see pictures showing the results of an exam, along with short messages describing those results. Your task is to decide <b>which type of speaker</b> produces which message, given different social goals they might have.
 			<br/><br/>
 			The next screen will give you more concrete instructions for the upcoming task.
 			<button @click="$magpie.nextSlide()">Next</button>
