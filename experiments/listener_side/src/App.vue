@@ -70,7 +70,7 @@
 		<br/><br/>
 		In the following practice trials, you will see examples of exam results. The tables show the exam results of students. 
 			A "<i style="color:#13AC38">&#10004;</i>" indicates that a task was answered correctly, 
-			and a "<i style="color:#B12810">&#10008;</i>" that it was answered incorrectly. You will first try to make your own report as if you were one of the three speakers, and then you will see example reports made by each of the three speakers.
+			and a "<i style="color:#B12810">&#10008;</i>" that it was answered incorrectly. <b>You will first try to make your own report as if you were one of the three speakers, and get familiar with the task. After the training phase, you will take the role of a listener and decide who said which message.</b>
 		<button @click="$magpie.nextScreen()">Next</button>
 		</Slide>
 	</Screen>
