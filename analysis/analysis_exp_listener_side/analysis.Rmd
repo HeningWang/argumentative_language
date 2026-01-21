@@ -59,7 +59,7 @@ scale_fill_discrete <- function(...) {
 
 ## Load data
 ```{r}
-data <- read.csv("../../data/data_listenerside/data_pilot1.csv")
+data <- read.csv("../../data/data_listenerside/data_pilot2.csv")
 list_info <- read.csv("../../experiments/listener_side/items/final_listener_items.csv")
 ```
 
@@ -116,7 +116,7 @@ data <- data %>%
 response_code <- c(
   "Student"   = "low",
   "Teacher"   = "high",
-  "Principal" = "info"
+  "Examiner" = "info"
 )
 
 data <- data %>%
@@ -452,7 +452,8 @@ data_brm |>
   ) |> 
   group_by(condition) |> 
   summarize(
-    post_prob_hypothesis = mean(match > `non-match-1` & match > `non-match-2`)
+    post_prob_hypothesis_conj = mean(match > `non-match-1` & match > `non-match-2`),
+    post_prob_hypothesis_sum = mean(match > `non-match-1` + `non-match-2`)
   )
 ```
 
