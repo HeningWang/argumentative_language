@@ -183,7 +183,7 @@ def factory_model_base_hierarchical(data, list_possible_observations,
             shape=(1,data.id.max()+1)
         )
         
-        # shape (participant)
+        # shape (array size condition, participant)
         alpha = pm.Deterministic(
             f'alpha',
             pm.math.invlogit(
@@ -429,7 +429,7 @@ def factory_model_lr_argstrength_hierarchical(data, list_possible_observations,
             shape=(1,data.id.max()+1)
         )
         
-        # shape (participant)
+        # shape (array size condition, participant)
         alpha = pm.Deterministic(
             f'alpha',
             pm.math.invlogit(
@@ -723,9 +723,10 @@ def factory_model_maximin_argstrength_hierarchical(data, list_possible_observati
             shape=(1,data.id.max()+1)
         )
         
+        # shape (array size condition, participant)
         alpha = pm.Deterministic(
             'alpha',
-            pm.math.invlogit(
+            pm.math.invlogit(  
                 alpha_mu + 
                 alpha_sigma * alpha_zs
             ) * 2
@@ -1021,7 +1022,7 @@ def factory_model_prag_argstrength_hierarchical(data, list_possible_observations
             shape=(1,data.id.max()+1)
         )
         
-        # shape (participant)
+        # shape (array size condition, participant)
         alpha = pm.Deterministic(
             f'alpha',
             pm.math.invlogit(
@@ -1322,7 +1323,7 @@ def factory_model_nonparametric_argstrength_hierarchical(data, list_possible_obs
             shape=(1,data.id.max()+1)
         )
         
-        # shape (participant)
+        # shape (array size condition, participant)
         alpha = pm.Deterministic(
             f'alpha',
             pm.math.invlogit(
