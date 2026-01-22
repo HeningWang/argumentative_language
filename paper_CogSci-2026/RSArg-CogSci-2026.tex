@@ -127,10 +127,8 @@
   %   \end{quote}
   % \end{footnotesize}
 
-
-
 \begin{abstract}
-  Concrete. \mf{fill me \dots}
+Theories of language use in the Gricean tradition, and related formalizations such as the Rational Speech Act (RSA) modeling framework, have focused on information exchange between cooperative interlocutors. More recent work has emphasized the importance of other, potentially less-cooperative functions of language: persuasion, argumentation, manipulation. In this work, we bridge these two traditions by developing a model of argumentative utterance choice in the RSA framework. We propose several formalization of the argumentative strength of a signal. We then measure how well they capture behaviour in a simple utterance production task where participants were assigned an explicit argumentative goal. We show that a popular regimentation of argumentative strength fails to capture some important patterns in the data, and discuss some alternatives. Although our models constitute a substantial improvement over a baseline model, we also find patterns in the data that remain unexplained, suggesting that more work is needed.\fc{not the most inspiring abstract but it's a start} 
 
 \textbf{Keywords:}
 pragmatic language use;
@@ -258,13 +256,21 @@ A total of $N=201$ adult participants with English as their first language were 
 % Based on a mean completion time of just below 10 minutes (median just below 9 minutes), this amounted to an average hourly payment of £1.5.
 
 \paragraph{Materials.}
-The results of high-school exams were presented visually in form of matrices.
-\mf{if there's space: insert a picture of a stimulus}
+The results of high-school exams were presented visually in form of matrices, as shown in Figure~\ref{fig:example-picture}.
 The rows of matrices corresponded to students (indicated by names), the columns indicated questions.
 A checkmark on green background in a cell represented that the student got the question right.
 A cross on a red background represented a false answer.
 The results where always arranged to show students ordered in terms of performance (students with more correct answers on in higher rows).
 The names of students were sampled at random for each trial from a list of common English first names.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width = \linewidth]{pics/example_picture.png}
+  \caption{
+    Example of an experimental stimulus showing one set of results for an exam with 12 questions and 6 students.
+  }
+  \label{fig:example-picture}
+\end{figure}
 
 Four sizes of matrices were used, differing in the number of students (5 or 11) and the number of questions in the exam (6 and 12).
 % For example, the matrix in Figure~\ref{fig:overview} is an instance of a $5 \times 12$ matrix.
@@ -279,7 +285,7 @@ Each participant saw each of the 20 instances of the same matrix size in complet
 Each participant saw 10 trials in the high and low framing condition each, randomly assigned for each run.
 
 \paragraph{Results.}
-Following preregistered protocol, \mf{insert anonymous link?} we excluded all the data from a participant if the participant selected the same response in all trials or if the participant gave more than four responses which are literally false as a description of the results shown in the corresponding trial.
+Following preregistered protocol, we excluded all the data from a participant if the participant selected the same response in all trials or if the participant gave more than four responses which are literally false as a description of the results shown in the corresponding trial.\footnote{The preregistration files are available at \url{https://osf.io/2juzy/overview?view_only=82547823039c4eb9aa2500135ddb2f6f}.}
 This reduced the original number of $N=201$ participants to $N=186$.
 We also excluded any remaining responses that are literally false.
 This resulted in another $113$ individual responses being removed from the data set.
@@ -424,7 +430,7 @@ The posterior predictive checks for each model also show systematic patterns in 
     Results of model comparison based on the full data set.
     For each model, shapes indicate the expected log-probability mass from leave-one-out cross validation, with error bars showing the standard error of these estimates.
     The $y$-axis lists the different types of models, ordered by ascending goodness-of-fit.
-    The shapes and colors indicate the method of model fitting: with or without hierarchical structure.\fc{hierarchic in legend feels unusual to me}
+    The shapes and colors indicate the method of model fitting: with or without hierarchical structure.\fc{hierarchic in legend feels unusual to me. Also note `non-parametric', which is the name in the codebase but we decided to call `model-free' instead}
   }
   \label{fig:results-model-comparison}
 \end{figure}
@@ -462,17 +468,19 @@ However, all measures of argumentative strengths we defined are truth-functional
 
 One particularly striking observation is that participants often chose `most : most' when `all : most' would have been both more informative and argumentatively stronger according to all models. All models failed to capture this pattern, and indeed it is difficult to explain it as a rational strategic choice. Future work could look into other possible explanations, such as processing ease.
 
-Finally, participants chose `none : all : right' more often than predicted by any model, for both frame condition. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.
+Finally, participants chose `none : all : right' more often than predicted by any model, for both frame condition. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.\fc{Not sure what more to say here, can also leave it out}
 
 \section{Discussion}\label{sec:discussion}
 
-A crucial empirical observation is that participants prefer `most|most' over `some|all'. A first explanation could be that `most' has a stronger interpretation than assumed in the lr-argstrength model. We implemented models where `most' has a stronger interpretation due to its literal (\fc{cit solt}) meaning or pragmatic interpretation (\fc{self cit}). Neither of these variations were better than the lr-argstrength. 
-% Another option is that high enough values of $\gamma$ make `most|most|right' argumentatively stronger than `some|all|right'. We tested a model where (although with a prior that pushed in that direction) $\gamma$ is estimated to be very close to 1 (indeed, so close that most|most| is argumentatively stronger than some|all).
-Another potential explanation is that participants allow for more variation across students than assumed by the model. If different students have different binomial parameters, knowing that one student performed very well does not say as much as knowing that many students performed reasonably well, as the former might be a fluke. This would make `some|all' argumentatively weaker. If each student is still described by a Binomial parameter, but these parameters are distributed as a Beta distribution, the resulting model of exam result probabilities follows a Beta-Binomial distribution. We leave a more detailed analysis of this option to future work.
+In this paper, we proposed several different formalizations of the notion of argumentative strength and evaluated them with data from a simple utterance choice experimental setup. We found that the traditional notion of \emph{log-likelihood ratio} argumentative strength captures the data better than a model that completely ignored argumentative goals, but worse than other notions. Strikingly, the models with the closest fit to the data are simpler than the log-likelihood ratio model, in that they consider fewer utterance-compatible states (maximin argstrength) or use a more context-specific approximation (model-free).
 
-NarrowLong, 1111000..., low condition: Neither model can really make sense of why 'most|all|wrong' is by far the most produced signal. lr-argstrength predicts it should be 'most|all|right' and maximin that it should be 'all|most|wrong'.\fc{tofinish}
-  
-Lr-argstrength and maximin argstrength differ in how many states are considered when assessing argstrength: all utterance-compatible ones and just one respectively. The truth might lie in the middle. Participants might consider some but not all of the observations for the signal. This behaviour can be rationalized: If the speaker is perfectly rational but reasons about an imperfect listener, they might only focus on the few states that the listener is likely to consider given a signal. We leave a more systematic exploration of this to future work.
+We explored a natural selection of models, but many other options could be considered. For instance, full lr-argstrength and maximin argstrength differ in how many states they consider: all utterance-compatible ones and just a single one respectively; The truth might lie in the middle. Participants might consider some but not all of the observations for the signal. This behaviour can be rationalized: If the speaker is perfectly rational but reasons about an imperfect listener, they might only focus on the few states that the listener is likely to consider given a signal, guided e.g., by prototypicality.
+
+Our data suggests that a full account of utterance choice would need to go beyond the purely intensional definitions of argumentative strength we have considered. Even in this simple design, the data contained several patterns that could not be captured by any of the models. These might be due to the connotation of different terms (`right', `wrong') or processing complexity (`all : most'). We leave a more systematic exploration of these options to future work.
+
+%For example, participants prefer `most|most' over `some|all'. A first explanation could be that `most' has a stronger interpretation than assumed in the lr-argstrength model. We implemented models where `most' has a stronger interpretation due to its literal (\fc{cit solt}) meaning or pragmatic interpretation (\fc{self cit}). Neither of these variations were better than the lr-argstrength. 
+% Another option is that high enough values of $\gamma$ make `most|most|right' argumentatively stronger than `some|all|right'. We tested a model where (although with a prior that pushed in that direction) $\gamma$ is estimated to be very close to 1 (indeed, so close that most|most| is argumentatively stronger than some|all).
+%Another potential explanation is that participants allow for more variation across students than assumed by the model. If different students have different binomial parameters, knowing that one student performed very well does not say as much as knowing that many students performed reasonably well, as the former might be a fluke. This would make `some|all' argumentatively weaker. If each student is still described by a Binomial parameter, but these parameters are distributed as a Beta distribution, the resulting model of exam result probabilities follows a Beta-Binomial distribution. We leave a more detailed analysis of this option to future work.
 
 \printbibliography
 
