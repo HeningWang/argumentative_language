@@ -308,32 +308,34 @@ The latter result suggests that our manipulation worked and that participants ar
 \section{Statistical Analysis}
 \label{sec:models}
 
-We perform a Bayesian analysis of the data produced by the experiment, using the RSA speaker defined in Eq.~\ref{eq:S1} as a generative model of participants' production behaviour. A full implementation of argumentative strength (Eq.~\ref{eq:utilArgstrength}) requires the specification of one hypothesis that the speaker argues for ($H_0$) and one that they argue against ($H_1$), as well as a functional form that measures how strongly a specific utterance supports $H_0$ against $H_1$.
+We perform a Bayesian analysis of the data produced by the experiment, using the RSA speaker defined in Eq.~\ref{eq:S1} as a generative model of participants' production behaviour.
+A full implementation of argumentative strength (Eq.~\ref{eq:utilArgstrength}) requires the specification of one hypothesis that the speaker argues for ($H_0$) and one that they argue against ($H_1$), as well as a functional form that measures how strongly a specific utterance supports $H_0$ against $H_1$.
 
 \subsection{Hypotheses for argstrength calculation}
 
 We model each hypothesis $H$ as saying that all students in the class have a certain probability $\gamma_H$ of getting each answer correct, making the simplifying assumption that there is no variation in skill across students and no variation in probability of getting different answers correct. 
 \fc{I actually spent a long time in the early phases of the project exploring variations of this - not sure it makes sense to pick up this thread though.}
-The probability of observing 	the results for a class is then proportional to the product of the Binomial probability of each student's results:
+\mf{Not for the abstract, but possibly for the long paper, I would say.}
+The probability of observing the full results from an exam is then proportional to the product of the Binomial probability of each student's results: \mf{check: why $\propto$ here? isn't it actually $=$?}
   %
   \begin{equation}\label{eq:stateprob}
     P(s \mid \gamma_H) \propto \prod_{k \in s}{ N \choose k } \gamma_H^k (1-\gamma_H)^{N-k}
   \end{equation}
   %
-where the exam $s$ is encoded as a list of numbers of correct answers for each student, and $N$ is the number of questions in the exam.
+where the exam result $s$ is a list of numbers of correct answers for each student, and $N$ is the number of questions.
 
-For the models below, the hypotheses are:
+By experimental design, in the high framing condition the speaker is choosing an utterance to support the hypothesis that students had a high probability of answering correctly rather than a low probability, and the opposite is true in the low framing condition.
+Consequently, for the models below, the assumed hypotheses are: \mf{elaborate on why exactly these numbers?}
  \begin{align}\label{eq:hypotheses}
 \gamma_{H_0} &= 0.85 &\gamma_{H_1} &= 0.15 & \text{for high frame condition.} \\
 \gamma_{H_0} &= 0.15 &\gamma_{H_1} &= 0.85 & \text{for low frame condition.}\nonumber
  \end{align}
-Intuitively, in the high framing condition the speaker is choosing an utterance to support the hypothesis that students had a high probability of answering correctly rather than a low probability, and the opposite is true in the low framing condition. 
 
 \subsection{Functional form of the argstrength component}
 
 Having defined the two hypotheses, we next turn to various ways of specifying the functional form of the argumentative strength of utterances.
 
-\paragraph{Log likelihood ratio argstrength.} The starting point is the notion of \emph{weight of evidence}, which has been introduced in the previous literature as a formal notion of argument strength, following \mf{refs}.
+\paragraph{Log likelihood ratio argstrength.} The starting point is the notion of \emph{weight of evidence}, which has been introduced in the previous literature as a formal notion of argumentative strength \citep[e.g.,][]{Merin1997:If-all-our-argu,Rooijvan-Rooij2004:Cooperative-ver,Winterstein2012:What-but-senten}.
 %This notion requires fixing two competing hypotheses $H_{0}$ and $H_{1}$ and formalizes the argumentative strength of an utterance $u$ as evidence in favor of $H_{0}$ as opposed to the (alternative, competing) hypothesis $H_{1}$.
 Concretely, we consider the degree to which the utterance $u$ is more likely to be true (literally) under hypothesis $H_{0}$ than under a competing (alternative) hypothesis $H_{1}$:
 %
@@ -342,21 +344,22 @@ Concretely, we consider the degree to which the utterance $u$ is more likely to 
     \log \frac{P( \interpret{u} \mid H_0 ) }{ P( \interpret{u} \mid H_1 ) }
 \end{equation}
 %
-\noindent where $P( \interpret{u} \mid H )$ is the probability that utterance $u$ is \emph{true} (rather than e.g., produced) given hypothesis $H$. $P(\interpret{u} \mid H)$ can be calculated based on the literal semantics:
+\noindent where $P( \interpret{u} \mid H )$ is the probability that utterance $u$ is \emph{true} (rather than, e.g., \textit{produced}) given hypothesis $H$. $P(\interpret{u} \mid H)$ can be calculated based on the literal semantics, with with $P(s \mid \gamma_H)$ is defined in Eq.~\eqref{eq:stateprob}, as:
 \begin{equation}
-    P(\interpret{u} \mid H) = \sum_{s \in S} \interpret{u}^s P(s \mid \gamma_H)
+    P(\interpret{u} \mid H) = \sum_{s \in \interpret{u}} P(s \mid \gamma_H)
 \end{equation}
-where $P(s \mid \gamma_H)$ is defined in Eq.~\eqref{eq:stateprob}, and $\interpret{u}^s$ equals 1 if $u$ is true in $s$ and 0 otherwise.
 
-\paragraph{Pragmatic argstrength.} The second type of argstrength replaces truth in a state $ \interpret{u}^s$ with the probability of production by a pragmatic speaker:
+\paragraph{Pragmatic argstrength.}
+While the previous definition defines argumentative strength in terms of the evidence ratio for $u$ being literally true, it is also conceivable that an utterance's argumentative strength is intuitively assessed not based on its literal meaning but based on its pragmatically enriched meaning.
+We therefore also consider a notion of pragmatic argumentative strength based on the pragmatic speaker function $P_{S}$ as defined above in Equations~\eqref{eq:S1} and~\eqref{eq:util-vanilla}.
+We first quantify the probability of observing $u$ under said pragmatic speaker behavior if $H$ is true:
+\begin{equation}
+P_{S} (u \mid H) = \sum_{s \in S} P_{S} (u \mid s) \  P(s \mid \gamma_H)
+\end{equation}
+We then define pragmatic argumentative strength as:
 \begin{equation}
 \textrm{prag-argstr}(u, H_0, H_1) = \log \frac{P_{S} (u \mid H_0)}{P_{S} (u \mid H_1)}
 \end{equation}
-\noindent where:
-\begin{equation}
-P_{S} (u \mid H) = \sum_{s \in S} P_{S} (u \mid s) P(s \mid \gamma_H)
-\end{equation}
-and $P_{S}$ is the pragmatic speaker defined above in Equations~\eqref{eq:S1} and~\eqref{eq:util-vanilla}, who does not in turn consider argumentative strength. \fc{add a sentence or two giving an intuition/motivation for prag-argstr.}
 
 \paragraph{Maximin argstrength.} The third type of argstrength captures the intuition that, rather than calculating argumentative strength by marginalizing across \emph{all} the states compatible with the utterance $u$, participants only consider the argumentatively weakest state compatible with $u$:
   \begin{equation}
@@ -368,7 +371,7 @@ A speaker might use maximin-argstr when considering the worst case scenario for 
 Maximin-argstr can also be motivated on computational grounds, since it only requires the single argumentatively weakest state, which in some cases can be found efficiently. 
 %Maximin- and lr-argstrength differ in terms of the absolute argstrength of signals, and in some cases also in their ranks. For instance, in the high framing condition `most|none|wrong' is better than `all|most|right' for lr-argstr, but the other way around for maximin-argstr.
 
-\paragraph{Model-free argstrength.} Instead of assessing argstrength in terms of a precise probabilistic relation between hypotheses and utterance-compatible observations, participants might use a heuristic higher-level feature of observations. One such feature for our experimental setup is the mean number of right answers across utterance-compatible observations:
+\paragraph{Model-free argstrength.} Instead of assessing argumentative strength in terms of a precise probabilistic relation between hypotheses and utterance-compatible observations, participants might use a heuristic higher-level feature of observations (a suitable \textit{test statistic}). One such feature for our experimental setup is the mean number of right answers across utterance-compatible observations:
 \begin{equation}
     \mathbb{E}_{\text{right}}(u) = |\interpret{u}|^{-1} \sum_{s \in \interpret{u}} \sum_{i \in s} i 
  \end{equation}
@@ -381,6 +384,10 @@ The argumentative speaker might choose an utterance to maximise this (centered) 
 \end{cases}
  \end{equation}
 \noindent We do not model the process of finding a heuristic given an argumentative goal, and therefore this argstrength does not formally depend on the hypotheses defined in Equation \eqref{eq:hypotheses}.
+\mf{It's not clear from the text (to me) what the $\mu_{\mathbb{E}}$ means exactly. I can guess but I cannot be sure. More importantly, I wonder if this summand doesn't actually cancel out? Is it strictly necessary (apart from stabilizing the inference)?}
+\mf{Even more importantly, I always thought of this approach as a shortcut to a literal listener's posterior of the true rate parameter (the iid probability of getting a single question right). The MLE we use here approximates the Bayesian mean well enough for larger samples sizes (which we might already have), so this is not totally ``model free'' necessarily; it define argumentative strength in terms of a ``valuation function'' on beliefs of the literal listener about a latent world-variable after hearing $u$.}
+
+
 
 \subsection{Statistical models}
 
