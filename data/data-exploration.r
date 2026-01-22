@@ -65,7 +65,8 @@ sum_stats <- d_exps |>
 
 sum_stats |> 
   ggplot(aes(x = response , y = proportion, group = condition, fill = condition)) +
-  geom_bar(stat = "identity", position = "dodge") + 
+  # geom_bar(stat = "identity", position = "dodge") + 
+  geom_bar(stat = "identity", position = position_dodge(preserve = "single")) + 
   facet_grid(arrayCondition ~ ., scale = "free") +
   theme_csp() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
