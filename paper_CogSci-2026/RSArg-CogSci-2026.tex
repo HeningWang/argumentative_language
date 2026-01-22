@@ -170,7 +170,7 @@ Providing such a comparison is the main contribution of this work.
 
 We focus on a setting of selective truth-telling, or paltering \citep{RogersZeckhauser2017:Artful-palterin}.
 We study cases like (\ref{bsp:leading-example}), which are similar to the real-life examples examined by \citet{CumminsFranke2021:Rational-interp}, but consider a constrained experimental setting that allows statistical model comparison of bespoke probabilistic models which differ only in the quantitative notion of argumentative strength they assume underlies the speakers' choice of expression.
-In the following, we formulate these models in the tradition of the RSA framework \citep{FrankGoodman2012:Predicting-Prag,ScontrasTessler2021:A-practical-int,Degen2023:The-Rational-Sp}.
+In the following, we formulate these models in the tradition of the RSA framework \citep{FrankGoodman2012:Predicting-Prag,FrankeJager2015:Probabilistic-p,Degen2023:The-Rational-Sp}.
 We then describe the experimental set-up, and report on the statistical model comparisons, as well as our results.
 Our main findings are that \mf{fill me \dots}.
 
@@ -186,7 +186,7 @@ In line with the usual assumption of Bayesian decision-makers, the speaker's pol
   P_{S} (u \mid s) & \propto \expo\left( \alpha U( u , s ) \right)\,.
 \end{align}
 The utility function $U(u,s)$ captures how good it is for the speaker to choose $u$ when the true state, according to the speaker, is $s$.
-We here follow the Rational Speech Act (RSA) modeling framework \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,Degen2023:The-Rational-Sp} which adopts the usual Gricean assumptions that the speaker wants to speak truly, maximize the amount of information conveyed about the state $s$, and to minimize their own speaking effort \citep{Grice1975:Logic-and-Conve}.
+We here follow the Rational Speech Act (RSA) modeling framework \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,FrankeJager2015:Probabilistic-p,Degen2023:The-Rational-Sp} which adopts the usual Gricean assumptions that the speaker wants to speak truly, maximize the amount of information conveyed about the state $s$, and to minimize their own speaking effort \citep{Grice1975:Logic-and-Conve}.
 To implement these assumptions, utilities are defined as a sum of the information-theoretic surprisal of $s$ conditional on $u$ being true and the (negative) cost of $u$, which is a stand-in for production effort or ease of accessibility:
 \begin{align}
   \label{eq:util-vanilla}
@@ -202,7 +202,7 @@ P(s \mid \interpret{u})
         0 & \text{otherwise.}
     \end{cases}
 \end{align*}
-With this, if the semantics for utterances is binary, the utility function from above can be factored into three well-known aspects of pragmatic language generation, namely the requirements that the speaker's utterance be true, informative and economical \citep{ScontrasTessler2021:A-practical-int}:
+For a binary semantics (as assumed here), the utility function factors into three well-known aspects of pragmatic language generation, namely that the utterance be true, informative and economical \citep{ScontrasTessler2021:A-practical-int}:
 \begin{align*}
   U(u , s) &=
              \underbrace{\log \left[ s \in \interpret{u} \right]}_{\text{truth}}
@@ -213,11 +213,10 @@ With this, if the semantics for utterances is binary, the utility function from 
 \end{align*}
 
 The speaker's policy defined above in Equation~\eqref{eq:S1}, when used with the standard utility function in Equation~\eqref{eq:util-vanilla} has been productively used to explain choices of utterances for different linguistic constructions of phenomena, e.g., for referential expressions \citep{FrankGoodman2012:Predicting-Prag}, generics \citep{Tessler2019:The-Language-of}, conditionals \citep{GrusdtLassiter2021:Probabilistic-m}, quantifiers and implicature \citep{GoodmanStuhlmuller2013:Knowledge-and-I,Tielvan-TielFranke2021:Probabilistic-p}, gradable adjectives \citep{LassiterGoodman2015:Adjectival-vagu}, or probability expression \citep{HerbstrittFranke2019:Complex-probabi}.
-\mf{insert some more references (without MF as co-author!)}
 Yet, some phenomena seem to require more elaborate utility functions.
-For example, in the realm of social meaning, extensions of the vanilla RSA model sketched above have been explored which incorporate additional utility components related to politeness \citep{YoonTessler2020:Polite-Speech-E}.
-Here, we take a similar approach to modelling the utility trade-off between describing the world informatively and making an argument in favor of a position or hypothesis $H_{0}$, as opposed to the competing position or hypothesis $H_{1}$.
-The general form of the extended speaker utility function we consider in this paper will be:
+For example, models have been explored which incorporate additional utility components related to politeness \citep{YoonTessler2020:Polite-Speech-E} or opinion \citep{AchimovaFranke2025:The-alignment-m}.
+Here, we take a similar approach to modelling the utility trade-off between truth and informatively, on the one hand, and, on the other, making an argument in favor of a position or hypothesis $H_{0}$, as opposed to the competing position or hypothesis $H_{1}$.
+The form of the utility functions we consider here is:
 \begin{align}
   & U(u , s , H_{0} , H_{1}) =  \label{eq:utilArgstrength} \\  \nonumber
   & \underbrace{{\mycolh{\beta}} \ \log P_{L_0} (s \mid \interpret{u})}_{\text{truth \& informativity}}
@@ -227,7 +226,7 @@ The general form of the extended speaker utility function we consider in this pa
     \underbrace{\text{cost}(u)}_{\text{economy}}
 \end{align}
 Following the previous literature, the parameter $\beta$ models the degree to which a speaker values optimizing informativity of an utterance or making a strong argument for position $H_{0}$ (relative to $H_{1}$).
-For the special case of $\beta = 1$, this formulation reduces to the previous utility function which did not have argumentative strength as an additional speaker objective for utterance selection.
+% For the special case of $\beta = 1$, this formulation reduces to the previous utility function which did not have argumentative strength as an additional speaker objective for utterance selection.
 
 In the following we will explore different models of the speaker's utterance choice:
 \begin{enumerate}
@@ -237,15 +236,6 @@ In the following we will explore different models of the speaker's utterance cho
   \item  The \textbf{maximin model} provides a computationally simpler definition of argumentative strength in terms of a form of worst-case reasoning.
   \item The \textbf{model-free model} uses a situation-specific notion of argumentative strength in terms of the posterior expectation of true answers; this approach is ``model-free'' in the sense that it does not commit to a strong theoretic position on what argument strength is supposed to be.
 \end{enumerate}
-
-\begin{draftytext}
-  \begin{itemize}
-    \item will explore a bunch of notions
-    \item the starting point is log likelihood ratio
-    \item used by a lot of previous work
-    \item but no real quantitative model fits so far
-  \end{itemize}
-\end{draftytext}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiment}
