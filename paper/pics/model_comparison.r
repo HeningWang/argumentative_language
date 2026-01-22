@@ -29,7 +29,7 @@ zTest(loo_diff_combined, se_diff_combined)
 d <- read_csv("model_comparison-combined.csv") |> 
   # cast 'model' as an ordered factor with ordering from colums 'loo'
   mutate(model = fct_reorder(factor(model), loo)) |> 
-  mutate(group = factor(group, level = c("population", "hierarchicaal")))
+  mutate(analysis = factor(analysis, level = c("population", "hierarchical")))
 
 d |> ggplot(aes(x = model, y = loo, group = analysis, color = analysis)) +
   geom_errorbar(aes(ymin = loo - se, ymax = loo + se),
@@ -37,14 +37,15 @@ d |> ggplot(aes(x = model, y = loo, group = analysis, color = analysis)) +
   # dodge points by group; geometric shape by factor 'analysis'
   geom_point(aes(shape = analysis), position = position_dodge(width = 0.5), size = 3) +
   coord_flip() +
-  xlab("") + 
-  ylab("") +
+  labs(x = NULL, y = NULL) +
   theme_aida() +
   # show legend on at the top
   theme(legend.position = "top",
-        legend.title = element_blank(),
+        # legend.title = element_blank(),
         legend.text = element_text(size = 10),
         axis.text.x = element_text(size = 10),
-        axis.text.y = element_text(size = 10))
+        axis.text.y = element_text(size = 10),
+        plot.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
 
 ggsave("model_comparison-combined.pdf", width = 5, height = 2.5, scale = 0.9)
+ggsave("../../paper_CogSci-2026/pics/model_comparison-combined.pdf", width = 5, height = 2.5, scale = 0.9)

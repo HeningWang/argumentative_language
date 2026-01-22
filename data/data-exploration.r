@@ -69,8 +69,12 @@ sum_stats |>
   geom_bar(stat = "identity", position = position_dodge(preserve = "single")) + 
   facet_grid(arrayCondition ~ ., scale = "free") +
   theme_csp() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  labs(x = NULL) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
+
 ggsave("pics/barplot_responses_perConditions.pdf", width = 8, height = 4.5, scale = 1.5)
+ggsave("../paper_CogSci-2026/pics/barplot_responses_perConditions.pdf", width = 8, height = 4.5, scale = 1.5)
 
 ## sum stats & basic plot for selected situations data ----
 
@@ -83,10 +87,12 @@ sum_stats_full |>
   ggplot(aes(x = response , y = proportion, group = condition, fill = condition)) +
   geom_bar(stat = "identity", position = "dodge") + 
   theme_csp() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  labs(x = NULL) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.margin = margin(t = 0, r = 0, b = 0, l = 0, unit = "pt"))
 
 ggsave("pics/barplot_responses_example-12-12-9-3-3.pdf", width = 8, height = 4.5, scale = 1)
-
+ggsave("../paper_CogSci-2026/pics/barplot_responses_example-12-12-9-3-3.pdf", width = 8, height = 4.5, scale = 1)
 
 ## simple Chi-squared test ----
 d_exps |> 
