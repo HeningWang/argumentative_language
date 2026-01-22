@@ -79,7 +79,7 @@
 ]{draftytext}
 
 
-\title{RSArg}
+\title{What guides speakers' utterance choice in argumentative language use?}
 
 %%% Format authors using helper functions from authblk package %%%
 \author[1]{\mbox{Author N. One (a1@uni.edu)}}
@@ -142,38 +142,36 @@ probabilistic modeling;
 \section{Introduction}
 \label{sec:introduction}
 
-Overwhelming evidence from decades of research demonstrates that human language use is often strongly oriented towards providing a high degree of useful information for addressees \mf{REFs}.
-This picture aligns well with the classic Gricean framework \citep{Grice1975:Logic-and-Conve}, which posits a cooperative principle alongside Maxims of Quality (truth), Quantity (informativity), and Relevance---where the latter is typically interpreted as relevance to the listener.
-
-Formal models of pragmatic language use consequently often rely on some kind of formal, relative, or quantitative notion of informativity, versions of which are supplied by formal logic (e.g., asymmetric logical entailment) or information theory.
-Based on such formalized quantitative notions of informativity, we can describe speakers' pragmatic choice of expressions as a form of utility maximization, defined---at least in part---by the drive to optimize relevant information exchange \citep{Parikh1991:Communication-a,BlutnerBOTJoS2000}.
-
-However, human talk does not always revolve around the straightforward exchange of relevant information alone.
-We also express an interpretative stance towards the facts we describe, communicating sentiment and opinion alongside descriptions of the world.
-Indeed, some work suggests that human talk is much more about persuasion, argumentation, manipulation, and opinion-negotiation than about pure, objective---indeed, robot-like---information-sharing \citep{AnscombreDucrot1983:Largumentation-,MercierSperber2011:Why-do-humans-r,Enfield2024:Language-vs.Rea}.
-For example, as a case of selective truth-telling, or \emph{paltering} \citep{RogersZeckhauser2017:Artful-palterin}, the same outcome of an exam could be truthfully described in a way that makes the students appear successful or less successful overall:
+Overwhelming evidence from decades of research demonstrates that human language use is often strongly oriented towards providing a high degree of useful information for addressees \citep{Grice1975:Logic-and-Conve}.
+% This picture aligns well with the classic Gricean framework \citep{Grice1975:Logic-and-Conve}, which posits a cooperative principle alongside Maxims of Quality (truth), Quantity (informativity), and Relevance---where the latter is typically interpreted as relevance to the listener.
+Formal models of pragmatic language use consequently often rely on formal notions of informativity ---such as supplied by formal logic or information theory--- to describe speakers' pragmatic choice of expressions as a form of utility maximization, defined---at least in part---by the drive to optimize relevant information exchange \citep[e.g.,][]{Parikh1991:Communication-a,BlutnerBOTJoS2000,FrankGoodman2012:Predicting-Prag}.
+Yet, some authors argue that the purpose of communication may be much more about persuasion, argumentation, manipulation, and opinion-negotiation than about pure, objective---indeed, robot-like---information-sharing \citep[e.g.,][]{AnscombreDucrot1983:Largumentation-,MercierSperber2011:Why-do-humans-r,Enfield2024:Language-vs.Rea}.
+To give an example of selective truth-telling, or \emph{paltering} \citep{RogersZeckhauser2017:Artful-palterin}, the outcome of an exam could be truthfully described with roughly similar information value with different expressions, framing the exam as easy (\ref{bsp:leading-example-easy}) or difficult (\ref{bsp:leading-example-difficult}).
 
 \begin{exe}
-  \item
+  \item \label{bsp:leading-example}
   \begin{xlist}
-    \item Most of the students got most questions right.
-    \item Some of the students got all questions wrong.
+    \item
+    \label{bsp:leading-example-easy}
+    Most of the students got most questions right.
+    \item
+    \label{bsp:leading-example-difficult}
+    Some of the students got all questions wrong.
   \end{xlist}
 \end{exe}
 
-Yet, there is much less formal work on this kind of language use.
-What seems to be blatantly lacking are good formal descriptions of what makes one utterance more suitable than another for a speaker with an intent to argumentatively frame their contribution.
+While formal notions of informativity are ready at hand, what is lacking are good formal descriptions of what makes one utterance more suitable than another for a speaker with an intent to argumentatively frame their contribution, as in the above example.
 In this work, we therefore ask which kind of utility function might underlie a speaker's choice to prefer one utterance over another in a persuasive or argumentative context: how can we capture formally what makes one argument better than another?
 We address this question through the notion of \emph{argumentative strength}.
 
-Some prior work \citep[e.g.,][]{Merin1997:If-all-our-argu,Rooijvan-Rooij2004:Cooperative-ver,CumminsFranke2021:Rational-interp} suggests a formalization of argumentative strength in terms of \textit{log-likelihood ratios}, based on early work from the philosophy of science on observational evidence \citep{Good1950:Probability-and}; see the formalization below.
-However, so far there has been no stringent empirical testing of this notion, nor a systematic comparison against closely related competitor notions in terms of their predictive accuracy for experimental data.
+Some prior work \citep[e.g.,][]{Merin1997:If-all-our-argu,Rooijvan-Rooij2004:Cooperative-ver,Winterstein2012:What-but-senten} suggests a formalization of argumentative strength in terms of \textit{log-likelihood ratios}, based on early work on observational evidence \citep{Good1950:Probability-and}; see the formalization below.
+However, so far there has been no stringent empirical testing of this notion, nor a systematic comparison against alternative formalization in terms of their predictive accuracy for experimental data.
 Providing such a comparison is the main contribution of this work.
 
-We focus on a setting of selective truth-telling, or paltering \cite{Roberts}.
-We study cases similar to the real-life examples examined by \citet{CumminsFranke2021:Rational-interp}, but consider a constrained experimental setting that allows statistical model comparison of bespoke probabilistic models which differ only in the quantitative notion of argumentative strength they assume underlies the speakers' choice of expression.
-In the following, we formulate these models in the tradition of the RSA framework \cite{RSA}.
-Next, we describe the experimental set-up, and report on the statistical model comparisons, as well as our results.
+We focus on a setting of selective truth-telling, or paltering \citep{RogersZeckhauser2017:Artful-palterin}.
+We study cases like (\ref{bsp:leading-example}), which are similar to the real-life examples examined by \citet{CumminsFranke2021:Rational-interp}, but consider a constrained experimental setting that allows statistical model comparison of bespoke probabilistic models which differ only in the quantitative notion of argumentative strength they assume underlies the speakers' choice of expression.
+In the following, we formulate these models in the tradition of the RSA framework \citep{FrankGoodman2012:Predicting-Prag,ScontrasTessler2021:A-practical-int,Degen2023:The-Rational-Sp}.
+We then describe the experimental set-up, and report on the statistical model comparisons, as well as our results.
 Our main findings are that \mf{fill me \dots}.
 
 
