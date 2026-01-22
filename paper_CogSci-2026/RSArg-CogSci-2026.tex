@@ -396,15 +396,19 @@ Parameter recovery simulations on synthesis data for the pooled models and array
 
 Figure~\ref{fig:results-model-comparison} shows the results of loo-based model comparison of all models trained on the dataset.
 We can roughly distinguish three levels. 
-First, the vanilla RSA model has a comparatively poor predictive accuracy.
+First, both the pooled and hierarchical vanilla RSA model have a comparatively poor predictive accuracy.
 Second, the semantic and pragmatic lr-argstrength models improve over the vanilla RSA model, and perform similarly to each other both for the pooled and the hierarchical cases. 
 Third, the maximin and non-parametric models offer the best predictive accuracy.
 By expected log-likelihood under leave-one-out cross-validation, the best model is the hierarchical non-parametric model.
 However, the second best model, the hierarchical maximin model, is not significantly worse under a simple $z$-test \mf{add reference Lambert}.
 
-Fitting and comparing models on the different matrix sizes conditions independently also reveals interesting differences. For instance, the maximin model is better than the model-free one for the 5$\times$12 condition, while the opposite is true in the 11$\times$6 and 5$\times$6 conditions (the models are not credibly different in the 11$\times$ 12 condition). Since each model encodes an account of argumentative strength that we do not expect to interact with the matrix size condition, this differences in performance might reflect a failure of some linking modeling assumption, e.g., the Binomial likelihood for student results.
+Fitting and comparing models on the different matrix sizes conditions independently reveals interesting differences in the best models. 
+The maximin model is better than the model-free one for the 5$\times$12 condition, while the opposite is true in the 11$\times$6 and 5$\times$6 conditions. 
+The models are not credibly different in the 11$\times$ 12 condition. 
+Since we do not expect participants to use different notions of argstrength in the different matrix size condition, these differences in performance might reflect a failure of some linking modeling assumption, e.g., the Binomial likelihood for student results.
 
-The posterior predictive checks for each model also show systematic patterns in how they correctly fit or depart from the data, which suggests ways in which the corresponding accounts of argumentative strength succeed or fail in this experimental setup. We briefly discuss these qualitative patterns of success and failure for each model. 
+The posterior predictive checks for each model show systematic patterns in how they correctly fit or depart from the data, which suggests ways in which the corresponding accounts of argumentative strength succeed or fail in this experimental setup. 
+We briefly discuss these qualitative patterns of success and failure for each model. 
 
 \begin{figure}[t]
   \centering
@@ -413,7 +417,7 @@ The posterior predictive checks for each model also show systematic patterns in 
     Results of model comparison based on the full data set.
     For each model, shapes indicate the expected log-probability mass from leave-one-out cross validation, with error bars showing the standard error of these estimates.
     The $y$-axis lists the different types of models, ordered by ascending goodness-of-fit.
-    The shapes and colors indicate the method of model fitting: with or without hierarchical structure.
+    The shapes and colors indicate the method of model fitting: with or without hierarchical structure.\fc{hierarchic in legend feels unusual to me}
   }
   \label{fig:results-model-comparison}
 \end{figure}
@@ -430,14 +434,27 @@ In each condition, maximin argstrength also predicts a long tail of argumentativ
 
 % In the high condition 'most|all|right' is the most produced signal, and it is the best under lr but not maximin (which instead predicts 'all|most|right' to be argumentatively better).
 
-\paragraph{Model free argstrength} In many cases, mf-argstrength makes similar predictions as maximin-argstrength. However, for \fc{tofinish}
-%`all|some|right' in $[5,5,5,5,1,1,1,1,1,1,1]$ (narrowLong condition) it is better than all other models, which underpredict frequency. (but it underpredicts `some|most|right')
+\paragraph{Model free argstrength} In many cases, mf-argstrength makes similar predictions as maximin-argstrength. One exception is that the mf-argstrength model systematically predicts more-than-observed frequency of `all|some|right' in the high condition and `all|some|wrong' in the low condition.
 
-\paragraph{Overall} All models predict a higher-than-observed frequency for `(some,most,all)|(some,most)|wrong' in the low condition and `(some,most,all)|(some,most)|right' in the high condition (e.g., for state $[1,1,1,0,0]$). In these cases, models distribute their predictions across a larger set of utterance which mostly using adjective `wrong' in the high framing condition and `false' in the low framing condition. It is possible that participants might avoid adjectives that emphasize a polarity opposite to the one for which they are arguing. However, all measures of argumentative strengths we defined are truth-functional, and therefore cannot capture the connotation of conveying the same content in terms of `right' or `false'.
+`all|some|right' in $[5,5,5,5,1,1,1,1,1,1,1]$ (narrowLong condition) and 55111 it is better than all other models, which underpredict frequency, but it underpredicts `some|most|right'. The same (but flipped) is true for low in 55511. 
 
-One particularly striking observation is that participants often chose `most|most' when `all|most' would have been both more informative and argumentatively stronger according to all models. All models failed to capture this pattern, and indeed it is difficult to explain it as a rational strategic choice. Future work could look into other possible explanations, such as processing ease.
+Predicts `all|some|right' better than other modls in 11111 (other models underpredict), and `all|some|wrong' in 55555.
+
+Overpredicts `all|some|wrong' and underpredicts `some|most|wrong' in 55555551111 (low). Overpredicts `all|some|wrong' in 55555555555 (low). Overpredicts `all|some|right' and underpredicts `some|all|right' in 12|12|3|3|3 (high condition).
+
+`most|some|right' in 11111110000 (high condition) is closer to observed for modelfree than other models (but underpredicts some|some|right). Also better for `most|some|right' in 55551110000. 
+
+`most|some|wrong' overpredicted and `some|most|wrong' underpredicted in 12|12|9|3|3 (low)
+
+Overpredicts `some|some|wrong' in 0000... in high, and overpredicts `some|some|right' in 12|12|...|12 in low condition.
+
+Lik maximin, overestimates `all|most|right' in 12|12|12|12|12|12|12|9|9|9|9 (high) and underestimates `most|all|right', same in 12|12|12|9|9 (high).
+
+\paragraph{Overall} Posterior predictive checks also show that all models fail to capture some patterns in the data. All models predict a higher-than-observed frequency for `(some,most,all)|(some,most)|wrong' in the low condition and `(some,most,all)|(some,most)|right' in the high condition (e.g., for state $[1,1,1,0,0]$). In these cases, models distribute their predictions across a larger set of utterance which mostly using adjective `wrong' in the high framing condition and `false' in the low framing condition. It is possible that participants might avoid adjectives that emphasize a polarity opposite to the one for which they are arguing. However, all measures of argumentative strengths we defined are truth-functional, and therefore cannot capture the connotation of conveying the same content in terms of `right' or `false'.
 
 We also observe a much higher frequency of `none|all|right' than predicted by any model. This utterance is chosen in both frame conditions. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.\fc{tofinish}
+
+One particularly striking observation is that participants often choose `most|most' when `all|most' would be both more informative and argumentatively stronger according to all models. All models failed to capture this pattern, and indeed it is difficult to explain it as a rational strategic choice. Future work could look into other possible explanations, such as processing ease.
 
 \section{Discussion}\label{sec:discussion}
 
