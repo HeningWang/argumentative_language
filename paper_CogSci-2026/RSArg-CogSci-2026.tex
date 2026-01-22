@@ -79,7 +79,7 @@
 ]{draftytext}
 
 
-\title{What guides speakers' utterance choice in argumentative language use?}
+\title{What guides speakers' \fc{is `speakers' needed?} utterance choice in argumentative language use?}
 
 %%% Format authors using helper functions from authblk package %%%
 \author[1]{\mbox{Author N. One (a1@uni.edu)}}
@@ -314,9 +314,7 @@ A full implementation of argumentative strength (Eq.~\ref{eq:utilArgstrength}) r
 \subsection{Hypotheses for argstrength calculation}
 
 We model each hypothesis $H$ as saying that all students in the class have a certain probability $\gamma_H$ of getting each answer correct, making the simplifying assumption that there is no variation in skill across students and no variation in probability of getting different answers correct. 
-\fc{I actually spent a long time in the early phases of the project exploring variations of this - not sure it makes sense to pick up this thread though.}
-\mf{Not for the abstract, but possibly for the long paper, I would say.}
-The probability of observing the full results from an exam is then proportional to the product of the Binomial probability of each student's results: \mf{check: why $\propto$ here? isn't it actually $=$?}
+The probability of observing the full results from an exam is then proportional to the product of the Binomial probability of each student's results: \mf{check: why $\propto$ here? isn't it actually $=$?}\fc{We decided at some point to do everything in terms of the states in the experiment rather than the full combinatorial statespace. I spent time also writing functions to compute argstrengths with the full state space. If we do the latter, the challenge is the sum across utterance-compatible states when calculating e.g., P([[u]]|h). I found a way to do it for all argstrengths except prag-argstrength---it is computationlly infeasible to recalculate the speaker probabilities for each sample with a different $\alpha$ for all those $s$s in the large matrix conditions.}
   %
   \begin{equation}\label{eq:stateprob}
     P(s \mid \gamma_H) \propto \prod_{k \in s}{ N \choose k } \gamma_H^k (1-\gamma_H)^{N-k}
@@ -325,7 +323,7 @@ The probability of observing the full results from an exam is then proportional 
 where the exam result $s$ is a list of numbers of correct answers for each student, and $N$ is the number of questions.
 
 By experimental design, in the high framing condition the speaker is choosing an utterance to support the hypothesis that students had a high probability of answering correctly rather than a low probability, and the opposite is true in the low framing condition.
-Consequently, for the models below, the assumed hypotheses are: \mf{elaborate on why exactly these numbers?}
+Consequently, for the models below, the assumed hypotheses are: \mf{elaborate on why exactly these numbers?}\fc{They were already there when I joined the project, I spent time playing with them, e.g., treating them as hidden variables, but the model was underspecified. Is there something to say beyond the previous sentence in the text?}
  \begin{align}\label{eq:hypotheses}
 \gamma_{H_0} &= 0.85 &\gamma_{H_1} &= 0.15 & \text{for high frame condition.} \\
 \gamma_{H_0} &= 0.15 &\gamma_{H_1} &= 0.85 & \text{for low frame condition.}\nonumber
@@ -344,7 +342,7 @@ Concretely, we consider the degree to which the utterance $u$ is more likely to 
     \log \frac{P( \interpret{u} \mid H_0 ) }{ P( \interpret{u} \mid H_1 ) }
 \end{equation}
 %
-\noindent where $P( \interpret{u} \mid H )$ is the probability that utterance $u$ is \emph{true} (rather than, e.g., \textit{produced}) given hypothesis $H$. $P(\interpret{u} \mid H)$ can be calculated based on the literal semantics, with with $P(s \mid \gamma_H)$ is defined in Eq.~\eqref{eq:stateprob}, as:
+\noindent where $P( \interpret{u} \mid H )$ is the probability that utterance $u$ is \emph{true} (rather than, e.g., \textit{produced}) given hypothesis $H$. $P(\interpret{u} \mid H)$ can be calculated based on the literal semantics, with $P(s \mid \gamma_H)$ defined in Eq.~\eqref{eq:stateprob}, as:
 \begin{equation}
     P(\interpret{u} \mid H) = \sum_{s \in \interpret{u}} P(s \mid \gamma_H)
 \end{equation}
@@ -383,11 +381,11 @@ The argumentative speaker might choose an utterance to maximise this (centered) 
    \mu_{\mathbb{E}_{\text{right}}} - \mathbb{E}_{\text{right}}(u) &\text{in low frame}
 \end{cases}
  \end{equation}
+ where $\mu_{\mathbb{E}_{\text{right}}}$ is the average value of $\mathbb{E}_{\text{right}}(u)$ across the possible utterances $u$.
 \noindent We do not model the process of finding a heuristic given an argumentative goal, and therefore this argstrength does not formally depend on the hypotheses defined in Equation \eqref{eq:hypotheses}.
 \mf{It's not clear from the text (to me) what the $\mu_{\mathbb{E}}$ means exactly. I can guess but I cannot be sure. More importantly, I wonder if this summand doesn't actually cancel out? Is it strictly necessary (apart from stabilizing the inference)?}
-\mf{Even more importantly, I always thought of this approach as a shortcut to a literal listener's posterior of the true rate parameter (the iid probability of getting a single question right). The MLE we use here approximates the Bayesian mean well enough for larger samples sizes (which we might already have), so this is not totally ``model free'' necessarily; it define argumentative strength in terms of a ``valuation function'' on beliefs of the literal listener about a latent world-variable after hearing $u$.}
-
-
+\fc{Added the definition. The summand is just to give it two neat properties at the same time (1) mf-argstrength(u) in the high condition = - mf-argstrength(u) in the low condition, which is true of the other argstrengths, and (2) mf-argstrength in the low condition can also be written as $\mathbb{E}_{\text{wrong}}(u)-\mu_{\mathbb{E}_{\text{wrong}}}$.}
+\mf{Even more importantly, I always thought of this approach as a shortcut to a literal listener's posterior of the true rate parameter (the iid probability of getting a single question right). The MLE we use here approximates the Bayesian mean well enough for larger samples sizes (which we might already have), so this is not totally ``model free'' necessarily; it define argumentative strength in terms of a ``valuation function'' on beliefs of the literal listener about a latent world-variable after hearing $u$.}\fc{Yeah, I also share this intuition, but note that $\mathbb{E}_{\text{wrong}}(u)$ can just get bigger with bigger matrix sizes, unlike the MLE, so assuming the same $\beta$ across conditions for a given participant, it is doing something different from just a prob estimate. I am not sure how much detail we should get into here.}
 
 \subsection{Statistical models}
 
@@ -407,16 +405,17 @@ First, both the pooled and hierarchical vanilla RSA model have a comparatively p
 Second, the semantic and pragmatic lr-argstrength models improve over the vanilla RSA model, and perform similarly to each other both for the pooled and the hierarchical cases. 
 Third, the maximin and non-parametric models offer the best predictive accuracy.
 By expected log-likelihood under leave-one-out cross-validation, the best model is the hierarchical non-parametric model.
+The posterior predictive p-value of this model with loglikelihood as the test statistic is 0.407, meaning that the data does not exclude this as a possible model.
 However, the second best model, the hierarchical maximin model, is not significantly worse under a simple $z$-test ($p \approx 0.97$), as suggested by \citep{Lambert2018:A-Students-Guid}.
 The most important high-level conclusion from these results is that including \textit{some} quantitative notion of argumentative strength seems required; the vanilla RSA model is not enough---and of the set of candidate notions investigated here \textit{all} yield very substantial improvements to predictive accuracy.
 
-Fitting and comparing models on the different matrix-size conditions independently also reveals interesting differences.
-\mf{Reader may wonder whether (i) models were trained on all conditions and evaluated on pairwise comparisons, or (ii) trained on only data from the pair to be compared.}
+Fitting only on the data of each matrix-size condition independently and comparing the resulting models also reveals interesting differences.
+\mf{Reader may wonder whether (i) models were trained on all conditions and evaluated on pairwise comparisons, or (ii) trained on only data from the pair to be compared.}\fc{Clarified now. Here I am speaking to people (like me) who are worried about keeping the same $\beta$ across conditions for each participant, becuase it's not clear the argstrengths scale well for different matrix sizes.}
 For instance, the maximin model is better than the model-free one for the 5$\times$12 condition, while the opposite is true in the 11$\times$6 and 5$\times$6 conditions (the models are not credibly different in the 11$\times$ 12 condition).
 Since each model encodes an account of argumentative strength that we do not expect to interact with the matrix size condition, these differences in performance might reflect a failure of some linking modeling assumption, e.g., the Binomial likelihood for student results.
 
 The posterior predictive checks for each model also show systematic patterns in how they correctly fit or depart from the data, which suggests ways in which the corresponding accounts of argumentative strength succeed or fail in this experimental setup. We briefly discuss these qualitative patterns of success and failure for each model.
-\mf{It would be great to be able to say whether the best fitting model is in some absolute sense good enough. We could compute a posterior predictive $p$-value, for example.}
+\mf{It would be great to be able to say whether the best fitting model is in some absolute sense good enough. We could compute a posterior predictive $p$-value, for example.}\fc{added this in first paragraph}
 
 \begin{figure}[t]
   \centering
@@ -442,27 +441,28 @@ In each condition, maximin argstrength also predicts a long tail of argumentativ
 
 % In the high condition 'most : all : right' is the most produced signal, and it is the best under lr but not maximin (which instead predicts 'all : most : right' to be argumentatively better).
 
-\paragraph{Model free argstrength} In many cases, mf-argstrength makes similar predictions as maximin-argstrength. One exception is that the mf-argstrength model systematically predicts more-than-observed frequency of `all|some|right' in the high condition and `all|some|wrong' in the low condition.
+\paragraph{Model free argstrength} 
+In many cases, mf-argstrength makes similar predictions as maximin-argstrength. 
+One systematic way the two depart is that the mf-argstrength model systematically postdicts higher frequency than the maximin-argstrength model for `all|some|right' in the high condition and `all|some|wrong' in the low condition. 
+Another is that mf-argstrength systematically postdicts lower frequency than maximin-argstrength for `some : most : wrong' in the low condition and `some : most : right' in the high condition.
+Which of the two models is more accurate depends on the matrix array size, explaining some of the difference in performance between models trained separately on the matrix array conditions.
+%`all|some|right' in $[5,5,5,5,1,1,1,1,1,1,1]$ (narrowLong condition) and 55111 it is better than all other models, which underpredict frequency, but it underpredicts `some|most|right'. The same (but flipped) is true for low in 55511. 
+%Predicts `all|some|right' better than other models in 11111 (other models underpredict), and `all|some|wrong' in 55555.
+% Overpredicts `all|some|wrong' and underpredicts `some|most|wrong' in 55555551111 (low). % Overpredicts `all|some|wrong' in 55555555555 (low). Overpredicts `all|some|right' and underpredicts `some|all|right' in 12|12|3|3|3 (high condition).
+%`most|some|right' in 11111110000 (high condition) is closer to observed for model-free than other models (but underpredicts some|some|right). Also better for `most|some|right' in 55551110000. 
+%`most|some|wrong' overpredicted and `some|most|wrong' underpredicted in 12|12|9|3|3 (low)
+%Overpredicts `some|some|wrong' in 0000... in high, and overpredicts `some|some|right' in 12|12|...|12 in low condition.
+%Lik maximin, overestimates `all|most|right' in 12|12|12|12|12|12|12|9|9|9|9 (high) and underestimates `most|all|right', same in 12|12|12|9|9 (high).
 
-`all|some|right' in $[5,5,5,5,1,1,1,1,1,1,1]$ (narrowLong condition) and 55111 it is better than all other models, which underpredict frequency, but it underpredicts `some|most|right'. The same (but flipped) is true for low in 55511. 
-
-Predicts `all|some|right' better than other modls in 11111 (other models underpredict), and `all|some|wrong' in 55555.
-
-Overpredicts `all|some|wrong' and underpredicts `some|most|wrong' in 55555551111 (low). Overpredicts `all|some|wrong' in 55555555555 (low). Overpredicts `all|some|right' and underpredicts `some|all|right' in 12|12|3|3|3 (high condition).
-
-`most|some|right' in 11111110000 (high condition) is closer to observed for modelfree than other models (but underpredicts some|some|right). Also better for `most|some|right' in 55551110000. 
-
-`most|some|wrong' overpredicted and `some|most|wrong' underpredicted in 12|12|9|3|3 (low)
-
-Overpredicts `some|some|wrong' in 0000... in high, and overpredicts `some|some|right' in 12|12|...|12 in low condition.
-
-Lik maximin, overestimates `all|most|right' in 12|12|12|12|12|12|12|9|9|9|9 (high) and underestimates `most|all|right', same in 12|12|12|9|9 (high).
-
-\paragraph{Overall} All models predict a higher-than-observed frequency for `(some,most,all) : (some,most) : wrong' in the low condition and `(some,most,all) : (some,most) : right' in the high condition (e.g., for state $[1,1,1,0,0]$). In these cases, models distribute their predictions across a larger set of utterance which mostly using adjective `wrong' in the high framing condition and `false' in the low framing condition. It is possible that participants might avoid adjectives that emphasize a polarity opposite to the one for which they are arguing. However, all measures of argumentative strengths we defined are truth-functional, and therefore cannot capture the connotation of conveying the same content in terms of `right' or `false'.
+\paragraph{Overall} 
+All models predict a lower-than-observed frequency for `(some,most,all) : (some,most) : wrong' in the low condition and `(some,most,all) : (some,most) : right' in the high condition (e.g., for state $[1,1,1,0,0]$). 
+In these cases, models distribute their predictions across a larger set of utterance which uses adjective `wrong' in the high framing condition and `false' in the low framing condition. 
+It is possible that participants might avoid adjectives that emphasize a polarity opposite to the one for which they are arguing. 
+However, all measures of argumentative strengths we defined are truth-functional, and therefore cannot capture the connotation of conveying the same content in terms of `right' or `false'.
 
 One particularly striking observation is that participants often chose `most : most' when `all : most' would have been both more informative and argumentatively stronger according to all models. All models failed to capture this pattern, and indeed it is difficult to explain it as a rational strategic choice. Future work could look into other possible explanations, such as processing ease.
 
-Finally, we observe a much higher frequency of `none : all : right' than predicted by any model. This utterance is chosen in both frame conditions. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.\fc{tofinish}
+Finally, participants chose `none : all : right' more often than predicted by any model, for both frame condition. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.
 
 \section{Discussion}\label{sec:discussion}
 
