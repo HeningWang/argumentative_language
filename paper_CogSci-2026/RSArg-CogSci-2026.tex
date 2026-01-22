@@ -406,9 +406,9 @@ Fitting and comparing models on the different matrix sizes conditions independen
 
 The posterior predictive checks for each model also show systematic patterns in how they correctly fit or depart from the data, which suggests ways in which the corresponding accounts of argumentative strength succeed or fail in this experimental setup. We briefly discuss these qualitative patterns of success and failure for each model. 
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
-  \includegraphics[width = 0.7\textwidth]{pics/model_comparison-combined.pdf}
+  \includegraphics[width = \linewidth]{pics/model_comparison-combined.pdf}
   \caption{
     Results of model comparison based on the full data set.
     For each model, shapes indicate the expected log-probability mass from leave-one-out cross validation, with error bars showing the standard error of these estimates.
@@ -416,7 +416,7 @@ The posterior predictive checks for each model also show systematic patterns in 
     The shapes and colors indicate the method of model fitting: with or without hierarchical structure.
   }
   \label{fig:results-model-comparison}
-\end{figure*}
+\end{figure}
 
 %For several of the models, I calculated the posterior predictive p-values for all the models (see Bayesian p-value section above). In all cases they were quite close to 0.5, indicating good compatibility of the data with the fitted posterior. However, note that posterior predictive p-values are generally not uniformly distributed in [0,1] and hierarchical models pose a challenge (see e.g. \href{https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.165.118&rep=rep1&type=pdf}{this paper (clickable)}).
 

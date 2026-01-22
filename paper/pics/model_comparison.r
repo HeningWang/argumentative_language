@@ -28,7 +28,8 @@ zTest(loo_diff_combined, se_diff_combined)
 
 d <- read_csv("model_comparison-combined.csv") |> 
   # cast 'model' as an ordered factor with ordering from colums 'loo'
-  mutate(model = fct_reorder(factor(model), loo))
+  mutate(model = fct_reorder(factor(model), loo)) |> 
+  mutate(group = factor(group, level = c("population", "hierarchicaal")))
 
 d |> ggplot(aes(x = model, y = loo, group = analysis, color = analysis)) +
   geom_errorbar(aes(ymin = loo - se, ymax = loo + se),
@@ -39,11 +40,11 @@ d |> ggplot(aes(x = model, y = loo, group = analysis, color = analysis)) +
   xlab("") + 
   ylab("") +
   theme_aida() +
-  # show legend on the right
-  theme(legend.position = "right",
+  # show legend on at the top
+  theme(legend.position = "top",
         legend.title = element_blank(),
         legend.text = element_text(size = 10),
         axis.text.x = element_text(size = 10),
         axis.text.y = element_text(size = 10))
 
-ggsave("model_comparison-combined.pdf", width = 7, height = 3)
+ggsave("model_comparison-combined.pdf", width = 5, height = 2.5, scale = 0.9)
