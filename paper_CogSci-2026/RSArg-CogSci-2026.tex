@@ -4,7 +4,7 @@
 \usepackage{CSPstyles}
 \usepackage{comment}
 
-% \cogscifinalcopy %%% Uncomment this line for the final submission
+\cogscifinalcopy %%% Uncomment this line for the final submission
 
 %%% Bibliography %%%
 \usepackage[
@@ -79,13 +79,15 @@
 ]{draftytext}
 
 
-\title{What guides speakers' \fc{is `speakers' needed?} utterance choice in argumentative language use?}
+\title{What guides utterance choice in argumentative language use?}
 
 %%% Format authors using helper functions from authblk package %%%
-\author[1]{\mbox{Author N. One (a1@uni.edu)}}
-\author[2]{\mbox{Author Number Two}}
-\affil[1]{Department of Hypothetical Sciences, University of Illustrations}
-\affil[2]{Department of Example Studies, University of Demonstrations}
+\author[1]{\mbox{Fausto Carcassi, Hening Wang, Chris Cummins (TBC), Michael Franke}}
+% \author[2]{\mbox{Hening Wang}}
+% \author[3]{\mbox{Chris Cummins (TBC)}}
+% \author[4]{\mbox{Michael Franke}}
+% \affil[1]{Department of Hypothetical Sciences, University of Illustrations}
+% \affil[2]{Department of Example Studies, University of Demonstrations}
 
 %%% Or, format authors manually %%%
 % \author{
@@ -128,7 +130,14 @@
   % \end{footnotesize}
 
 \begin{abstract}
-Theories of language use in the Gricean tradition, and related formalizations such as the Rational Speech Act (RSA) modeling framework, have focused on information exchange between cooperative interlocutors. More recent work has emphasized the importance of other, potentially less-cooperative functions of language: persuasion, argumentation, manipulation. In this work, we bridge these two traditions by developing a model of argumentative utterance choice in the RSA framework. We propose several formalization of the argumentative strength of a signal. We then measure how well they capture behaviour in a simple utterance production task where participants were assigned an explicit argumentative goal. We show that a popular regimentation of argumentative strength fails to capture some important patterns in the data, and discuss some alternatives. Although our models constitute a substantial improvement over a baseline model, we also find patterns in the data that remain unexplained, suggesting that more work is needed.\fc{not the most inspiring abstract but it's a start} 
+Theories of the pragmatic use of language in the Gricean tradition, and related formalizations such as the Rational Speech Act (RSA) modeling framework, have focused on information exchange between cooperative interlocutors.
+More recent work has emphasized the importance of other, potentially less-cooperative functions of language: persuasion, argumentation, manipulation.
+In this work, we bridge these two traditions by developing a model of argumentative utterance choice in the RSA framework.
+We propose several formalizations of the argumentative strength of a signal.
+We then measure how well they capture behaviour in a simple utterance production task where participants were assigned an explicit argumentative goal.
+We show that a popular regimentation of argumentative strength fails to capture some important patterns in the data, and discuss some alternatives.
+Although our models constitute a substantial improvement over a baseline model, we also find patterns in the data that remain unexplained, suggesting that more work is needed.
+% \fc{not the most inspiring abstract but it's a start}
 
 \textbf{Keywords:}
 pragmatic language use;
@@ -167,11 +176,11 @@ However, so far there has been no stringent empirical testing of this notion, no
 Providing such a comparison is the main contribution of this work.
 
 We focus on a setting of selective truth-telling, or paltering \citep{RogersZeckhauser2017:Artful-palterin}.
-We study cases like (\ref{bsp:leading-example}), which are similar to the real-life examples examined by \citet{CumminsFranke2021:Rational-interp}, but consider a constrained experimental setting that allows statistical model comparison of bespoke probabilistic models which differ only in the quantitative notion of argumentative strength they assume underlies the speakers' choice of expression.
+We study cases like (\ref{bsp:leading-example}), which are similar to the real-life examples examined by \citet{CumminsFranke2021:Rational-interp}, but consider a constrained experimental setting borrowed from \citet{Vinicius-Macuch-SilvaWinter2024:Strategic-use-o} that allows statistical model comparison of bespoke probabilistic models which differ only in the quantitative notion of argumentative strength they assume underlies the speakers' choice of expression.
 In the following, we formulate these models in the tradition of the RSA framework \citep{FrankGoodman2012:Predicting-Prag,FrankeJager2015:Probabilistic-p,Degen2023:The-Rational-Sp}.
 We then describe the experimental set-up, and report on the statistical model comparisons, as well as our results.
 Our main findings are that the log-likelihood ratio model captures the data worse than other formalizations of argumentative strength, and that there are patterns in the data not captured by any of the models we considered. 
-We conclude with some suggestions for future work.
+We conclude with suggestions for future work.
 
 
 \section{Probabilistic models of argumentative language}
@@ -321,7 +330,7 @@ A full implementation of argumentative strength (Eq.~\ref{eq:utilArgstrength}) r
 \subsection{Hypotheses for argstrength calculation}
 
 We model each hypothesis $H$ as saying that all students in the class have a certain probability $\gamma_H$ of getting each answer correct, making the simplifying assumption that there is no variation in skill across students and no variation in probability of getting different answers correct. 
-The probability of observing the full results from an exam is then proportional to the product of the Binomial probability of each student's results: \mf{check: why $\propto$ here? isn't it actually $=$?}\fc{We decided at some point to do everything in terms of the states in the experiment rather than the full combinatorial statespace. I spent time also writing functions to compute argstrengths with the full state space. If we do the latter, the challenge is the sum across utterance-compatible states when calculating e.g., P([[u]]|h). I found a way to do it for all argstrengths except prag-argstrength---it is computationlly infeasible to recalculate the speaker probabilities for each sample with a different $\alpha$ for all those $s$s in the large matrix conditions.}
+The probability of observing the full results from an exam is then proportional to the product of the Binomial probability of each student's results:
   %
   \begin{equation}\label{eq:stateprob}
     P(s \mid \gamma_H) \propto \prod_{k \in s}{ N \choose k } \gamma_H^k (1-\gamma_H)^{N-k}
@@ -330,7 +339,7 @@ The probability of observing the full results from an exam is then proportional 
 where the exam result $s$ is a list of numbers of correct answers for each student, and $N$ is the number of questions.
 
 By experimental design, in the high framing condition the speaker is choosing an utterance to support the hypothesis that students had a high probability of answering correctly rather than a low probability, and the opposite is true in the low framing condition.
-Consequently, for the models below, the assumed hypotheses are: \mf{elaborate on why exactly these numbers?}\fc{They were already there when I joined the project, I spent time playing with them, e.g., treating them as hidden variables, but the model was underspecified. Is there something to say beyond the previous sentence in the text?}
+For practical purposes, we fixed values for these hypotheses as follows:\footnote{Treating values for the hypotheses as free variables leads to issues of unindentifiability. Choice of different values largely led to qualitatively similar results.}
  \begin{align}\label{eq:hypotheses}
 \gamma_{H_0} &= 0.85 &\gamma_{H_1} &= 0.15 & \text{for high frame condition.} \\
 \gamma_{H_0} &= 0.15 &\gamma_{H_1} &= 0.85 & \text{for low frame condition.}\nonumber
@@ -390,9 +399,9 @@ The argumentative speaker might choose an utterance to maximise this (centered) 
  \end{equation}
  where $\mu_{\mathbb{E}_{\text{right}}}$ is the average value of $\mathbb{E}_{\text{right}}(u)$ across the possible utterances $u$.
 \noindent We do not model the process of finding a heuristic given an argumentative goal, and therefore this argstrength does not formally depend on the hypotheses defined in Equation \eqref{eq:hypotheses}.
-\mf{It's not clear from the text (to me) what the $\mu_{\mathbb{E}}$ means exactly. I can guess but I cannot be sure. More importantly, I wonder if this summand doesn't actually cancel out? Is it strictly necessary (apart from stabilizing the inference)?}
-\fc{Added the definition. The summand is just to give it two neat properties at the same time (1) mf-argstrength(u) in the high condition = - mf-argstrength(u) in the low condition, which is true of the other argstrengths, and (2) mf-argstrength in the low condition can also be written as $\mathbb{E}_{\text{wrong}}(u)-\mu_{\mathbb{E}_{\text{wrong}}}$.}
-\mf{Even more importantly, I always thought of this approach as a shortcut to a literal listener's posterior of the true rate parameter (the iid probability of getting a single question right). The MLE we use here approximates the Bayesian mean well enough for larger samples sizes (which we might already have), so this is not totally ``model free'' necessarily; it define argumentative strength in terms of a ``valuation function'' on beliefs of the literal listener about a latent world-variable after hearing $u$.}\fc{Yeah, I also share this intuition, but note that $\mathbb{E}_{\text{wrong}}(u)$ can just get bigger with bigger matrix sizes, unlike the MLE, so assuming the same $\beta$ across conditions for a given participant, it is doing something different from just a prob estimate. I am not sure how much detail we should get into here.}
+% \mf{It's not clear from the text (to me) what the $\mu_{\mathbb{E}}$ means exactly. I can guess but I cannot be sure. More importantly, I wonder if this summand doesn't actually cancel out? Is it strictly necessary (apart from stabilizing the inference)?}
+% \fc{Added the definition. The summand is just to give it two neat properties at the same time (1) mf-argstrength(u) in the high condition = - mf-argstrength(u) in the low condition, which is true of the other argstrengths, and (2) mf-argstrength in the low condition can also be written as $\mathbb{E}_{\text{wrong}}(u)-\mu_{\mathbb{E}_{\text{wrong}}}$.}
+% \mf{Even more importantly, I always thought of this approach as a shortcut to a literal listener's posterior of the true rate parameter (the iid probability of getting a single question right). The MLE we use here approximates the Bayesian mean well enough for larger samples sizes (which we might already have), so this is not totally ``model free'' necessarily; it define argumentative strength in terms of a ``valuation function'' on beliefs of the literal listener about a latent world-variable after hearing $u$.}\fc{Yeah, I also share this intuition, but note that $\mathbb{E}_{\text{wrong}}(u)$ can just get bigger with bigger matrix sizes, unlike the MLE, so assuming the same $\beta$ across conditions for a given participant, it is doing something different from just a prob estimate. I am not sure how much detail we should get into here.}
 
 \subsection{Statistical models}
 
@@ -417,12 +426,12 @@ However, the second best model, the hierarchical maximin model, is not significa
 The most important high-level conclusion from these results is that including \textit{some} quantitative notion of argumentative strength seems required; the vanilla RSA model is not enough---and of the set of candidate notions investigated here \textit{all} yield very substantial improvements to predictive accuracy.
 
 Fitting only on the data of each matrix-size condition independently and comparing the resulting models also reveals interesting differences.
-\mf{Reader may wonder whether (i) models were trained on all conditions and evaluated on pairwise comparisons, or (ii) trained on only data from the pair to be compared.}\fc{Clarified now. Here I am speaking to people (like me) who are worried about keeping the same $\beta$ across conditions for each participant, becuase it's not clear the argstrengths scale well for different matrix sizes.}
+% \mf{Reader may wonder whether (i) models were trained on all conditions and evaluated on pairwise comparisons, or (ii) trained on only data from the pair to be compared.}\fc{Clarified now. Here I am speaking to people (like me) who are worried about keeping the same $\beta$ across conditions for each participant, becuase it's not clear the argstrengths scale well for different matrix sizes.}
 For instance, the maximin model is better than the model-free one for the 5$\times$12 condition, while the opposite is true in the 11$\times$6 and 5$\times$6 conditions (the models are not credibly different in the 11$\times$ 12 condition).
 Since each model encodes an account of argumentative strength that we do not expect to interact with the matrix size condition, these differences in performance might reflect a failure of some linking modeling assumption, e.g., the Binomial likelihood for student results.
 
 The posterior predictive checks for each model also show systematic patterns in how they correctly fit or depart from the data, which suggests ways in which the corresponding accounts of argumentative strength succeed or fail in this experimental setup. We briefly discuss these qualitative patterns of success and failure for each model.
-\mf{It would be great to be able to say whether the best fitting model is in some absolute sense good enough. We could compute a posterior predictive $p$-value, for example.}\fc{added this in first paragraph}
+% \mf{It would be great to be able to say whether the best fitting model is in some absolute sense good enough. We could compute a posterior predictive $p$-value, for example.}\fc{added this in first paragraph}
 
 \begin{figure}[t]
   \centering
@@ -431,7 +440,7 @@ The posterior predictive checks for each model also show systematic patterns in 
     Results of model comparison based on the full data set.
     For each model, shapes indicate the expected log-probability mass from leave-one-out cross validation, with error bars showing the standard error of these estimates.
     The $y$-axis lists the different types of models, ordered by ascending goodness-of-fit.
-    The shapes and colors indicate the method of model fitting: with or without hierarchical structure.\fc{hierarchic in legend feels unusual to me. Also note `non-parametric', which is the name in the codebase but we decided to call `model-free' instead}
+    The shapes and colors indicate the method of model fitting: with or without hierarchical structure.
   }
   \label{fig:results-model-comparison}
 \end{figure}
@@ -469,7 +478,8 @@ However, all measures of argumentative strengths we defined are truth-functional
 
 One particularly striking observation is that participants often chose `most : most' when `all : most' would have been both more informative and argumentatively stronger according to all models. All models failed to capture this pattern, and indeed it is difficult to explain it as a rational strategic choice. Future work could look into other possible explanations, such as processing ease.
 
-Finally, participants chose `none : all : right' more often than predicted by any model, for both frame condition. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.\fc{Not sure what more to say here, can also leave it out}
+Finally, participants chose `none : all : right' more often than predicted by any model, for both frame condition. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.
+% \fc{Not sure what more to say here, can also leave it out}
 
 \section{Discussion}\label{sec:discussion}
 
