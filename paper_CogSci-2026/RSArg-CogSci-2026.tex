@@ -179,7 +179,7 @@ We focus on a setting of selective truth-telling, or paltering \citep{RogersZeck
 We study cases like (\ref{bsp:leading-example}), which are similar to the real-life examples examined by \citet{CumminsFranke2021:Rational-interp}, but consider a constrained experimental setting borrowed from \citet{Vinicius-Macuch-SilvaWinter2024:Strategic-use-o} that allows statistical model comparison of bespoke probabilistic models which differ only in the quantitative notion of argumentative strength they assume underlies the speakers' choice of expression.
 In the following, we formulate these models in the tradition of the RSA framework \citep{FrankGoodman2012:Predicting-Prag,FrankeJager2015:Probabilistic-p,Degen2023:The-Rational-Sp}.
 We then describe the experimental set-up, and report on the statistical model comparisons, as well as our results.
-Our main findings are that the log-likelihood ratio model captures the data worse than other formalizations of argumentative strength, and that there are patterns in the data not captured by any of the models we considered. 
+Our main findings are that the log-likelihood ratio model captures the data less well than other formalizations of argumentative strength, and that there are patterns in the data not captured by any of the models we considered. 
 We conclude with suggestions for future work.
 
 
@@ -220,10 +220,10 @@ For a binary semantics (as assumed here), the utility function factors into thre
              \underbrace{\text{cost}(u)}_{\text{economy}} \,.
 \end{align*}
 
-The speaker's policy defined above in Equation~\eqref{eq:S1}, when used with the standard utility function in Equation~\eqref{eq:util-vanilla} has been productively used to explain choices of utterances for different linguistic constructions of phenomena, e.g., for referential expressions \citep{FrankGoodman2012:Predicting-Prag}, generics \citep{Tessler2019:The-Language-of}, conditionals \citep{GrusdtLassiter2021:Probabilistic-m}, quantifiers and implicature \citep{GoodmanStuhlmuller2013:Knowledge-and-I,Tielvan-TielFranke2021:Probabilistic-p}, gradable adjectives \citep{LassiterGoodman2015:Adjectival-vagu}, or probability expression \citep{HerbstrittFranke2019:Complex-probabi}.
+The speaker's policy defined above in Equation~\eqref{eq:S1}, when used with the standard utility function in Equation~\eqref{eq:util-vanilla} has been productively used to explain choices of utterances for different linguistic constructions of phenomena, e.g., for referential expressions \citep{FrankGoodman2012:Predicting-Prag}, generics \citep{Tessler2019:The-Language-of}, conditionals \citep{GrusdtLassiter2021:Probabilistic-m}, quantifiers and implicature \citep{GoodmanStuhlmuller2013:Knowledge-and-I,Tielvan-TielFranke2021:Probabilistic-p}, gradable adjectives \citep{LassiterGoodman2015:Adjectival-vagu}, or probability expressions \citep{HerbstrittFranke2019:Complex-probabi}.
 Yet, some phenomena seem to require more elaborate utility functions.
 For example, models have been explored which incorporate additional utility components related to politeness \citep{YoonTessler2020:Polite-Speech-E} or opinion \citep{AchimovaFranke2025:The-alignment-m}.
-Here, we take a similar approach to modelling the utility trade-off between truth and informatively, on the one hand, and, on the other, making an argument in favor of a position or hypothesis $H_{0}$, as opposed to the competing position or hypothesis $H_{1}$.
+Here, we take a similar approach to modelling the utility trade-off between truth and informativity, on the one hand, and, the goal of making an argument in favor of a position or hypothesis $H_{0}$, as opposed to the competing position or hypothesis $H_{1}$, on the other hand.
 The form of the utility functions we consider here is:
 \begin{align}
   & U(u , s , H_{0} , H_{1}) =  \label{eq:utilArgstrength} \\  \nonumber
@@ -339,7 +339,7 @@ The probability of observing the full results from an exam is then proportional 
 where the exam result $s$ is a list of numbers of correct answers for each student, and $N$ is the number of questions.
 
 By experimental design, in the high framing condition the speaker is choosing an utterance to support the hypothesis that students had a high probability of answering correctly rather than a low probability, and the opposite is true in the low framing condition.
-For practical purposes, we fixed values for these hypotheses as follows:\footnote{Treating values for the hypotheses as free variables leads to issues of unindentifiability. Choice of different values largely led to qualitatively similar results.}
+For practical purposes, we fixed values for these hypotheses as follows:\footnote{Treating values for the hypotheses as free variables leads to issues of unindentifiability. Choosing different values largely led to qualitatively similar results.}
  \begin{align}\label{eq:hypotheses}
 \gamma_{H_0} &= 0.85 &\gamma_{H_1} &= 0.15 & \text{for high frame condition.} \\
 \gamma_{H_0} &= 0.15 &\gamma_{H_1} &= 0.85 & \text{for low frame condition.}\nonumber
@@ -427,7 +427,7 @@ The most important high-level conclusion from these results is that including \t
 
 Fitting only on the data of each matrix-size condition independently and comparing the resulting models also reveals interesting differences.
 % \mf{Reader may wonder whether (i) models were trained on all conditions and evaluated on pairwise comparisons, or (ii) trained on only data from the pair to be compared.}\fc{Clarified now. Here I am speaking to people (like me) who are worried about keeping the same $\beta$ across conditions for each participant, becuase it's not clear the argstrengths scale well for different matrix sizes.}
-For instance, the maximin model is better than the model-free one for the 5$\times$12 condition, while the opposite is true in the 11$\times$6 and 5$\times$6 conditions (the models are not credibly different in the 11$\times$ 12 condition).
+For instance, the maximin model is better than the model-free one for the 5$\times$12 condition, while the opposite is true in the 11$\times$6 and 5$\times$6 conditions (the models are not credibly different in the 11$\times$12 condition).
 Since each model encodes an account of argumentative strength that we do not expect to interact with the matrix size condition, these differences in performance might reflect a failure of some linking modeling assumption, e.g., the Binomial likelihood for student results.
 
 The posterior predictive checks for each model also show systematic patterns in how they correctly fit or depart from the data, which suggests ways in which the corresponding accounts of argumentative strength succeed or fail in this experimental setup. We briefly discuss these qualitative patterns of success and failure for each model.
@@ -451,7 +451,7 @@ The posterior predictive checks for each model also show systematic patterns in 
 
 \paragraph{{lr}-argstrength} The simple lr-argstrength and its pragmatic variation make very similar predictions. They capture many patterns of utterance choice in the data relating to argumentativity, e.g., participants' preference for `some : most : right' over `most : all : wrong' in the high frame condition when both utterances are true. However, in the two 12-questions exam conditions, this argstrength predicts a much stronger preference of `some : all : right' over `most : most : right' than we find in the data (in the high frame condition, when both signals are true). This is significant for its overall predictive performance, because these were the most frequently chosen utterances for those conditions.
 
-\paragraph{Maximin argstrength}  Intuitively, what makes 'most : most : right' a better argument than 'some : all : right' in the high frame condition is that the former excludes some particularly bad cases, i.e., where one participant answered correctly and all the other ones got all of them wrong. This is captured by the maximin argstrength, which can fit this pattern in the data better than lr-argstrength.
+\paragraph{Maximin argstrength}  Intuitively, what makes `most : most : right' a better argument than `some : all : right' in the high frame condition is that the former excludes some particularly bad cases, i.e., where one participant answered correctly and all the other ones got all of them wrong. \hw{where one participants answered all the questions correctly and the others all incorrectly} This is captured by the maximin argstrength, which can fit this pattern in the data better than lr-argstrength.
 
 In each condition, maximin argstrength also predicts a long tail of argumentatively weak signals with equal argstrength, e.g., `some : some : wrong', `all : all : wrong', and several others (in the high condition). This is a surprising prediction, but it makes sense of a pattern in the data: when participants have to describe poor exam results in the high condition, they produce a larger variety of signals than for other observations.
 
@@ -459,7 +459,7 @@ In each condition, maximin argstrength also predicts a long tail of argumentativ
 
 \paragraph{Model free argstrength} 
 In many cases, mf-argstrength makes similar predictions as maximin-argstrength. 
-One systematic way the two depart is that the mf-argstrength model systematically postdicts higher frequency than the maximin-argstrength model for `all|some|right' in the high condition and `all|some|wrong' in the low condition. 
+One systematic way the two depart is that the mf-argstrength model systematically postdicts higher frequency than the maximin-argstrength model for `all : some : right' in the high condition and `all : some : wrong' in the low condition. 
 Another is that mf-argstrength systematically postdicts lower frequency than maximin-argstrength for `some : most : wrong' in the low condition and `some : most : right' in the high condition.
 Which of the two models is more accurate depends on the matrix array size, explaining some of the difference in performance between models trained separately on the matrix array conditions.
 %`all|some|right' in $[5,5,5,5,1,1,1,1,1,1,1]$ (narrowLong condition) and 55111 it is better than all other models, which underpredict frequency, but it underpredicts `some|most|right'. The same (but flipped) is true for low in 55511. 
@@ -478,7 +478,7 @@ However, all measures of argumentative strengths we defined are truth-functional
 
 One particularly striking observation is that participants often chose `most : most' when `all : most' would have been both more informative and argumentatively stronger according to all models. All models failed to capture this pattern, and indeed it is difficult to explain it as a rational strategic choice. Future work could look into other possible explanations, such as processing ease.
 
-Finally, participants chose `none : all : right' more often than predicted by any model, for both frame condition. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.
+Finally, participants chose `none : all : right' more often than predicted by any model, for both frame conditions. For example, in the high frame condition, it is chosen for exam results where all students got all answers wrong.
 % \fc{Not sure what more to say here, can also leave it out}
 
 \section{Discussion}\label{sec:discussion}
