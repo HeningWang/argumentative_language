@@ -50,7 +50,7 @@ responses_prettified <- d_exps |> pull(response) |>
   # 1) drop [, ], and '
   str_remove_all("\\[|\\]|'") %>%     
   # 2) collapse commas into " | "
-  str_replace_all(",\\s*", " | ") %>% 
+  str_replace_all(",\\s*", " : ") %>% 
   # 3) trim any stray whitespace
   str_trim()
 

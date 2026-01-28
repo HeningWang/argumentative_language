@@ -27,6 +27,8 @@ zTest(loo_diff_combined, se_diff_combined)
 
 
 d <- read_csv("model_comparison-combined.csv") |> 
+  mutate(model = case_when(model == "non-parametric" ~ "model free",
+                           TRUE ~ model)) |>
   # cast 'model' as an ordered factor with ordering from colums 'loo'
   mutate(model = fct_reorder(factor(model), loo)) |> 
   mutate(analysis = factor(analysis, level = c("population", "hierarchical")))
@@ -41,7 +43,7 @@ d |> ggplot(aes(x = model, y = loo, group = analysis, color = analysis)) +
   theme_aida() +
   # show legend on at the top
   theme(legend.position = "top",
-        # legend.title = element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(size = 10),
         axis.text.x = element_text(size = 10),
         axis.text.y = element_text(size = 10),
