@@ -4,7 +4,7 @@
 \usepackage{CSPstyles}
 \usepackage{comment}
 
-\cogscifinalcopy %%% Uncomment this line for the final submission
+%\cogscifinalcopy %%% Uncomment this line for the final submission
 
 %%% Bibliography %%%
 \usepackage[
@@ -456,8 +456,8 @@ In each condition, maximin argstrength also predicts a long tail of argumentativ
 
 \paragraph{Model free argstrength} 
 In many cases, mf-argstrength makes similar predictions as maximin-argstrength. 
-One systematic way the two depart is that the mf-argstrength model systematically postdicts higher frequency than the maximin-argstrength model for `all : some : right' in the high condition and `all : some : wrong' in the low condition. 
-Another is that mf-argstrength systematically postdicts lower frequency than maximin-argstrength for `some : most : wrong' in the low condition and `some : most : right' in the high condition.
+One systematic way the two depart is that the mf-argstrength model systematically retrodicts higher frequency than the maximin-argstrength model for `all : some : right' in the high condition and `all : some : wrong' in the low condition. 
+Another is that mf-argstrength systematically retrodicts lower frequency than maximin-argstrength for `some : most : wrong' in the low condition and `some : most : right' in the high condition.
 Which of the two models is more accurate depends on the matrix array size, explaining some of the difference in performance between models trained separately on the matrix array conditions.
 %`all|some|right' in $[5,5,5,5,1,1,1,1,1,1,1]$ (narrowLong condition) and 55111 it is better than all other models, which underpredict frequency, but it underpredicts `some|most|right'. The same (but flipped) is true for low in 55511. 
 %Predicts `all|some|right' better than other models in 11111 (other models underpredict), and `all|some|wrong' in 55555.
