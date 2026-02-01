@@ -149,8 +149,8 @@ Decades of research have demonstrated that human language use is often oriented 
 % This picture aligns well with the classic Gricean framework \citep{Grice1975:Logic-and-Conve}, which posits a cooperative principle alongside Maxims of Quality (truth), Quantity (informativity), and Relevance---where the latter is typically interpreted as relevance to the listener.
 Consequetly, formal models of language use often model speakers as optimizing relevant information exchange, relying on formal notions of informativity provided by e.g., formal logic or information theory \citep[e.g.,][]{Parikh1991:Communication-a,BlutnerBOTJoS2000,FrankGoodman2012:Predicting-Prag}.
 %Formal models of pragmatic language use consequently often rely on formal notions of informativity, supplied by e.g., formal logic or information theory, to describe speakers' pragmatic choice of expressions as a form of utility maximization, defined at least in part by the drive to optimize relevant information exchange \citep[e.g.,][]{Parikh1991:Communication-a,BlutnerBOTJoS2000,FrankGoodman2012:Predicting-Prag}.
-Yet, some authors argue that the purpose of communication may be much more about persuasion, argumentation, manipulation, and opinion-negotiation than about pure, objective---indeed, robot-like---information-sharing \citep[e.g.,][]{AnscombreDucrot1983:Largumentation-,MercierSperber2011:Why-do-humans-r,Enfield2024:Language-vs.Rea}.
-To give an example of selective truth-telling, or \emph{paltering} \citep{RogersZeckhauser2017:Artful-palterin}, the outcome of an exam could be truthfully described with roughly similar information value with different expressions, framing the exam as easy (\ref{bsp:leading-example-easy}) or difficult (\ref{bsp:leading-example-difficult}).
+Yet, some authors argue that the purpose of communication may be much more about persuasion, argumentation, manipulation, and opinion-negotiation than about pure, objective information-sharing \citep[e.g.,][]{AnscombreDucrot1983:Largumentation-,MercierSperber2011:Why-do-humans-r,Enfield2024:Language-vs.Rea}.
+To give an example of selective truth-telling, or \emph{paltering} \citep{RogersZeckhauser2017:Artful-palterin}, the outcome of an exam could be truthfully described using similar formulations with roughly the same literal content, framing the exam as easy (\ref{bsp:leading-example-easy}) or difficult (\ref{bsp:leading-example-difficult}).
 
 \begin{exe}
   \item \label{bsp:leading-example}
@@ -172,7 +172,7 @@ Some prior work \citep[e.g.,][]{Merin1997:If-all-our-argu,Rooijvan-Rooij2004:Coo
 However, so far there has been no stringent empirical testing of this notion, nor a systematic comparison against alternative formalization in terms of their predictive accuracy for experimental data.
 Providing such a comparison is the main contribution of this work.
 
-We focus on a setting of selective truth-telling, or paltering \citep{RogersZeckhauser2017:Artful-palterin}.
+We focus on a setting of paltering.
 We study cases like (\ref{bsp:leading-example}), which are similar to the real-life examples examined by \citet{CumminsFranke2021:Rational-interp}, but consider a constrained experimental setting borrowed from \citet{Vinicius-Macuch-SilvaWinter2024:Strategic-use-o} that allows statistical model comparison of bespoke probabilistic models which differ only in the quantitative notion of argumentative strength they assume underlies the speakers' choice of expression.
 In the following, we formulate these models in the tradition of the Rational Speech Act (RSA) framework \citep{FrankGoodman2012:Predicting-Prag,FrankeJager2015:Probabilistic-p,Degen2023:The-Rational-Sp}.
 We then describe the experimental set-up, and report on the statistical model comparisons, as well as our results.
@@ -217,9 +217,9 @@ For a binary semantics (as assumed here), the utility function factors into thre
              \underbrace{\text{cost}(u)}_{\text{economy}} \,.
 \end{align*}
 
-The speaker's policy defined above in Equation~\eqref{eq:S1}, when used with the standard utility function in Equation~\eqref{eq:util-vanilla} has been productively used to explain choices of utterances for different linguistic constructions of phenomena, e.g., for referential expressions \citep{FrankGoodman2012:Predicting-Prag}, generics \citep{Tessler2019:The-Language-of}, conditionals \citep{GrusdtLassiter2021:Probabilistic-m}, quantifiers and implicature \citep{GoodmanStuhlmuller2013:Knowledge-and-I,Tielvan-TielFranke2021:Probabilistic-p}, gradable adjectives \citep{LassiterGoodman2015:Adjectival-vagu}, or probability expressions \citep{HerbstrittFranke2019:Complex-probabi}.
+The speaker's policy defined above in Equation~\eqref{eq:S1}, when used with the standard utility function in Equation~\eqref{eq:util-vanilla}, has been productively used to explain choices of utterances for different linguistic constructions of phenomena, e.g., for referential expressions \citep{FrankGoodman2012:Predicting-Prag}, generics \citep{Tessler2019:The-Language-of}, conditionals \citep{GrusdtLassiter2021:Probabilistic-m}, quantifiers and implicature \citep{GoodmanStuhlmuller2013:Knowledge-and-I,Tielvan-TielFranke2021:Probabilistic-p}, gradable adjectives \citep{LassiterGoodman2015:Adjectival-vagu}, or probability expressions \citep{HerbstrittFranke2019:Complex-probabi}.
 Yet, some phenomena seem to require more elaborate utility functions.
-For example, models have been explored which incorporate additional utility components related to politeness \citep{YoonTessler2020:Polite-Speech-E} or opinion \citep{AchimovaFranke2025:The-alignment-m}.
+For example, models which incorporate additional utility components related to politeness \citep{YoonTessler2020:Polite-Speech-E} or opinion \citep{AchimovaFranke2025:The-alignment-m}.
 Here, we add the goal of arguing in favor of a position or hypothesis $H_{0}$, as opposed to the competing position or hypothesis $H_{1}$, and model the utility trade-off between \emph{truth and informativity}, on the one hand, and the the \emph{argumentative strength} on the other.
 The form of the utility functions we consider here is:
 \begin{align}
@@ -230,14 +230,14 @@ The form of the utility functions we consider here is:
  \ - \
     \underbrace{\text{cost}(u)}_{\text{economy}}
 \end{align}
-Following the previous literature, the parameter $\beta$ models the degree to which a speaker values optimizing informativity of an utterance or making a strong argument for position $H_{0}$ (relative to $H_{1}$).
+Following previous literature, the parameter $\beta$ models the degree to which a speaker optimizes informativity of an utterance or making a strong argument for position $H_{0}$ (relative to $H_{1}$).
 % For the special case of $\beta = 1$, this formulation reduces to the previous utility function which did not have argumentative strength as an additional speaker objective for utterance selection.
 
 In the following we will explore different models of the speaker's utterance choice:
 \begin{enumerate}
-  \item The \textbf{vanilla RSA model} provides the conservative baseline. It contains no speaker objective for argumentative speech; alternatively we can think of it as a model with $\beta=1$.
+  \item The \textbf{vanilla RSA model} provides the conservative baseline. It contains no speaker objective for argumentative speech. We can think of it as a model with $\beta=1$.
   \item The \textbf{likelihood-ratio model} formalizes argumentative strength in analogy to a common measure of observational evidence, the log-likelihood ratio (based on literal interpretation of the utterance). It quantifies how much more likely an utterance is to be \emph{true} given $H_0$ as opposed to $H_1$.
-  \item The \textbf{pragmatic likelihood-ratio model} is similar to the previous model but computes argumentative strength via log-likelihood ratios based on a pragmatic enrichment of the utterance. It quantifies of how much more likely an utterance is to be \emph{produced} by a pragmatic speaker given $H_0$ as opposed to $H_1$.
+  \item The \textbf{pragmatic likelihood-ratio model} is similar to the likelihood-ratio model, but computes argumentative strength via log-likelihood ratios based on a pragmatic enrichment of the utterance. It quantifies of how much more likely an utterance is to be \emph{produced} by a pragmatic speaker given $H_0$ as opposed to $H_1$.
   \item  The \textbf{maximin model} provides a computationally simpler definition of argumentative strength in terms of a form of worst-case reasoning. It quantifies how strongly an utterance supports $H_0$, as opposed to $H_1$, if the listener only considers the single argumentatively weakest state that verifies the utterance.
   \item The \textbf{model-free model} uses a situation-specific notion of argumentative strength in terms of the posterior expectation of true answers. This approach is ``model-free'' in the sense that it does not commit to a strong theoretic position on what argument strength is supposed to be.
 \end{enumerate}
@@ -246,10 +246,10 @@ In the following we will explore different models of the speaker's utterance cho
 \section{Experiment}
 \label{sec:experiment-1}
 
-To test whether and how speakers choose expressions for purposes of argumentative framing, we used an experimental design which presents a perspicuous but complex state of affairs (the results of a high-school exam) and allows participants to choose flexibly from a large, but still constrained set of alternative expressions.
-The design used here is essentially the same as that of Experiment~1 reported in \cite{Vinicius-Macuch-SilvaWinter2024:Strategic-use-o}, except that we here used a larger set of visual scenes (different array sizes, see below).
+To test whether and how speakers choose expressions for purposes of argumentative framing, we used an experimental design which presents a perspicuous but complex state of affairs (the results of a high-school exam) and allows participants to choose flexibly from a large, but still constrained, set of alternative expressions.
+The design used here is essentially the same as that of Experiment~1 reported in \citet{Vinicius-Macuch-SilvaWinter2024:Strategic-use-o}, except that we here used a larger set of visual scenes (different array sizes, see below).
 While the work reported by \citet{Vinicius-Macuch-SilvaWinter2024:Strategic-use-o} also elicited and analyzed free production data, we here focus on a more constrained free-choice task in order to harness the complexity of the data for subsequent modeling.
-Participants could essentially choose one of 32 sentences, but they did so by individual selection of (i) an outer quantifier, (ii) an inner quantifier, and (iii) an adjective, to complete the sentence frame in (\ref{bsp:sentences-Exp}), where OQ and IQ $\in \{$ None, Some, Most, All $\}$, and ADJ $\in \{$ right, wrong $\}$.
+Participants could essentially choose one of 32 sentences, but they did so by individual selection of (i) an outer quantifier, (ii) an inner quantifier, and (iii) an adjective, to complete the sentence frame in (\ref{bsp:sentences-Exp}), where OQ and IQ $\in \{$ none, some, most, all $\}$, and ADJ $\in \{$ right, wrong $\}$.
 
 \begin{exe}
   \ex \label{bsp:sentences-Exp}
@@ -263,11 +263,11 @@ A total of $N=201$ adult participants with English as their first language were 
 % Based on a mean completion time of just below 10 minutes (median just below 9 minutes), this amounted to an average hourly payment of £1.5.
 
 \paragraph{Materials.}
-The results of high-school exams were presented visually in form of matrices, as shown in Figure~\ref{fig:example-picture}.
+The results of ficticious high-school exams were presented visually in form of matrices, as shown in Figure~\ref{fig:example-picture}.
 The rows of matrices corresponded to students (indicated by names), the columns indicated questions.
 A checkmark on green background in a cell represented that the student got the question right.
-A cross on a red background represented a false answer.
-The results were always arranged to show students ordered in terms of performance (students with more correct answers on in higher rows).
+A cross on a red background represented an incorrect answer.
+The results were always arranged to show students ordered in terms of performance (students with more correct answers in higher rows).
 The names of students were sampled at random for each trial from a list of common English first names.
 
 \begin{figure}[t]
@@ -324,7 +324,7 @@ The latter result suggests that our manipulation worked and that participants ar
 We perform a Bayesian analysis of the data produced by the experiment, using the RSA speaker defined in Eq.~\ref{eq:S1} as a generative model of participants' production behaviour.
 A full implementation of argumentative strength (Eq.~\ref{eq:utilArgstrength}) requires the specification of one hypothesis that the speaker argues for ($H_0$) and one that they argue against ($H_1$), as well as a functional form that measures how strongly a specific utterance supports $H_0$ against $H_1$.
 
-\subsection{Hypotheses for argstrength calculation}
+\subsection{Hypotheses for argumentative strength calculation}
 
 We model each hypothesis $H$ as saying that all students in the class have a certain probability $\gamma_H$ of getting each answer correct, making the simplifying assumption that there is no variation in skill across students and no variation in probability of getting different answers correct. 
 The probability of observing the full results from an exam is then proportional to the product of the Binomial probability of each student's results:
