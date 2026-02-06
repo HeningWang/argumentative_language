@@ -145,7 +145,7 @@
 
 	</template>
 
-	<PostTestScreen />
+	<PostTestScreen :gender="false" />
 	<SubmitResultsScreen />
   </Experiment>
 </template>
