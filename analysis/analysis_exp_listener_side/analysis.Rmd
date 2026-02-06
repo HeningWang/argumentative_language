@@ -416,14 +416,16 @@ data_brm <-  data |>
            response_condition == "info" & condition == "high"  ~ "non-match-2",
            response_condition == "high" & condition == "info"  ~ "non-match-1",
            response_condition == "high" & condition == "low"   ~ "non-match-2"
-         ))
+         ),
+         submission_id = factor(submission_id),
+         item_id       = factor(item_id))
 ```
 
 
 ```{r, BDA-brms-fit, results = 'hide'}
 # run a multinomial Bayesian regression model with by-subjects random intercepts and slopes
 fit <- brm(
-  formula = response_condition ~ condition + (1 + condition | submission_id),
+  formula = response_condition ~ condition + (1 + condition | submission_id) + (1 + condition | item_id),
   family  = categorical(),
   data    = data_brm,
   chains  = 4,
@@ -432,6 +434,10 @@ fit <- brm(
   backend = "cmdstanr"
 )
   
+```
+Show summary.
+```{r, BDA-brms-summary}
+summary(fit)
 ```
 
 Next, we extract posterior samples using the `tidybayes::add_epred_draws` function, which gives us samples from the posterior distribution of the expected values of the each response category for each condition.
